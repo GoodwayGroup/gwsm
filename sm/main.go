@@ -12,10 +12,10 @@ import (
 )
 
 /*
-    NOTE: Refactor of https://github.com/cyberark/summon-aws-secrets/blob/master/main.go
-    This was needed to have the command return the byte stream rather than have it write
-    to STDOUT
- */
+   NOTE: Refactor of https://github.com/cyberark/summon-aws-secrets/blob/master/main.go
+   This was needed to have the command return the byte stream rather than have it write
+   to STDOUT
+*/
 func RetrieveSecret(variableName string) (secretBytes []byte) {
 	// All clients require a Session. The Session provides the client with
 	// shared configuration such as region, endpoint, and credentials. A
