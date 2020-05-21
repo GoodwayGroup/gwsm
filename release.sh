@@ -67,12 +67,12 @@ fi
 
 h1 "Preparing release of $VERSION"
 
-h2 "Updating CHANGELOG.md"
-auto-changelog -v $VERSION -l false --template keepachangelog && git add CHANGELOG.md
-git commit -m "feat(release): $VERSION"
-
 h2 "Tagging version: $VERSION"
 git tag $VERSION
+
+h2 "Updating CHANGELOG.md"
+git-chglog -o CHANGELOG.md && git add CHANGELOG.md
+git commit -m "feat(release): $VERSION"
 
 note "Building assets to be uploaded"
 make ci
