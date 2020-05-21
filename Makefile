@@ -1,4 +1,4 @@
-NAME=gw-kube-env
+NAME=gwsm
 
 VERSION=$$(git describe --tags --always)
 
