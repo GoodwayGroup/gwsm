@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/urfave/cli/v2"
-	"gw-kube-env/cmd"
-	"gw-kube-env/info"
+	"gwsm/cmd"
+	"gwsm/info"
 	"log"
 	"os"
 	"runtime"

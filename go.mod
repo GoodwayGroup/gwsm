@@ -1,4 +1,4 @@
-module gw-kube-env
+module gwsm
 
 go 1.14
 
