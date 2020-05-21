@@ -7,4 +7,4 @@ const AppRepoOwner string = "GoodwayGroup Tech"
 const AppName string = "gwsm"
 
 // AppVersion defined current version of this application
-const AppVersion string = "v0.1.0"
+const AppVersion string = "v0.2.0"
