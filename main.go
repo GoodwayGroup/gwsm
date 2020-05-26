@@ -26,16 +26,6 @@ func main() {
 		HelpName:             info.AppName,
 		Usage:                "interact with config map and secret manager variables",
 		EnableBashCompletion: true,
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "region",
-				Usage:       "AWS region",
-				Required:    false,
-				Value:       "us-east-1",
-				DefaultText: "us-east-1",
-				EnvVars:     []string{"AWS_REGION"},
-			},
-		},
 		Commands: []*cli.Command{
 			{
 				Name:    "version",

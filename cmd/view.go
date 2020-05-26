@@ -124,7 +124,6 @@ func ViewEnvDiff(c *cli.Context) error {
 
 			t.Render()
 		}
-		// fmt.Printf("%s\n\n", block)
 		fmt.Println("")
 	}
 
