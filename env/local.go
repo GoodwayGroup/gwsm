@@ -13,6 +13,14 @@ import (
 	"sync"
 )
 
+func addToGroupedValues(groupedValues map[string]map[string]string, group string, key string, value string) {
+	if len(groupedValues[group]) > 0 {
+		groupedValues[group][key] = fmt.Sprint(value)
+	} else {
+		groupedValues[group] = map[string]string{key: value}
+	}
+}
+
 // Parse local ConfigMap file and retrieve JSON blobs from AWS Secrets Manager. Return a map of groups names to value blocks.
 func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]string, err error) {
 	yamlFile, err := ioutil.ReadFile(c.String("configmap"))
@@ -33,13 +41,8 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		// TODO: Make Secrets suffix a CLI param w/ default
 		if strings.HasSuffix(key, "_NAME") {
 			subs[strings.ToLower(key)] = value
-		} else {
-			if len(groupedValues["local"]) > 0 {
-				groupedValues["local"][key] = fmt.Sprint(value)
-			} else {
-				groupedValues["local"] = map[string]string{key: fmt.Sprint(value)}
-			}
 		}
+		addToGroupedValues(groupedValues, "local", key, fmt.Sprint(value))
 	}
 
 	cnt := len(subs)
@@ -93,11 +96,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		if len(arguments) > 1 {
 			keyName = arguments[1]
 		}
-		if len(groupedValues[secretName]) > 0 {
-			groupedValues[secretName][envvar] = fmt.Sprint(allSecrets[secretName][keyName])
-		} else {
-			groupedValues[secretName] = map[string]string{envvar: fmt.Sprint(allSecrets[secretName][keyName])}
-		}
+		addToGroupedValues(groupedValues, secretName, envvar, fmt.Sprint(allSecrets[secretName][keyName]))
 	}
 
 	return

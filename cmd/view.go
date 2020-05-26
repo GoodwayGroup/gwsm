@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/jedib0t/go-pretty/table"
 	"github.com/r3labs/diff"
 	"github.com/urfave/cli/v2"
 	"gwsm/env"
+	"os"
 	"sort"
 )
 
@@ -15,22 +17,31 @@ func ViewLocalEnv(c *cli.Context) error {
 		return err
 	}
 
-	var envValues []string
 	for group, values := range groupedValues {
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
+		t.SetStyle(table.StyleColoredDark)
 		if group == "local" {
-			envValues = append(envValues, fmt.Sprintf("\n# from ConfigMap"))
+			t.SetTitle("From ConfigMap")
 		} else {
-			envValues = append(envValues, fmt.Sprintf("\n# from secret: %s", group))
+			t.SetTitle(fmt.Sprintf("From secret: %s", group))
 		}
+		t.AppendHeader(table.Row{"Key", "Value"})
 
-		for key, value := range values {
-			envValues = append(envValues, fmt.Sprintf("%s=%s", key, value))
+		keys := make([]string, 0, len(values))
+		for k := range values {
+			keys = append(keys, k)
 		}
-	}
+		sort.Strings(keys)
 
-	// dump full env to screen
-	for _, v := range envValues {
-		fmt.Println(v)
+		for _, key := range keys {
+			t.AppendRow([]interface{}{
+				key,
+				values[key],
+			})
+		}
+		t.Render()
+		fmt.Println("")
 	}
 
 	return nil
@@ -79,21 +90,78 @@ func ViewEnvDiff(c *cli.Context) error {
 
 	// Compares as if the Local env is being applied to the Pod env.
 	changelog, err := diff.Diff(envMapPod, envMapLocal)
+
+	diffGroups := map[string][]diff.Change{
+		"create": []diff.Change{},
+		"delete": []diff.Change{},
+		"update": []diff.Change{},
+	}
+
 	for _, change := range changelog {
-		switch change.Type {
-		case "create":
-			// This means that the value is not contained in the Pod environment and will be added.
-			fmt.Printf("NEW KEY: %s\n\tVALUE: %s\n", change.Path[0], change.To)
-		case "update":
-			// This denotes that there is a change in the local value compared to that on the Pod.
-			fmt.Printf("UPDATED KEY: %s\n\t%s -> %s\n", change.Path[0], change.From, change.To)
-		case "delete":
-			// This indicates that the value is present on the Pod, but not in the local env.
-			fmt.Printf("DELETED KEY: %s\n", change.Path[0])
-		default:
-			// This should not be reached.
-			fmt.Println(change)
+		diffGroups[change.Type] = append(diffGroups[change.Type], change)
+	}
+
+	for _, group := range []string{"create", "update", "delete"} {
+		changes := len(diffGroups[group])
+
+		if changes > 0 {
+			t := table.NewWriter()
+			t.SetOutputMirror(os.Stdout)
+			t.SetStyle(table.StyleColoredDark)
+
+			var title string
+			switch group {
+			case "create":
+				title = "NEW: Env values that will be ADDED to the Pod"
+			case "update":
+				title = "UPDATE: Env values that will be UPDATED on the Pod"
+			case "delete":
+				title = "POSSIBLE DELETE: Env values that are present on the Pod, but not found in the local Env"
+			default:
+				// This should not be reached.
+				panic(fmt.Sprintf("Uknown group type: %s", group))
+			}
+
+			t.SetTitle(title)
+			t.AppendHeader(table.Row{"Key", "Value"})
+
+			fmt.Printf("Found %d differences for group `%s`\n", changes, group)
+			sort.Slice(diffGroups[group], func(i int, j int) bool {
+				return diffGroups[group][i].Path[0] < diffGroups[group][j].Path[0]
+			})
+			for _, change := range diffGroups[group] {
+				switch change.Type {
+				case "create":
+					// This means that the value is not contained in the Pod environment and will be added.
+					// fmt.Printf("NEW KEY: %s=%s\n", change.Path[0], change.To)
+					t.AppendRow([]interface{}{
+						change.Path[0],
+						change.To,
+					})
+				case "update":
+					// This denotes that there is a change in the local value compared to that on the Pod.
+					// fmt.Printf("UPDATED KEY: %s\n\t%s -> %s\n", change.Path[0], change.From, change.To)
+					t.AppendRow([]interface{}{
+						change.Path[0],
+						fmt.Sprintf("%s -> %s", change.From, change.To),
+					})
+				case "delete":
+					// This indicates that the value is present on the Pod, but not in the local env.
+					// fmt.Printf("DELETED KEY: %s=%s\n", change.Path[0], change.From)
+					t.AppendRow([]interface{}{
+						change.Path[0],
+						change.From,
+					})
+				default:
+					// This should not be reached.
+					panic(fmt.Sprintf("Uknown change type: %s", change.Type))
+				}
+			}
+			t.Render()
+		} else {
+			fmt.Printf("No diff found for group `%s`\n", group)
 		}
+		fmt.Println("")
 	}
 
 	return nil

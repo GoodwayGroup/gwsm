@@ -10,6 +10,37 @@ import (
 	"strings"
 )
 
+func containsString(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func shouldProcessLine(c *cli.Context, ln string) bool {
+	prefixes := strings.Split(c.String("filter-prefix"), ",")
+	if len(prefixes) > 0 {
+		for _, prefix := range prefixes {
+			if strings.HasPrefix(ln, prefix) {
+				return false
+			}
+		}
+	}
+
+	exclusions := strings.Split(c.String("exclude"), ",")
+	if len(exclusions) > 0 {
+		result := strings.SplitN(ln, "=", 2)
+		if len(result) > 1 {
+			return !containsString(exclusions, result[0])
+		}
+		return false
+	}
+
+	return true
+}
+
 func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
 	// TODO: Handle error
 	err, clientset := kube.GetClient()
@@ -54,7 +85,8 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 	scanner := bufio.NewScanner(strings.NewReader(stdOut))
 	for scanner.Scan() {
 		ln := scanner.Text()
-		if !strings.HasPrefix(scanner.Text(), c.String("filter")) {
+
+		if shouldProcessLine(c, ln) {
 			result := strings.SplitN(ln, "=", 2)
 			if len(result) > 1 {
 				envMap[result[0]] = fmt.Sprint(result[1])
