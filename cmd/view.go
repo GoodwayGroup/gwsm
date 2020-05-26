@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/r3labs/diff"
 	"github.com/urfave/cli/v2"
 	"gwsm/env"
 	"sort"
-	"github.com/r3labs/diff"
 )
 
 // Print the resulting environment for a set of local ConfigMap and Summon secrets.yml file.
