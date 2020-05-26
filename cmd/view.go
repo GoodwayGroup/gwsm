@@ -3,11 +3,13 @@ package cmd
 import (
 	"fmt"
 	"github.com/jedib0t/go-pretty/table"
+	"github.com/logrusorgru/aurora"
 	"github.com/r3labs/diff"
 	"github.com/urfave/cli/v2"
 	"gwsm/env"
 	"os"
 	"sort"
+	"strings"
 )
 
 // Print the resulting environment for a set of local ConfigMap and Summon secrets.yml file.
@@ -20,7 +22,7 @@ func ViewLocalEnv(c *cli.Context) error {
 	for group, values := range groupedValues {
 		t := table.NewWriter()
 		t.SetOutputMirror(os.Stdout)
-		t.SetStyle(table.StyleColoredDark)
+		t.SetStyle(table.StyleLight)
 		if group == "local" {
 			t.SetTitle("From ConfigMap")
 		} else {
@@ -103,66 +105,87 @@ func ViewEnvDiff(c *cli.Context) error {
 
 	for _, group := range []string{"create", "update", "delete"} {
 		changes := len(diffGroups[group])
+		block := strings.Repeat("-", 79)
+		fmt.Printf("%s\n%s\n%s\n", block, getDescription(group, changes), block)
 
 		if changes > 0 {
-			t := table.NewWriter()
-			t.SetOutputMirror(os.Stdout)
-			t.SetStyle(table.StyleColoredDark)
-
-			var title string
-			switch group {
-			case "create":
-				title = "NEW: Env values that will be ADDED to the Pod"
-			case "update":
-				title = "UPDATE: Env values that will be UPDATED on the Pod"
-			case "delete":
-				title = "POSSIBLE DELETE: Env values that are present on the Pod, but not found in the local Env"
-			default:
-				// This should not be reached.
-				panic(fmt.Sprintf("Uknown group type: %s", group))
-			}
-
-			t.SetTitle(title)
-			t.AppendHeader(table.Row{"Key", "Value"})
-
-			fmt.Printf("Found %d differences for group `%s`\n", changes, group)
 			sort.Slice(diffGroups[group], func(i int, j int) bool {
 				return diffGroups[group][i].Path[0] < diffGroups[group][j].Path[0]
 			})
+
+			t := table.NewWriter()
+			t.SetOutputMirror(os.Stdout)
+			t.SetStyle(table.StyleLight)
+			t.AppendHeader(table.Row{"Key", "Value"})
+
 			for _, change := range diffGroups[group] {
-				switch change.Type {
-				case "create":
-					// This means that the value is not contained in the Pod environment and will be added.
-					// fmt.Printf("NEW KEY: %s=%s\n", change.Path[0], change.To)
-					t.AppendRow([]interface{}{
-						change.Path[0],
-						change.To,
-					})
-				case "update":
-					// This denotes that there is a change in the local value compared to that on the Pod.
-					// fmt.Printf("UPDATED KEY: %s\n\t%s -> %s\n", change.Path[0], change.From, change.To)
-					t.AppendRow([]interface{}{
-						change.Path[0],
-						fmt.Sprintf("%s -> %s", change.From, change.To),
-					})
-				case "delete":
-					// This indicates that the value is present on the Pod, but not in the local env.
-					// fmt.Printf("DELETED KEY: %s=%s\n", change.Path[0], change.From)
-					t.AppendRow([]interface{}{
-						change.Path[0],
-						change.From,
-					})
-				default:
-					// This should not be reached.
-					panic(fmt.Sprintf("Uknown change type: %s", change.Type))
-				}
+				addRowToTable(change, t)
 			}
+
 			t.Render()
-		} else {
-			fmt.Printf("No diff found for group `%s`\n", group)
 		}
+		// fmt.Printf("%s\n\n", block)
 		fmt.Println("")
 	}
 
 	return nil
+}
+
+func getDescription(group string, found int) string {
+	switch group {
+	case "create":
+		return fmt.Sprintf(
+			"%s\n\n%s\n\nFound %s",
+			aurora.Green("New"),
+			"Local ENV values that are NOT found on the selected Pod",
+			fmt.Sprint(aurora.Green(found)),
+		)
+	case "update":
+		return fmt.Sprintf(
+			"%s\n\n%s\n\nFound %s",
+			aurora.Yellow("Updates"),
+			"Local ENV values that are DIFFERENT than the values found on the selected Pod",
+			fmt.Sprint(aurora.Yellow(found)),
+		)
+	case "delete":
+		b := `ENV values that were found on the selected Pod, but are not found locally. 
+This could be caused by system level ENV values (such as CWD) or it could 
+indicate that a value is MISSING from the local ENV.`
+		return fmt.Sprintf(
+			"%s\n\n%s\n\nFound %s",
+			aurora.Red("Possible Deletions"),
+			b,
+			fmt.Sprint(aurora.Red(found)),
+		)
+	default:
+		// This should not be reached.
+		panic(fmt.Sprintf("Uknown group type: %s", group))
+	}
+}
+
+func addRowToTable(change diff.Change, t table.Writer) {
+	switch change.Type {
+	case "create":
+		// This means that the value is not contained in the Pod environment and will be added.
+		t.AppendRow([]interface{}{
+			change.Path[0],
+			change.To,
+		})
+	case "update":
+		// This denotes that there is a change in the local value compared to that on the Pod.
+		t.AppendRow([]interface{}{
+			change.Path[0],
+			fmt.Sprintf("%s -> %s", aurora.Yellow(change.From), aurora.Green(change.To)),
+		})
+	case "delete":
+		// This indicates that the value is present on the Pod, but not in the local env.
+		// TODO: Format the row with color based on whether it is a system variable or not
+		t.AppendRow([]interface{}{
+			change.Path[0],
+			change.From,
+		})
+	default:
+		// This should not be reached.
+		panic(fmt.Sprintf("Uknown change type: %s", change.Type))
+	}
 }
