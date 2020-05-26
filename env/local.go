@@ -6,21 +6,22 @@ import (
 	"github.com/cyberark/summon/secretsyml"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
+	"gwsm/lib"
 	"gwsm/sm"
-	"gwsm/types"
 	"io/ioutil"
 	"strings"
 	"sync"
 )
 
+// Parse local ConfigMap file and retrieve JSON blobs from AWS Secrets Manager. Return a map of groups names to value blocks.
 func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]string, err error) {
-	yamlFile, err := ioutil.ReadFile(c.String("configmap-path"))
+	yamlFile, err := ioutil.ReadFile(c.String("configmap"))
 	if err != nil {
 		fmt.Printf("Error reading YAML file: %s\n", err)
 		return nil, err
 	}
 
-	var yamlConfig types.ConfigMap
+	var yamlConfig lib.ConfigMap
 	err = yaml.Unmarshal(yamlFile, &yamlConfig)
 	if err != nil {
 		fmt.Printf("Error parsing YAML file: %s\n", err)
@@ -29,6 +30,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 	groupedValues = make(map[string]map[string]string)
 	subs := make(map[string]string)
 	for key, value := range yamlConfig.Data {
+		// TODO: Make Secrets suffix a CLI param w/ default
 		if strings.HasSuffix(key, "_NAME") {
 			subs[strings.ToLower(key)] = value
 		} else {
@@ -52,12 +54,12 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		return
 	}
 
-	secrets, err := secretsyml.ParseFromFile(c.String("secrets-path"), "", subs)
+	secrets, err := secretsyml.ParseFromFile(c.String("secrets"), "", subs)
 	if err != nil {
 		fmt.Printf("Error parsing Secrets file: %s\n", err)
 	}
 
-	results := make(chan types.Result, len(secrets))
+	results := make(chan lib.Result, len(secrets))
 	var wg sync.WaitGroup
 
 	for _, secretGroup := range subs {
@@ -66,9 +68,8 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 			defer wg.Done()
 			blob := sm.RetrieveSecret(groupName)
 			var parsed map[string]interface{}
-			// TODO: address err capture
-			json.Unmarshal(blob, &parsed)
-			results <- types.Result{Name: groupName, JSON: parsed, Error: nil}
+			err := json.Unmarshal(blob, &parsed)
+			results <- lib.Result{Name: groupName, JSON: parsed, Error: err}
 		}(secretGroup)
 	}
 	wg.Wait()
@@ -76,6 +77,10 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 
 	allSecrets := make(map[string]map[string]interface{})
 	for secretJSON := range results {
+		if secretJSON.Error != nil {
+			fmt.Printf("Error with SM results JSON: %s\n", secretJSON.Error)
+			return nil, secretJSON.Error
+		}
 		allSecrets[secretJSON.Name] = secretJSON.JSON
 	}
 

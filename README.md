@@ -67,8 +67,8 @@ The path to the secrets.yml is typically .docker/secrets.yaml
 
 
 OPTIONS:
-   --secrets-path value, -s value    Path to secrets.yml (default: ".docker/secrets.yml")
-   --configmap-path value, -m value  Path to configmap.yaml
+   --secrets value, -s value    Path to secrets.yml (default: ".docker/secrets.yml")
+   --configmap value, -m value  Path to configmap.yaml
 ```
 
 

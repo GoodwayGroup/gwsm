@@ -1,23 +1,18 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 	"gwsm/env"
-	"gwsm/kube"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"log"
 	"sort"
-	"strings"
+	"github.com/r3labs/diff"
 )
 
+// Print the resulting environment for a set of local ConfigMap and Summon secrets.yml file.
 func ViewLocalEnv(c *cli.Context) error {
 	groupedValues, err := env.GetGroupedLocalEnv(c)
 	if err != nil {
-		log.Fatalln("failed to get pods:", err)
-
+		return err
 	}
 
 	var envValues []string
@@ -41,103 +36,64 @@ func ViewLocalEnv(c *cli.Context) error {
 	return nil
 }
 
+// Print the environment for a given process on a Pod within a supplied NameSpace.
 func ViewNamespaceEnv(c *cli.Context) error {
-	// TODO: Handle error
-	_, clientset := kube.GetClient()
-
-	namespace := c.String("namespace")
-	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	envMap, err := env.GetEnvFromPodProcess(c)
 	if err != nil {
-		log.Fatalln("failed to get pods:", err)
+		return err
 	}
 
-	var podNames []string
-	for _, pod := range pods.Items {
-		podNames = append(podNames, pod.GetName())
+	sortedEnv := make([]string, 0, len(envMap))
+	for k, v := range envMap {
+		sortedEnv = append(sortedEnv, fmt.Sprintf("%s=%s", k, v))
 	}
+	sort.Strings(sortedEnv)
 
-	prompt := promptui.Select{
-		Label: "Select Pod",
-		Items: podNames,
-	}
-
-	_, result, err := prompt.Run()
-
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return nil
-	}
-
-	fmt.Println("")
-	cmd := []string{"/bin/sh", "-c", fmt.Sprintf("strings /proc/$(ps faux | grep %s | tail -1 | awk '{print $2}')/environ", c.String("cmd"))}
-	stdOut, _, err := kube.ExecCommandInContainerWithFullOutput(clientset, namespace, result, cmd)
-	if err != nil {
-		panic(err)
-	}
-
-	var env []string
-	scanner := bufio.NewScanner(strings.NewReader(stdOut))
-	for scanner.Scan() {
-		ln := scanner.Text()
-		if !strings.HasPrefix(scanner.Text(), c.String("filter")) {
-			env = append(env, ln)
-		}
-	}
-
-	sort.Strings(env)
-	for _, val := range env {
-		fmt.Println(val)
+	for _, ln := range sortedEnv {
+		fmt.Println(ln)
 	}
 
 	return nil
 }
 
+// Print the diff for a parsed local ConfigMap file and retrieved JSON blobs from AWS Secrets Manager with the environment
+// for a given process on a Pod within a supplied NameSpace.
 func ViewEnvDiff(c *cli.Context) error {
-	// TODO: Handle error
-	_, clientset := kube.GetClient()
-
-	namespace := c.String("namespace")
-	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	// Get local envMap
+	groupedValues, err := env.GetGroupedLocalEnv(c)
 	if err != nil {
-		log.Fatalln("failed to get pods:", err)
+		return err
 	}
-
-	var podNames []string
-	for _, pod := range pods.Items {
-		podNames = append(podNames, pod.GetName())
-	}
-
-	prompt := promptui.Select{
-		Label: "Select Pod",
-		Items: podNames,
-	}
-
-	_, result, err := prompt.Run()
-
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return nil
-	}
-
-	fmt.Println("")
-	cmd := []string{"/bin/sh", "-c", fmt.Sprintf("strings /proc/$(ps faux | grep %s | tail -1 | awk '{print $2}')/environ", c.String("cmd"))}
-	stdOut, _, err := kube.ExecCommandInContainerWithFullOutput(clientset, namespace, result, cmd)
-	if err != nil {
-		panic(err)
-	}
-
-	var env []string
-	scanner := bufio.NewScanner(strings.NewReader(stdOut))
-	for scanner.Scan() {
-		ln := scanner.Text()
-		if !strings.HasPrefix(scanner.Text(), c.String("filter")) {
-			env = append(env, ln)
+	envMapLocal := make(map[string]string)
+	for _, group := range groupedValues {
+		for k, v := range group {
+			envMapLocal[k] = v
 		}
 	}
 
-	sort.Strings(env)
-	for _, val := range env {
-		fmt.Println(val)
+	// Get envMap from Pod
+	envMapPod, err := env.GetEnvFromPodProcess(c)
+	if err != nil {
+		return err
+	}
+
+	// Compares as if the Local env is being applied to the Pod env.
+	changelog, err := diff.Diff(envMapPod, envMapLocal)
+	for _, change := range changelog {
+		switch change.Type {
+		case "create":
+			// This means that the value is not contained in the Pod environment and will be added.
+			fmt.Printf("NEW KEY: %s\n\tVALUE: %s\n", change.Path[0], change.To)
+		case "update":
+			// This denotes that there is a change in the local value compared to that on the Pod.
+			fmt.Printf("UPDATED KEY: %s\n\t%s -> %s\n", change.Path[0], change.From, change.To)
+		case "delete":
+			// This indicates that the value is present on the Pod, but not in the local env.
+			fmt.Printf("DELETED KEY: %s\n", change.Path[0])
+		default:
+			// This should not be reached.
+			fmt.Println(change)
+		}
 	}
 
 	return nil

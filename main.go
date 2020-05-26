@@ -58,15 +58,15 @@ func main() {
 						UsageText: "View the current environment variables based on the LOCAL configurations for a given configmap and secrets.yml",
 						Flags: []cli.Flag{
 							&cli.StringFlag{
-								Name:     "secrets-path",
+								Name:     "secrets",
 								Aliases:  []string{"s"},
 								Usage:    "Path to secrets.yml",
 								Required: false,
 								Value:    ".docker/secrets.yml",
 							},
 							&cli.StringFlag{
-								Name:     "configmap-path",
-								Aliases:  []string{"m"},
+								Name:     "configmap",
+								Aliases:  []string{"c"},
 								Usage:    "Path to configmap.yaml",
 								Required: true,
 							},
@@ -75,7 +75,7 @@ func main() {
 					},
 					{
 						Name:      "namespace",
-						Aliases:   []string{"n"},
+						Aliases:   []string{"ns"},
 						Usage:     "View values configured withing a namesapce",
 						UsageText: "View the current environment variables of a given command running on a pod within a namespace.",
 						Flags: []cli.Flag{
@@ -107,14 +107,14 @@ func main() {
 						UsageText: "View the diff of the local environment against a given command running on a pod within a namespace.",
 						Flags: []cli.Flag{
 							&cli.StringFlag{
-								Name:     "secrets-path",
+								Name:     "secrets",
 								Aliases:  []string{"s"},
 								Usage:    "Path to secrets.yml",
 								Required: false,
 								Value:    ".docker/secrets.yml",
 							},
 							&cli.StringFlag{
-								Name:     "configmap-path",
+								Name:     "configmap",
 								Aliases:  []string{"m"},
 								Usage:    "Path to configmap.yaml",
 								Required: true,
@@ -138,7 +138,7 @@ func main() {
 								Value:    "npm_",
 							},
 						},
-						Action: cmd.ViewNamespaceEnv,
+						Action: cmd.ViewEnvDiff,
 					},
 				},
 			},
