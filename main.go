@@ -55,7 +55,7 @@ func main() {
 						Name:      "local",
 						Aliases:   []string{"l"},
 						Usage:     "View values based on local settings",
-						UsageText: "View the current environment variables based on the LOCAL configurations for a given configmap and secrets.yml",
+						UsageText: info.ViewLocalCommandHelpText,
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:     "secrets",
@@ -76,18 +76,18 @@ func main() {
 					{
 						Name:      "namespace",
 						Aliases:   []string{"ns"},
-						Usage:     "View values configured withing a namesapce",
-						UsageText: "View the current environment variables of a given command running on a pod within a namespace.",
+						Usage:     "View values configured withing a namespace",
+						UsageText: info.ViewNamespaceCommandHelpText,
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:     "namespace",
 								Aliases:  []string{"n"},
-								Usage:    "Kube Namespace",
+								Usage:    "Kube Namespace list Pods from",
 								Required: true,
 							},
 							&cli.StringFlag{
 								Name:     "cmd",
-								Usage:    "Command to grep for",
+								Usage:    "Command to inspect",
 								Required: false,
 								Value:    "node",
 							},
@@ -111,7 +111,7 @@ func main() {
 						Name:      "diff",
 						Aliases:   []string{"d"},
 						Usage:     "View diff of local vs. namespace",
-						UsageText: "View the diff of the local environment against a given command running on a pod within a namespace.",
+						UsageText: info.ViewDiffCommandHelpText,
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:     "secrets",
@@ -129,12 +129,12 @@ func main() {
 							&cli.StringFlag{
 								Name:     "namespace",
 								Aliases:  []string{"n"},
-								Usage:    "Kube Namespace",
+								Usage:    "Kube Namespace list Pods from",
 								Required: true,
 							},
 							&cli.StringFlag{
 								Name:     "cmd",
-								Usage:    "Command to grep for",
+								Usage:    "Command to inspect",
 								Required: false,
 								Value:    "node",
 							},
