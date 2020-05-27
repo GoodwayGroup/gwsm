@@ -70,7 +70,7 @@ func main() {
 						Name:      "ansible",
 						Aliases:   []string{"legacy", "a"},
 						Usage:     "View value from ansible-vault encrypted Kube Secret file.",
-						UsageText: info.ViewAnsibleEncryptedEnvHelpText,
+						UsageText: info.ViewAnsibleEncryptedEnvCommandHelpText,
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:     "vault-password-file",
@@ -186,7 +186,7 @@ func main() {
 				Name:      "diff:legacy",
 				Aliases:   []string{"diff:ansible"},
 				Usage:     "View diff of local (ansible encrypted) vs. namespace",
-				UsageText: info.ViewDiffCommandHelpText,
+				UsageText: info.ViewAnsibleEnvDiffCommandHelpText,
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:     "vault-password-file",
