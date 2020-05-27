@@ -66,3 +66,42 @@ The 'filter-prefix' flag will exclude any values that start with the flagged pre
 
 The 'exclude' flag will exclude any values where the KEY matches exactly from display.
 `
+
+var ViewAnsibleEncryptedEnvCommandHelpText = `
+View a legacy ansible-vault encrypted Kubenetes Secret file. This will output the contents of
+the 'data.<accsessor flag>' block. This defaults to 'data..env'.
+
+Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
+
+Example file structure of decrypted file:
+
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  .env: <BASE64 ENCODED STRING>
+`
+
+var ViewAnsibleEnvDiffCommandHelpText = `
+View the diff of the local ansible-vault encrypted Kubenetes Secret file against a given dotenv
+file on a pod within a namespace.
+
+The local file will use the contents of the 'data.<accsessor flag>' block. This defaults to 'data..env'.
+
+Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
+
+Example file structure of decrypted file:
+
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  .env: <BASE64 ENCODED STRING>
+
+It will then grab contents of the dotenv filr on a Pod in a given Namespace.
+
+This defaults to inspecting the '$PWD/.env on' when executing a 'cat' command. This method uses
+'/bin/bash -c' as the base command to perform inspection.
+`

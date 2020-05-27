@@ -13,20 +13,23 @@ USAGE:
    gwsm [global options] command [command options] [arguments...]
 
 VERSION:
-   v0.1.0
+   v0.4.0
 
-AUTHOR:
+AUTHORS:
    Derek Smith <dsmith@goodwaygroup.com>
+   GoodwayGroup Tech
 
 COMMANDS:
-   version, v  Print version info
-   view        View the current environment variables for a given configmap and secrets.yml
-   help, h     Shows a list of commands or help for one command
+   version, v                 Print version info
+   local, l                   Interact with local env files
+   namespace, ns              Interact with env on a running Pod within a Namespace
+   diff, d                    View diff of local vs. namespace
+   diff:legacy, diff:ansible  View diff of local (ansible encrypted) vs. namespace
+   help, h                    Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --region value  AWS region (default: us-east-1) [$AWS_REGION]
-   --help, -h      show help (default: false)
-   --version, -v   print the version (default: false)
+   --help, -h     show help (default: false)
+   --version, -v  print the version (default: false)
 
 COPYRIGHT:
    (c) 2020 Goodway Group
@@ -40,36 +43,20 @@ $ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
 
 ## Commands
 
-### view
+Each command ans subcommand has detailed help text that can be viewed using the `--help, -h` flag.
 
-```
-$ gwsm help view
-NAME:
-   gwsm view - View the current environment variables for a given configmap and secrets.yml
-
-USAGE:
-
-View the current environment variables for a given ConfigMap and summon secrets.yml.
-
-This will retrieve the stored secrets within AWS Secrets Manager and map them via
-the secrets.yml file used by the 'summon' CLI tool to generate the current state of
-Environment Variables for a given stage.
-
-The AWS Secrets Manager names are assumed to be stored as '<SECRETS_GROUP>_NAME'
-in the ConfigMap. Example: 'RDS_SECRET_NAME: rds/staging/service-yolo'
-
-From the root of the service, the required files are typically found below:
-
-The path to the configmap.yaml file is within the kubernetes deployment.
-This is typically .kube/<stage>/05-configmap.yaml
-
-The path to the secrets.yml is typically .docker/secrets.yaml
-
-
-OPTIONS:
-   --secrets value, -s value    Path to secrets.yml (default: ".docker/secrets.yml")
-   --configmap value, -m value  Path to configmap.yaml
-```
+- `local`
+    - `view`
+        - View values based on local settings
+    - `ansible, legacy`
+        - View value from ansible-vault encrypted Kube Secret file.
+- `namespace`
+    - `view`
+        - View values configured withing a namespace
+- `diff`
+    - View diff of local vs. namespace
+- `diff:ansible, diff:legacy`
+    - View diff of local (ansible encrypted) vs. namespace
 
 
 ## Built With
