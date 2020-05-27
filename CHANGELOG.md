@@ -2,6 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v0.4.0"></a>
+## [v0.4.0] - 2020-05-27
+### Chore
+- **verion:** bump version to v0.4.0
+
+### Feat
+- **ansible:** support for ansible-vault encrypted Kube Secret files ([#2](https://github.com/GoodwayGroup/gwsm/issues/2))
+- **release:** v0.3.0
+
+
 <a name="v0.3.0"></a>
 ## [v0.3.0] - 2020-05-26
 ### Chore
@@ -41,7 +51,8 @@
 - **release:** swapped tagging and CHANGELOG generation
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...HEAD
+[v0.4.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.2.1...v0.3.0
 [v0.2.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.1.0...v0.2.0
