@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"gwsm/kube"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"strings"
 )
 
@@ -41,19 +42,11 @@ func shouldProcessLine(c *cli.Context, ln string) bool {
 	return true
 }
 
-func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
-	// TODO: Handle error
-	err, clientset := kube.GetClient()
-	if err != nil {
-		fmt.Println("Failed to get kube client:", err)
-		return nil, err
-	}
-
-	namespace := c.String("namespace")
+func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) (string, error) {
 	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		fmt.Println("Failed to get pods:", err)
-		return nil, err
+		return "", err
 	}
 
 	var podNames []string
@@ -70,6 +63,23 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 
 	if err != nil {
 		fmt.Printf("Prompt failed %v\n", err)
+		return "", err
+	}
+
+	return result, nil
+}
+
+func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
+	// TODO: Handle error
+	err, clientset := kube.GetClient()
+	if err != nil {
+		fmt.Println("Failed to get kube client:", err)
+		return nil, err
+	}
+
+	namespace := c.String("namespace")
+	result, err := promptForPod(err, clientset, namespace)
+	if err != nil {
 		return nil, err
 	}
 
@@ -91,6 +101,39 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 			if len(result) > 1 {
 				envMap[result[0]] = fmt.Sprint(result[1])
 			}
+		}
+	}
+
+	return
+}
+
+func GetLegacyEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
+	// TODO: Handle error
+	err, clientset := kube.GetClient()
+	if err != nil {
+		fmt.Println("Failed to get kube client:", err)
+		return nil, err
+	}
+
+	namespace := c.String("namespace")
+	result, err := promptForPod(err, clientset, namespace)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("")
+	cmd := []string{"/bin/sh", "-c", fmt.Sprintf("cat %s", c.String("dotenv"))}
+	stdOut, _, err := kube.ExecCommandInContainerWithFullOutput(clientset, namespace, result, cmd)
+	if err != nil {
+		fmt.Printf("Failed to execute command `%s` on pod %s with error: %e", cmd, result, err)
+		return nil, err
+	}
+
+	envMap = make(map[string]string)
+	for _, envStr := range strings.Split(stdOut, "\n") {
+		parts := strings.SplitN(envStr, "=", 2)
+		if len(parts) > 1 {
+			envMap[parts[0]] = parts[1]
 		}
 	}
 

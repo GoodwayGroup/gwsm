@@ -66,3 +66,19 @@ The 'filter-prefix' flag will exclude any values that start with the flagged pre
 
 The 'exclude' flag will exclude any values where the KEY matches exactly from display.
 `
+
+var ViewAnsibleEncryptedEnvHelpText = `
+View a legacy ansible-vault encrypted Kubenetes Secret file. This will output the contents of
+the 'data.<accsessor flag>' block. This defaults to 'data..env'.
+
+Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
+
+Example file structure of decrypted file:
+
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  .env: <BASE64 ENCODED STRING>
+`

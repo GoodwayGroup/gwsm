@@ -13,8 +13,10 @@ require (
 	github.com/manifoldco/promptui v0.7.0
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mitchellh/gox v1.0.1 // indirect
+	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
 	github.com/r3labs/diff v1.1.0
 	github.com/urfave/cli/v2 v2.2.0
+	golang.org/x/crypto v0.0.0-20181025213731-e84da0312774
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20190709130402-674ba3eaed22
