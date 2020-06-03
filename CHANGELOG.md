@@ -1,8 +1,19 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="v0.5.0"></a>
+## [v0.5.0] - 2020-06-03
+### Bug Fixes
+- **typo:** address typo in error message
+
+### Chore
+- **changelog:** updated settings for changelog generation
+- **version:** bump app version to v0.5.0
+
 ### Features
 - **release:** v0.4.0
+- **s3:** added simple s3 get command
 
 
 <a name="v0.4.0"></a>
@@ -56,7 +67,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.5.0...HEAD
+[v0.5.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.2.1...v0.3.0
 [v0.2.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.2.0...v0.2.1
