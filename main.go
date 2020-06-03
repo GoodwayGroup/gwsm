@@ -40,6 +40,18 @@ func main() {
 				},
 			},
 			{
+				Name:  "s3",
+				Usage: "simple S3 commands",
+				Subcommands: []*cli.Command{
+					{
+						Name:      "get",
+						Usage:     "[object path] [destination path]",
+						UsageText: info.S3GetCommandHelp,
+						Action:    cmd.S3Get,
+					},
+				},
+			},
+			{
 				Name:    "local",
 				Aliases: []string{"l"},
 				Usage:   "Interact with local env files",

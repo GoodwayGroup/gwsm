@@ -105,3 +105,11 @@ It will then grab contents of the dotenv filr on a Pod in a given Namespace.
 This defaults to inspecting the '$PWD/.env on' when executing a 'cat' command. This method uses
 '/bin/bash -c' as the base command to perform inspection.
 `
+
+var S3GetCommandHelp = `
+The '[object path]' MUST always start with 's3://'
+The '[destination path]' direcotry MUST exists, but file will be created or overwritten
+
+Example:
+$ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
+`
