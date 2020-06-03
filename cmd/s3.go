@@ -9,7 +9,7 @@ import (
 func S3Get(c *cli.Context) error {
 	if c.NArg() > 2 {
 		cli.ShowSubcommandHelp(c)
-		return cli.NewExitError(errors.New("ERROR too many arguements passed"), 2)
+		return cli.NewExitError(errors.New("ERROR too many arguments passed"), 2)
 	}
 
 	src, dest := c.Args().Get(0), c.Args().Get(1)
