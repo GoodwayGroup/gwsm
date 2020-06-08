@@ -10,12 +10,14 @@ require (
 	github.com/cyberark/summon v0.8.1
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/go-openapi/strfmt v0.19.5 // indirect
+	github.com/hashicorp/go-version v1.2.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
 	github.com/manifoldco/promptui v0.7.0
 	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mitchellh/gox v1.0.1 // indirect
 	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
 	github.com/r3labs/diff v1.1.0
 	github.com/urfave/cli/v2 v2.2.0

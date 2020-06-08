@@ -69,9 +69,12 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		wg.Add(1)
 		go func(groupName string) {
 			defer wg.Done()
-			blob := sm.RetrieveSecret(groupName)
+			blob, err := sm.RetrieveSecret(groupName)
+			if err != nil {
+				results <- lib.Result{Name: groupName, JSON: nil, Error: err}
+			}
 			var parsed map[string]interface{}
-			err := json.Unmarshal(blob, &parsed)
+			err = json.Unmarshal(blob, &parsed)
 			results <- lib.Result{Name: groupName, JSON: parsed, Error: err}
 		}(secretGroup)
 	}

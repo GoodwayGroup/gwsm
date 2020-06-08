@@ -3,6 +3,7 @@ package env
 import (
 	"bufio"
 	"fmt"
+	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 	"gwsm/kube"
@@ -45,7 +46,8 @@ func shouldProcessLine(c *cli.Context, ln string) bool {
 func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) (string, error) {
 	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 	if err != nil {
-		fmt.Println("Failed to get pods:", err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Red("✖ Failed to get pods"))
 		return "", err
 	}
 
@@ -62,7 +64,8 @@ func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) 
 	_, result, err := prompt.Run()
 
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Sprintf(aurora.Red("✖ Prompt failed %e"), err))
 		return "", err
 	}
 
@@ -70,10 +73,10 @@ func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) 
 }
 
 func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
-	// TODO: Handle error
 	err, clientset := kube.GetClient()
 	if err != nil {
-		fmt.Println("Failed to get kube client:", err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Red("✖ Failed to get kube client"))
 		return nil, err
 	}
 
@@ -87,7 +90,9 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 	cmd := []string{"/bin/sh", "-c", fmt.Sprintf("strings /proc/$(ps faux | grep %s | tail -1 | awk '{print $2}')/environ", c.String("cmd"))}
 	stdOut, _, err := kube.ExecCommandInContainerWithFullOutput(clientset, namespace, result, cmd)
 	if err != nil {
-		fmt.Printf("Failed to execute command `%s` on pod %s with error: %e", cmd, result, err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Sprintf(aurora.Red("✖ Failed to execute command `%s` on pod %s with error: %e"), cmd, result, err))
+
 		return nil, err
 	}
 
@@ -108,10 +113,10 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 }
 
 func GetLegacyEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
-	// TODO: Handle error
 	err, clientset := kube.GetClient()
 	if err != nil {
-		fmt.Println("Failed to get kube client:", err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Red("✖ Failed to get kube client"))
 		return nil, err
 	}
 
@@ -125,7 +130,8 @@ func GetLegacyEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err e
 	cmd := []string{"/bin/sh", "-c", fmt.Sprintf("cat %s", c.String("dotenv"))}
 	stdOut, _, err := kube.ExecCommandInContainerWithFullOutput(clientset, namespace, result, cmd)
 	if err != nil {
-		fmt.Printf("Failed to execute command `%s` on pod %s with error: %e", cmd, result, err)
+		// TODO: Consolidate logger
+		fmt.Println(aurora.Sprintf(aurora.Red("✖ \"Failed to execute command `%s` on pod %s with error: %e\""), cmd, result, err))
 		return nil, err
 	}
 

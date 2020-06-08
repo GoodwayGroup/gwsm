@@ -8,7 +8,6 @@ import (
 	"github.com/a8m/djson"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/jedib0t/go-pretty/table"
-	"github.com/logrusorgru/aurora"
 	"github.com/urfave/cli/v2"
 	"gwsm/lib"
 	"gwsm/sm"
@@ -18,14 +17,14 @@ import (
 
 // Limit the length of a string while also appending an ellipses.
 func truncateString(str string, num int) string {
-	bnoden := str
+	short := str
 	if len(str) > num {
 		if num > 3 {
 			num -= 3
 		}
-		bnoden = str[0:num] + "..."
+		short = str[0:num] + "..."
 	}
-	return bnoden
+	return short
 }
 
 // Helper method to either bypass and return the `secretName` passed in via CLI
@@ -36,6 +35,7 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 	if secretName == "" {
 		secrets, err := sm.ListSecrets()
 		if err != nil {
+			PrintWarn("Error retrieving list of secrets.")
 			return "", err
 		}
 
@@ -127,7 +127,7 @@ func SMViewSecret(c *cli.Context) error {
 	} else {
 		result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
 		if err != nil {
-			fmt.Println(aurora.Red("✖ Stored string value is not valid JSON."))
+			PrintWarn("stored string value is not valid JSON.")
 			fmt.Println(secret.SecretString)
 		} else {
 			f := colorjson.NewFormatter()
@@ -147,7 +147,6 @@ func SMDescribeSecret(c *cli.Context) error {
 		return cli.NewExitError(err, 2)
 	}
 
-	// go get secret
 	secret, err := sm.DescribeSecret(secretName)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -175,7 +174,7 @@ func SMEditSecret(c *cli.Context) error {
 	} else {
 		result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
 		if err != nil {
-			fmt.Println(aurora.Red("✖ Stored string value is not valid JSON."))
+			PrintWarn("stored string value is not valid JSON.")
 			s = []byte(aws.StringValue(secret.SecretString))
 		} else {
 			s, err = json.MarshalIndent(result, "", "    ")
@@ -201,21 +200,28 @@ func SMEditSecret(c *cli.Context) error {
 		return cli.NewExitError(err, 2)
 	}
 
-	fmt.Println(aurora.Sprintf(aurora.Green("✔ %s successfully updated."), secretName))
+	PrintSuccess(fmt.Sprintf("%s successfully updated.", secretName))
 
 	return nil
 }
 
 func SMCreateSecret(c *cli.Context) error {
-	// Do a name check?
 	secretName := c.String("secret-id")
-	interactive := c.Bool("interactive")
+	exists, err := sm.CheckIfSecretExists(secretName)
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+	if exists {
+		PrintWarn(fmt.Sprintf("'%s' already exists. Please use a different name.", secretName))
+		return nil
+	}
 
+	interactive := c.Bool("interactive")
 	var value []byte
 	if c.String("value") == "" {
 		// Assume interactive mode
 		interactive = true
-		value = []byte(c.String("{}"))
+		value = []byte("{}")
 	} else {
 		value = []byte(c.String("value"))
 	}
@@ -224,7 +230,7 @@ func SMCreateSecret(c *cli.Context) error {
 	if interactive {
 		result, err := djson.Decode(value)
 		if err != nil {
-			fmt.Println(aurora.Red("✖ value is not valid JSON."))
+			PrintWarn("value is not valid JSON.")
 			s = value
 		} else {
 			s, err = json.MarshalIndent(result, "", "    ")
@@ -241,7 +247,6 @@ func SMCreateSecret(c *cli.Context) error {
 	}
 
 	var t string
-	var err error
 	if c.Bool("binary") {
 		t = "BinarySecret"
 		_, err = sm.CreateSecretBinary(secretName, s)
@@ -254,11 +259,22 @@ func SMCreateSecret(c *cli.Context) error {
 		return cli.NewExitError(err, 2)
 	}
 
-	fmt.Println(aurora.Sprintf(aurora.Green("✔ %s %s successfully created."), secretName, t))
+	PrintSuccess(fmt.Sprintf("%s %s successfully created.", secretName, t))
 
 	return nil
 }
 
 func SMPutSecret(c *cli.Context) error {
+	secretName := c.String("secret-id")
+	exists, err := sm.CheckIfSecretExists(secretName)
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+	if exists {
+		PrintWarn(fmt.Sprintf("'%s' already exists. Please use a different name.", secretName))
+		return nil
+	}
+
+	// TODO: Implement PutSecret
 	return cli.NewExitError("Not yet implemented", 5)
 }

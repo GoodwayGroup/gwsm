@@ -4,19 +4,35 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"gwsm/lib"
-	"os"
 	"strings"
 )
+
+func getValueByKey(keyName string, secretBytes []byte) (secret []byte, err error) {
+	var secrets map[string]interface{}
+	var secretValue string
+
+	if err := json.Unmarshal(secretBytes, &secrets); err != nil {
+		return nil, err
+	}
+
+	secretValue = fmt.Sprint(secrets[keyName])
+
+	return []byte(secretValue), nil
+}
 
 /*
    NOTE: Refactor of https://github.com/cyberark/summon-aws-secrets/blob/master/main.go
    This was needed to have the command return the byte stream rather than have it write
    to STDOUT
 */
-func RetrieveSecret(variableName string) (secretBytes []byte) {
-	sess, _ := lib.GetAWSSession()
+func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	// Check if key has been specified
@@ -34,10 +50,9 @@ func RetrieveSecret(variableName string) (secretBytes []byte) {
 		SecretId: aws.String(secretName),
 	})
 
-	err := req.Send()
+	err = req.Send()
 	if err != nil {
-		// TODO: Refactor to use common error return pattern for cli.Error
-		printAndExit(err)
+		return nil, err
 	}
 
 	if resp.SecretString != nil {
@@ -49,8 +64,7 @@ func RetrieveSecret(variableName string) (secretBytes []byte) {
 	if keyName != "" {
 		secretBytes, err = getValueByKey(keyName, secretBytes)
 		if err != nil {
-			// TODO: Refactor to use common error return pattern for cli.Error
-			printAndExit(err)
+			return nil, err
 		}
 	}
 
@@ -60,7 +74,10 @@ func RetrieveSecret(variableName string) (secretBytes []byte) {
 // ListSecrets will retrieval ALL secrets via pagination of 100 per page. It will
 // return once all pages have been processed.
 func ListSecrets() (secrets []secretsmanager.SecretListEntry, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	// Get all secret names
@@ -82,7 +99,10 @@ func ListSecrets() (secrets []secretsmanager.SecretListEntry, err error) {
 
 // GetSecret will retrieve a specific secret by Name (id)
 func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	secret, err = svc.GetSecretValue(&secretsmanager.GetSecretValueInput{
@@ -98,7 +118,10 @@ func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err erro
 
 // PutSecretString will put an updated SecretString value to a specific secret by Name (id)
 func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	secret, err = svc.PutSecretValue(&secretsmanager.PutSecretValueInput{
@@ -115,7 +138,10 @@ func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretVa
 
 // PutSecretBinary will put an updated SecretBinary value to a specific secret by Name (id)
 func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	secret, err = svc.PutSecretValue(&secretsmanager.PutSecretValueInput{
@@ -132,7 +158,10 @@ func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretVa
 
 // CreateSecretString will create a new SecretString value to a specific secret by Name (id)
 func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	secret, err = svc.CreateSecret(&secretsmanager.CreateSecretInput{
@@ -149,7 +178,10 @@ func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSe
 
 // CreateSecretBinary will create a new SecretBinary value to a specific secret by Name (id)
 func CreateSecretBinary(id string, data []byte) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
 	secret, err = svc.CreateSecret(&secretsmanager.CreateSecretInput{
@@ -166,14 +198,15 @@ func CreateSecretBinary(id string, data []byte) (secret *secretsmanager.CreateSe
 
 // DescribeSecret retrieves the describe data for a specific secret by Name (id)
 func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err error) {
-	sess, _ := lib.GetAWSSession()
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
 	svc := secretsmanager.New(sess)
 
-	// Get all secret names
 	secret, err = svc.DescribeSecret(&secretsmanager.DescribeSecretInput{
 		SecretId: aws.String(id),
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -181,21 +214,25 @@ func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err
 	return
 }
 
-// TODO: Refactor to use common error return pattern for cli.Error
-func printAndExit(err error) {
-	os.Stderr.Write([]byte(err.Error()))
-	os.Exit(1)
-}
+func CheckIfSecretExists(id string) (bool, error) {
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return true, err
+	}
+	svc := secretsmanager.New(sess)
 
-func getValueByKey(keyName string, secretBytes []byte) (secret []byte, err error) {
-	var secrets map[string]interface{}
-	var secretValue string
+	_, err = svc.DescribeSecret(&secretsmanager.DescribeSecretInput{
+		SecretId: aws.String(id),
+	})
 
-	if err := json.Unmarshal(secretBytes, &secrets); err != nil {
-		return nil, err
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			if aerr.Code() == secretsmanager.ErrCodeResourceNotFoundException {
+				return false, nil
+			}
+		}
+		return true, err
 	}
 
-	secretValue = fmt.Sprint(secrets[keyName])
-
-	return []byte(secretValue), nil
+	return true, nil
 }
