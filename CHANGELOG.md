@@ -2,6 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v0.6.1"></a>
+## [v0.6.1] - 2020-06-08
+### Chore
+- **version:** bump version of app to v0.6.0
+
+### Features
+- **release:** v0.6.0
+- **sm:** added JSON validation step to edit action that allows for verification before submit
+
+
 <a name="v0.6.0"></a>
 ## [v0.6.0] - 2020-06-08
 ### Debt
@@ -78,7 +88,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.1...HEAD
+[v0.6.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.3.0...v0.4.0
