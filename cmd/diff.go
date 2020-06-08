@@ -73,9 +73,9 @@ func addRowToTable(change diff.Change, t table.Writer) {
 
 func printOutDiff(changelog diff.Changelog) {
 	diffGroups := map[string][]diff.Change{
-		"create": []diff.Change{},
-		"delete": []diff.Change{},
-		"update": []diff.Change{},
+		"create": {},
+		"delete": {},
+		"update": {},
 	}
 
 	for _, change := range changelog {

@@ -17,11 +17,11 @@ func main() {
 		Version:  info.AppVersion,
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
-			&cli.Author{
+			{
 				Name:  "Derek Smith",
 				Email: "dsmith@goodwaygroup.com",
 			},
-			&cli.Author{
+			{
 				Name: info.AppRepoOwner,
 			},
 		},
@@ -48,6 +48,146 @@ func main() {
 						Usage:     "[object path] [destination path]",
 						UsageText: info.S3GetCommandHelp,
 						Action:    cmd.S3Get,
+					},
+				},
+			},
+			{
+				Name:    "secretsmanager",
+				Aliases: []string{"sm"},
+				Usage:   "Secrets Manager commands",
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:        "binary",
+						Aliases:     []string{"b"},
+						Usage:       "get the SecretBinary value",
+						DefaultText: info.SecretBinaryHelp,
+					},
+				},
+				Subcommands: []*cli.Command{
+					{
+						// list-secrets
+						Name:   "list",
+						Usage:  "display table of all secrets with meta data",
+						Action: cmd.SMListSecrets,
+					},
+					{
+						// describe-secret
+						Name:  "describe",
+						Usage: "print description of secret to STDOUT",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:    "secret-id",
+								Aliases: []string{"s"},
+								Usage:   "Specific Secret to view, will bypass select/search",
+							},
+						},
+						Action: cmd.SMDescribeSecret,
+					},
+					{
+						// get-secret-value
+						Name:    "get",
+						Aliases: []string{"view"},
+						Usage:   "select from list or pass in specific secret",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:    "secret-id",
+								Aliases: []string{"s"},
+								Usage:   "Specific Secret to view, will bypass select/search",
+							},
+							&cli.BoolFlag{
+								Name:        "binary",
+								Aliases:     []string{"b"},
+								Usage:       "get the SecretBinary value",
+								DefaultText: info.SecretBinaryHelp,
+							},
+						},
+						// TODO: Flag for use of binary
+						Action: cmd.SMViewSecret,
+					},
+					{
+						Name:    "edit",
+						Aliases: []string{"e"},
+						Usage:   "interactive edit of a secret String Value",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:    "secret-id",
+								Aliases: []string{"s"},
+								Usage:   "Specific Secret to view, will bypass select/search",
+							},
+						},
+						Action: cmd.SMEditSecret,
+					},
+					{
+						// create-secret
+						Name:    "create",
+						Aliases: []string{"c"},
+						Usage:   "create new secret in Secrets Manager",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "secret-id",
+								Aliases:  []string{"s"},
+								Usage:    "Secret name",
+								Required: true,
+							},
+							&cli.StringFlag{
+								Name:    "value",
+								Aliases: []string{"v"},
+								Usage:   "Secret Value. Will store as a string, unless binary flag is set.",
+							},
+							&cli.BoolFlag{
+								Name:    "interactive",
+								Aliases: []string{"i"},
+								Usage:   "Open interactive editor to create secret value.",
+							},
+							&cli.StringFlag{
+								// TODO: add description feature
+								Name:    "description",
+								Aliases: []string{"desc"},
+								Usage:   "Additional description text.",
+							},
+							&cli.StringFlag{
+								// TODO: add tags feature
+								Name:  "tags",
+								Usage: "key=value tags (CSV list)",
+							},
+						},
+						Action: cmd.SMCreateSecret,
+					},
+					{
+						// put-secret-value
+						Name:  "put",
+						Usage: "non-interactive update to a specific secret",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "secret-id",
+								Aliases:  []string{"s"},
+								Usage:    "Secret name",
+								Required: true,
+							},
+							&cli.StringFlag{
+								Name:    "value",
+								Aliases: []string{"v"},
+								Usage:   "Secret Value. Will store as a string, unless binary flag is set.",
+							},
+							&cli.BoolFlag{
+								Name:    "interactive",
+								Aliases: []string{"i"},
+								Usage:   "Open interactive editor to create secret value.",
+							},
+							&cli.StringFlag{
+								// TODO: add description feature
+								Name:    "description",
+								Aliases: []string{"desc"},
+								Usage:   "Additional description text.",
+							},
+							&cli.StringFlag{
+								// TODO: add tags feature
+								Name:  "tags",
+								Usage: "key=value tags (CSV list)",
+							},
+						},
+						// TODO: Flag for use of binary
+						Action: cmd.SMPutSecret,
 					},
 				},
 			},

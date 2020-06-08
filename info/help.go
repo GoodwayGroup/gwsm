@@ -113,3 +113,5 @@ The '[destination path]' direcotry MUST exists, but file will be created or over
 Example:
 $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 `
+
+var SecretBinaryHelp = "By default, the tool will interact with the SecretString value. Use this flag to interact with the SecretBinary value instead."
