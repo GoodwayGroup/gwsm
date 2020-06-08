@@ -2,6 +2,17 @@
 ## [Unreleased]
 
 
+<a name="v0.6.0"></a>
+## [v0.6.0] - 2020-06-08
+### Debt
+- **logger:** updated logging and added tests
+
+### Features
+- **release:** v0.5.0
+- **sm:** Added interactive editor for edit and create
+- **sm:** Added list, describe, get, edit and create SecretsManager commmands
+
+
 <a name="v0.5.0"></a>
 ## [v0.5.0] - 2020-06-03
 ### Bug Fixes
@@ -67,7 +78,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.0...HEAD
+[v0.6.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.2.1...v0.3.0
