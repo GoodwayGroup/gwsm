@@ -12,3 +12,7 @@ func PrintWarn(s string) {
 func PrintSuccess(s string) {
 	fmt.Println(Sprintf(Green("✔ %s"), s))
 }
+
+func PrintInfo(s string) {
+	fmt.Println(Sprintf(Gray(14, "➜ %s"), s))
+}

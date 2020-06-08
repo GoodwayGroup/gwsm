@@ -35,7 +35,7 @@ func OpenFileInEditor(filename string) error {
 // the written bytes on success or an error on failure. Temp file will be
 // deleted automatically.
 func GetInputFromEditor(data []byte) ([]byte, error) {
-	file, err := ioutil.TempFile(os.TempDir(), "*")
+	file, err := ioutil.TempFile(os.TempDir(), "*.json")
 	if err != nil {
 		return []byte{}, err
 	}

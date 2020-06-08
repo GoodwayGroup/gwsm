@@ -67,7 +67,7 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 		}
 
 		secretName = answers.SecretName
-		fmt.Printf("Retrieving: %s\n", secretName)
+		PrintInfo(fmt.Sprintf("Retrieving: %s", secretName))
 	}
 	return secretName, nil
 }
@@ -128,7 +128,7 @@ func SMViewSecret(c *cli.Context) error {
 		result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
 		if err != nil {
 			PrintWarn("stored string value is not valid JSON.")
-			fmt.Println(secret.SecretString)
+			fmt.Println(aws.StringValue(secret.SecretString))
 		} else {
 			f := colorjson.NewFormatter()
 			f.Indent = 4
@@ -184,11 +184,53 @@ func SMEditSecret(c *cli.Context) error {
 		}
 	}
 
-	up, err := lib.GetInputFromEditor(s)
+	var up []byte
+	up, err = lib.GetInputFromEditor(s)
 	if err != nil {
 		return cli.NewExitError(err, 2)
 	}
-	// TODO: Check if new data is Valid JSON before save
+	
+	done := false
+	for !done {
+		_, err = djson.Decode(up)
+		if err != nil {
+			PrintWarn("invalid JSON submitted.")
+
+			ed := false
+			p1 := &survey.Confirm{
+				Message: "Open to edit?",
+			}
+			err = survey.AskOne(p1, &ed)
+			if err != nil {
+				return err
+			}
+			if ed {
+				PrintInfo("Opening in editor...")
+				up, err = lib.GetInputFromEditor(up)
+				if err != nil {
+					return cli.NewExitError(err, 2)
+				}
+			} else {
+				submit := false
+				p2 := &survey.Confirm{
+					Message: "Continue with Submit?",
+				}
+				err = survey.AskOne(p2, &submit)
+				if err != nil {
+					return err
+				}
+				if !submit {
+					PrintWarn("Exiting without submit.")
+					return nil
+				}
+				PrintInfo("Continuing with submit.")
+				done = true
+			}
+		} else {
+			PrintInfo("JSON validated.")
+			done = true
+		}
+	}
 
 	if c.Bool("binary") {
 		_, err = sm.PutSecretBinary(secretName, up)

@@ -41,3 +41,20 @@ func Test_PrintSuccess(t *testing.T) {
 		t.Errorf("%#v, wanted %#v", string(out), wantMsg)
 	}
 }
+
+func Test_PrintInfo(t *testing.T) {
+	rescueStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	PrintInfo("This is a test!")
+
+	w.Close()
+	out, _ := ioutil.ReadAll(r)
+	os.Stdout = rescueStdout
+
+	wantMsg := fmt.Sprintln(aurora.Gray(14, "✔ This is a test!"))
+	if string(out) != wantMsg {
+		t.Errorf("%#v, wanted %#v", string(out), wantMsg)
+	}
+}

@@ -94,14 +94,7 @@ func main() {
 								Aliases: []string{"s"},
 								Usage:   "Specific Secret to view, will bypass select/search",
 							},
-							&cli.BoolFlag{
-								Name:        "binary",
-								Aliases:     []string{"b"},
-								Usage:       "get the SecretBinary value",
-								DefaultText: info.SecretBinaryHelp,
-							},
 						},
-						// TODO: Flag for use of binary
 						Action: cmd.SMViewSecret,
 					},
 					{
