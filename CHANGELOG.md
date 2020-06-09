@@ -2,6 +2,13 @@
 ## [Unreleased]
 
 
+<a name="v0.7.0"></a>
+## [v0.7.0] - 2020-06-09
+### Features
+- **release:** v0.6.1
+- **sm:** support for delete secret, deprecated custom editor code in favor of survey prompt
+
+
 <a name="v0.6.1"></a>
 ## [v0.6.1] - 2020-06-08
 ### Chore
@@ -88,7 +95,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.0...HEAD
+[v0.7.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.1...v0.7.0
 [v0.6.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.4.0...v0.5.0
