@@ -116,6 +116,26 @@ func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err erro
 	return
 }
 
+// DeleteSecret will retrieve a specific secret by Name (id)
+func DeleteSecret(id string, force bool) (secret *secretsmanager.DeleteSecretOutput, err error) {
+	sess, err := lib.GetAWSSession()
+	if err != nil {
+		return nil, err
+	}
+	svc := secretsmanager.New(sess)
+
+	secret, err = svc.DeleteSecret(&secretsmanager.DeleteSecretInput{
+		SecretId:                   aws.String(id),
+		ForceDeleteWithoutRecovery: aws.Bool(force),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
 // PutSecretString will put an updated SecretString value to a specific secret by Name (id)
 func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretValueOutput, err error) {
 	sess, err := lib.GetAWSSession()

@@ -53,7 +53,7 @@ func Test_PrintInfo(t *testing.T) {
 	out, _ := ioutil.ReadAll(r)
 	os.Stdout = rescueStdout
 
-	wantMsg := fmt.Sprintln(aurora.Gray(14, "✔ This is a test!"))
+	wantMsg := fmt.Sprintln(aurora.Gray(14, "➜ This is a test!"))
 	if string(out) != wantMsg {
 		t.Errorf("%#v, wanted %#v", string(out), wantMsg)
 	}

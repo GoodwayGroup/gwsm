@@ -9,10 +9,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/urfave/cli/v2"
-	"gwsm/lib"
 	"gwsm/sm"
 	"os"
 	"sort"
+	"strings"
 )
 
 // Limit the length of a string while also appending an ellipses.
@@ -45,31 +45,36 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 		}
 		sort.Strings(secretNames)
 
-		var qs = []*survey.Question{
-			{
-				Name: "secret",
-				Prompt: &survey.Select{
-					Message: "Choose a Secret to view:",
-					Options: secretNames,
-					Default: secretNames[0],
-				},
-			},
+		p := &survey.Select{
+			Message: "Choose a Secret to view:",
+			Options: secretNames,
+			Default: secretNames[0],
 		}
-
-		answers := struct {
-			SecretName string `survey:"secret"`
-		}{}
-
-		// perform the questions
-		err = survey.Ask(qs, &answers)
+		err = survey.AskOne(p, &secretName)
 		if err != nil {
 			return "", err
 		}
 
-		secretName = answers.SecretName
 		PrintInfo(fmt.Sprintf("Retrieving: %s", secretName))
 	}
 	return secretName, nil
+}
+
+func promptForEdit(secretName string, s []byte) ([]byte, error) {
+	ed := ""
+	prompt := &survey.Editor{
+		Message:       fmt.Sprintf("Open editor to modify '%s'?", secretName),
+		FileName:      "*.json",
+		Default:       string(s),
+		HideDefault:   true,
+		AppendDefault: true,
+	}
+	err := survey.AskOne(prompt, &ed, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return []byte(ed), nil
 }
 
 func SMListSecrets(c *cli.Context) error {
@@ -185,11 +190,15 @@ func SMEditSecret(c *cli.Context) error {
 	}
 
 	var up []byte
-	up, err = lib.GetInputFromEditor(s)
+	up, err = promptForEdit(secretName, s)
 	if err != nil {
 		return cli.NewExitError(err, 2)
 	}
-	
+	if string(s) == strings.TrimSuffix(string(up), "\n") {
+		PrintInfo("Updated value matches original. Exiting.")
+		return nil
+	}
+
 	done := false
 	for !done {
 		_, err = djson.Decode(up)
@@ -205,10 +214,13 @@ func SMEditSecret(c *cli.Context) error {
 				return err
 			}
 			if ed {
-				PrintInfo("Opening in editor...")
-				up, err = lib.GetInputFromEditor(up)
+				up, err = promptForEdit(secretName, up)
 				if err != nil {
 					return cli.NewExitError(err, 2)
+				}
+				if string(s) == strings.TrimSuffix(string(up), "\n") {
+					PrintInfo("Updated value matches original. Exiting.")
+					return nil
 				}
 			} else {
 				submit := false
@@ -281,7 +293,8 @@ func SMCreateSecret(c *cli.Context) error {
 			}
 		}
 
-		up, err := lib.GetInputFromEditor(s)
+		var up []byte
+		up, err = promptForEdit(secretName, s)
 		if err != nil {
 			return cli.NewExitError(err, 2)
 		}
@@ -319,4 +332,40 @@ func SMPutSecret(c *cli.Context) error {
 
 	// TODO: Implement PutSecret
 	return cli.NewExitError("Not yet implemented", 5)
+}
+
+func SMDeleteSecret(c *cli.Context) error {
+	secretName := c.String("secret-id")
+	exists, err := sm.CheckIfSecretExists(secretName)
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+	if !exists {
+		PrintWarn(fmt.Sprintf("'%s' was not found.", secretName))
+		return nil
+	}
+
+	del := false
+	p1 := &survey.Confirm{
+		Message: fmt.Sprintf("Are you sure you want to permanentaly delete '%s'?", secretName),
+	}
+	err = survey.AskOne(p1, &del)
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+
+	if !del {
+		PrintInfo("Exiting without delete.")
+		return nil
+	}
+
+	force := c.Bool("force")
+	_, err = sm.DeleteSecret(secretName, force)
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+
+	PrintSuccess(fmt.Sprintf("'%s' deleted. (force: %v)", secretName, force))
+
+	return nil
 }

@@ -78,7 +78,7 @@ func main() {
 							&cli.StringFlag{
 								Name:    "secret-id",
 								Aliases: []string{"s"},
-								Usage:   "Specific Secret to view, will bypass select/search",
+								Usage:   "Specific Secret to describe, will bypass select/search",
 							},
 						},
 						Action: cmd.SMDescribeSecret,
@@ -105,7 +105,7 @@ func main() {
 							&cli.StringFlag{
 								Name:    "secret-id",
 								Aliases: []string{"s"},
-								Usage:   "Specific Secret to view, will bypass select/search",
+								Usage:   "Specific Secret to edit, will bypass select/search",
 							},
 						},
 						Action: cmd.SMEditSecret,
@@ -181,6 +181,25 @@ func main() {
 						},
 						// TODO: Flag for use of binary
 						Action: cmd.SMPutSecret,
+					},
+					{
+						Name:    "delete",
+						Aliases: []string{"del"},
+						Usage:   "delete a specific secret",
+						Flags: []cli.Flag{
+							&cli.StringFlag{
+								Name:     "secret-id",
+								Aliases:  []string{"s"},
+								Usage:    "Specific Secret to delete",
+								Required: true,
+							},
+							&cli.BoolFlag{
+								Name:    "force",
+								Aliases: []string{"f"},
+								Usage:   "Bypass recovery window (30 days) and immediately delete Secret.",
+							},
+						},
+						Action: cmd.SMDeleteSecret,
 					},
 				},
 			},
