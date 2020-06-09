@@ -11,10 +11,12 @@ import (
 	"time"
 )
 
+var version string
+
 func main() {
 	app := &cli.App{
 		Name:     info.AppName,
-		Version:  info.AppVersion,
+		Version:  version,
 		Compiled: time.Now(),
 		Authors: []*cli.Author{
 			{
@@ -35,7 +37,7 @@ func main() {
 				Aliases: []string{"v"},
 				Usage:   "Print version info",
 				Action: func(c *cli.Context) error {
-					fmt.Printf("%s %s (%s/%s)\n", info.AppName, info.AppVersion, runtime.GOOS, runtime.GOARCH)
+					fmt.Printf("%s %s (%s/%s)\n", info.AppName, version, runtime.GOOS, runtime.GOARCH)
 					return nil
 				},
 			},
