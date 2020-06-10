@@ -2,6 +2,15 @@
 ## [Unreleased]
 
 
+<a name="v0.7.2"></a>
+## [v0.7.2] - 2020-06-10
+### Bug Fixes
+- **sm:** fixed hanging goroutine when error returned from SM
+
+### Features
+- **release:** v0.7.1
+
+
 <a name="v0.7.1"></a>
 ## [v0.7.1] - 2020-06-09
 ### Debt
@@ -104,7 +113,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.2...HEAD
+[v0.7.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.1...v0.7.2
 [v0.7.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.1...v0.7.0
 [v0.6.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.0...v0.6.1
