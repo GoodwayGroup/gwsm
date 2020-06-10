@@ -38,8 +38,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 	groupedValues = make(map[string]map[string]string)
 	subs := make(map[string]string)
 	for key, value := range yamlConfig.Data {
-		// TODO: Make Secrets suffix a CLI param w/ default
-		if strings.HasSuffix(key, "_NAME") {
+		if strings.HasSuffix(key, c.String("secret-suffix")) {
 			subs[strings.ToLower(key)] = value
 		}
 		addToGroupedValues(groupedValues, "local", key, fmt.Sprint(value))
@@ -72,6 +71,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 			blob, err := sm.RetrieveSecret(groupName)
 			if err != nil {
 				results <- lib.Result{Name: groupName, JSON: nil, Error: err}
+				return
 			}
 			var parsed map[string]interface{}
 			err = json.Unmarshal(blob, &parsed)
@@ -85,9 +85,9 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 	for secretJSON := range results {
 		if secretJSON.Error != nil {
 			fmt.Printf("Error with SM results JSON: %s\n", secretJSON.Error)
-			return nil, secretJSON.Error
+		} else {
+			allSecrets[secretJSON.Name] = secretJSON.JSON
 		}
-		allSecrets[secretJSON.Name] = secretJSON.JSON
 	}
 
 	for envvar, mappings := range secrets {

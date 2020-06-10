@@ -229,6 +229,11 @@ func main() {
 								Usage:    "Path to configmap.yaml",
 								Required: true,
 							},
+							&cli.StringFlag{
+								Name:  "secret-suffix",
+								Usage: "Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup",
+								Value: "_NAME",
+							},
 						},
 						Action: cmd.ViewLocalEnv,
 					},
@@ -344,6 +349,11 @@ func main() {
 						Usage:    "List (csv) of specific env vars to exclude values from display. Set to \"\" to remove any exclusions.",
 						Required: false,
 						Value:    "PATH,SHLVL,HOSTNAME",
+					},
+					&cli.StringFlag{
+						Name:  "secret-suffix",
+						Usage: "Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup",
+						Value: "_NAME",
 					},
 				},
 				Action: cmd.ViewEnvDiff,

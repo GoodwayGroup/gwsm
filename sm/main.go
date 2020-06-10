@@ -2,6 +2,7 @@ package sm
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -43,6 +44,14 @@ func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 
 	if len(arguments) > 1 {
 		keyName = arguments[1]
+	}
+
+	exists, err := CheckIfSecretExists(secretName)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, errors.New(fmt.Sprintf("'%s' secret does not exist", secretName))
 	}
 
 	// Get secret value
