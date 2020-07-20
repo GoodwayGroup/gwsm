@@ -7,7 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
-	"gwsm/lib"
+	as "github.com/clok/awssession"
 	"strings"
 )
 
@@ -30,7 +30,7 @@ func getValueByKey(keyName string, secretBytes []byte) (secret []byte, err error
    to STDOUT
 */
 func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 // ListSecrets will retrieval ALL secrets via pagination of 100 per page. It will
 // return once all pages have been processed.
 func ListSecrets() (secrets []secretsmanager.SecretListEntry, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func ListSecrets() (secrets []secretsmanager.SecretListEntry, err error) {
 
 // GetSecret will retrieve a specific secret by Name (id)
 func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err erro
 
 // DeleteSecret will retrieve a specific secret by Name (id)
 func DeleteSecret(id string, force bool) (secret *secretsmanager.DeleteSecretOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func DeleteSecret(id string, force bool) (secret *secretsmanager.DeleteSecretOut
 
 // PutSecretString will put an updated SecretString value to a specific secret by Name (id)
 func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretVa
 
 // PutSecretBinary will put an updated SecretBinary value to a specific secret by Name (id)
 func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -187,7 +187,7 @@ func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretVa
 
 // CreateSecretString will create a new SecretString value to a specific secret by Name (id)
 func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +207,7 @@ func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSe
 
 // CreateSecretBinary will create a new SecretBinary value to a specific secret by Name (id)
 func CreateSecretBinary(id string, data []byte) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -227,7 +227,7 @@ func CreateSecretBinary(id string, data []byte) (secret *secretsmanager.CreateSe
 
 // DescribeSecret retrieves the describe data for a specific secret by Name (id)
 func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +244,7 @@ func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err
 }
 
 func CheckIfSecretExists(id string) (bool, error) {
-	sess, err := lib.GetAWSSession()
+	sess, err := as.New()
 	if err != nil {
 		return true, err
 	}

@@ -5,8 +5,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	as "github.com/clok/awssession"
 	"github.com/urfave/cli/v2"
-	"gwsm/lib"
 	"os"
 	"strings"
 )
@@ -20,7 +20,7 @@ func Get(src string, dest string) error {
 	}
 	defer dstFile.Close()
 
-	sess, _ := lib.GetAWSSession()
+	sess, _ := as.New()
 	downloader := s3manager.NewDownloader(sess)
 
 	bucket, object, err := getBucketAndObject(src)
