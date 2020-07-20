@@ -2,6 +2,13 @@
 ## [Unreleased]
 
 
+<a name="v0.8.0"></a>
+## [v0.8.0] - 2020-07-20
+### Features
+- **awssession:** use awssession to manage session creation
+- **release:** v0.7.2
+
+
 <a name="v0.7.2"></a>
 ## [v0.7.2] - 2020-06-10
 ### Bug Fixes
@@ -113,7 +120,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.0...HEAD
+[v0.8.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.2...v0.8.0
 [v0.7.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.1...v0.7.2
 [v0.7.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.6.1...v0.7.0
