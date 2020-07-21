@@ -8,7 +8,7 @@ require (
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
 	github.com/aws/aws-sdk-go v1.33.8
 	github.com/clok/awssession v0.1.1
-	github.com/clok/kemba v0.4.0
+	github.com/clok/kemba v0.5.0
 	github.com/cyberark/summon v0.8.1
 	github.com/go-openapi/strfmt v0.19.5 // indirect
 	github.com/hashicorp/go-version v1.2.1 // indirect
