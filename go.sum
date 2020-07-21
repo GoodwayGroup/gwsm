@@ -50,10 +50,10 @@ github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5P
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 h1:q763qf9huN11kDQavWsoZXJNW3xEE4JJyHa5Q25/sd8=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
-github.com/clok/awssession v0.1.0 h1:LHFk1qxWckz/mBEVYbV0A4VozsWQte20tdAEUDoJ+Mk=
-github.com/clok/awssession v0.1.0/go.mod h1:NiRCj/zuqoJmRxeyihTi30KP/L0ct5jmhffUUjj3YRs=
-github.com/clok/kemba v0.3.0 h1:LPIQHyZxDMIk3yZEsnxnySsV9eRTazilxtdRu74Ve+E=
-github.com/clok/kemba v0.3.0/go.mod h1:9Ya26H5b+apkx+nUwTf6elx4MSqYyYLMVTkLvhlJlFg=
+github.com/clok/awssession v0.1.1 h1:AaCEsFA7Tn3ULQQ20EPOcaq/rTAJh9vzLFd6I0BJ0s0=
+github.com/clok/awssession v0.1.1/go.mod h1:ylz+HqrluG79V6azFSCfk1g97ktEhP9yCe+AhjBpXic=
+github.com/clok/kemba v0.4.0 h1:TvchRCoP1Fpr9XYC+sYZHvqta+1KqEmFKWaRXfLM9Tk=
+github.com/clok/kemba v0.4.0/go.mod h1:0arBoVOTmV5rgJAVsgXCmGRnKnf1g5TIH0rUja13LAc=
 github.com/codegangsta/cli v1.20.0/go.mod h1:/qJNoX69yVSKu5o4jLyXAENLRyk1uhi7zkbQ3slBdOA=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
@@ -173,6 +173,7 @@ github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
 github.com/googleapis/gnostic v0.0.0-20170729233727-0c5108395e2d h1:7XGaL1e6bYS1yIonGp9761ExpPPV1ui0SAC59Yube9k=
 github.com/googleapis/gnostic v0.0.0-20170729233727-0c5108395e2d/go.mod h1:sJBsCZ4ayReDTBIg8b9dl28c5xFWyhBTVRp3pOg5EKY=
+github.com/gookit/color v1.2.4 h1:xOYBan3Fwlrqj1M1UN2TlHOCRiek3bGzWf/vPnJ1roE=
 github.com/gookit/color v1.2.4/go.mod h1:AhIE+pS6D4Ql0SQWbBeXPHw7gY0/sjHoA4s/n1KB7xg=
 github.com/gophercloud/gophercloud v0.0.0-20190126172459-c818fa66e4c8/go.mod h1:3WdhXV3rUYy9p6AUW8d94kr+HS62Y4VL9mBnFxsD8q4=
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
