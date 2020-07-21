@@ -1,6 +1,7 @@
 package kube
 
 import (
+	"github.com/clok/kemba"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"log"
@@ -8,8 +9,10 @@ import (
 	"path/filepath"
 )
 
-func GetClient() (error, *kubernetes.Clientset) {
+func GetClient() (*kubernetes.Clientset, error) {
 	kubeconfig := filepath.Join(os.Getenv("HOME"), ".kube", "config")
+	k := kemba.New("kube:getClient")
+	k.Printf("using kubeconfig: %s", kubeconfig)
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		log.Fatal(err)
@@ -20,5 +23,5 @@ func GetClient() (error, *kubernetes.Clientset) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return err, clientset
+	return clientset, nil
 }

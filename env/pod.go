@@ -73,7 +73,7 @@ func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) 
 }
 
 func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
-	err, clientset := kube.GetClient()
+	clientset, err := kube.GetClient()
 	if err != nil {
 		// TODO: Consolidate logger
 		fmt.Println(aurora.Red("✖ Failed to get kube client"))
@@ -113,7 +113,7 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 }
 
 func GetLegacyEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
-	err, clientset := kube.GetClient()
+	clientset, err := kube.GetClient()
 	if err != nil {
 		// TODO: Consolidate logger
 		fmt.Println(aurora.Red("✖ Failed to get kube client"))

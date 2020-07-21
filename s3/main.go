@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	as "github.com/clok/awssession"
+	"github.com/clok/kemba"
 	"github.com/urfave/cli/v2"
 	"os"
 	"strings"
@@ -52,6 +53,8 @@ func getBucketAndObject(path string) (bucket string, object string, err error) {
 	} else {
 		return "", "", errors.New("ERROR unable to parse bucket path")
 	}
+	k := kemba.New("s3:getBucketAndObject")
+	k.Printf("bucket: %s object: %s", bucket, object)
 
 	return
 }

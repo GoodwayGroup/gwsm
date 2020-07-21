@@ -2,6 +2,7 @@ package kube
 
 import (
 	"bytes"
+	"github.com/clok/kemba"
 	"io"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -30,6 +31,9 @@ type ExecOptions struct {
 // returning stdout, stderr and error. `options` allowed for
 // additional parameters to be passed.
 func ExecWithOptions(client *kubernetes.Clientset, options ExecOptions) (string, string, error) {
+	k := kemba.New("kube:ExecWithOptions")
+	k.Log(options)
+
 	kubeCfg := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		clientcmd.NewDefaultClientConfigLoadingRules(),
 		&clientcmd.ConfigOverrides{},
