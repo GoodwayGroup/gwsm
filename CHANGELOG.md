@@ -2,6 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v0.8.1"></a>
+## [v0.8.1] - 2020-07-21
+### Chore
+- update dependencies
+
+### DevOps
+- updated release.sh script
+
+### Features
+- **release:** v0.8.0
+
+
 <a name="v0.8.0"></a>
 ## [v0.8.0] - 2020-07-20
 ### Features
@@ -120,7 +132,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.1...HEAD
+[v0.8.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.0...v0.8.1
 [v0.8.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.2...v0.8.0
 [v0.7.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.1...v0.7.2
 [v0.7.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.0...v0.7.1
