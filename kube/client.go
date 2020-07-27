@@ -9,10 +9,13 @@ import (
 	"path/filepath"
 )
 
+var (
+	kgc = kemba.New("kube:getClient")
+)
+
 func GetClient() (*kubernetes.Clientset, error) {
 	kubeconfig := filepath.Join(os.Getenv("HOME"), ".kube", "config")
-	k := kemba.New("kube:getClient")
-	k.Printf("using kubeconfig: %s", kubeconfig)
+	kgc.Printf("using kubeconfig: %s", kubeconfig)
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		log.Fatal(err)

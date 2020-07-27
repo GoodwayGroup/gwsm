@@ -27,12 +27,15 @@ type ExecOptions struct {
 	PreserveWhitespace bool
 }
 
+var (
+	kexec = kemba.New("kube:ExecWithOptions")
+)
+
 // ExecWithOptions executes a command in the specified container,
 // returning stdout, stderr and error. `options` allowed for
 // additional parameters to be passed.
 func ExecWithOptions(client *kubernetes.Clientset, options ExecOptions) (string, string, error) {
-	k := kemba.New("kube:ExecWithOptions")
-	k.Log(options)
+	kexec.Log(options)
 
 	kubeCfg := clientcmd.NewNonInteractiveDeferredLoadingClientConfig(
 		clientcmd.NewDefaultClientConfigLoadingRules(),

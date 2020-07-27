@@ -3,15 +3,26 @@ package env
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/GoodwayGroup/gwsm/sm"
 	"github.com/cyberark/summon/secretsyml"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
-	"gwsm/lib"
-	"gwsm/sm"
 	"io/ioutil"
 	"strings"
 	"sync"
 )
+
+// ConfigMap is a simple version of the ConfigMap defined in kubernetes.
+type ConfigMap struct {
+	Data map[string]string
+}
+
+// Result is a common interface for returning metadata to a channel.
+type Result struct {
+	Name  string
+	JSON  map[string]interface{}
+	Error error
+}
 
 func addToGroupedValues(groupedValues map[string]map[string]string, group string, key string, value string) {
 	if len(groupedValues[group]) > 0 {
@@ -29,7 +40,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		return nil, err
 	}
 
-	var yamlConfig lib.ConfigMap
+	var yamlConfig ConfigMap
 	err = yaml.Unmarshal(yamlFile, &yamlConfig)
 	if err != nil {
 		fmt.Printf("Error parsing YAML file: %s\n", err)
@@ -61,7 +72,7 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 		fmt.Printf("Error parsing Secrets file: %s\n", err)
 	}
 
-	results := make(chan lib.Result, len(secrets))
+	results := make(chan Result, len(secrets))
 	var wg sync.WaitGroup
 
 	for _, secretGroup := range subs {
@@ -70,12 +81,12 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 			defer wg.Done()
 			blob, err := sm.RetrieveSecret(groupName)
 			if err != nil {
-				results <- lib.Result{Name: groupName, JSON: nil, Error: err}
+				results <- Result{Name: groupName, JSON: nil, Error: err}
 				return
 			}
 			var parsed map[string]interface{}
 			err = json.Unmarshal(blob, &parsed)
-			results <- lib.Result{Name: groupName, JSON: parsed, Error: err}
+			results <- Result{Name: groupName, JSON: parsed, Error: err}
 		}(secretGroup)
 	}
 	wg.Wait()

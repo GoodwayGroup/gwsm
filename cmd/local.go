@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/GoodwayGroup/gwsm/env"
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/urfave/cli/v2"
-	"gwsm/env"
 	"os"
 	"sort"
 )

@@ -8,12 +8,18 @@ import (
 	"github.com/urfave/cli/v2"
 	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/yaml.v3"
-	"gwsm/lib"
 	"io/ioutil"
 	"os"
 	"strings"
 	"syscall"
 )
+
+// KubeSecret is a simple version of the KubeSecret defined in kubernetes.
+type KubeSecret struct {
+	Kind string
+	Type string
+	Data map[string]interface{}
+}
 
 func GetEnvFromAnsibleVault(c *cli.Context) (string, error) {
 	pw, err := retrieveVaultPassword(c.String("vault-password-file"))
@@ -30,7 +36,7 @@ func GetEnvFromAnsibleVault(c *cli.Context) (string, error) {
 		return "", cli.NewExitError(err, 1)
 	}
 
-	var kubeSecret lib.KubeSecret
+	var kubeSecret KubeSecret
 	err = yaml.Unmarshal([]byte(result), &kubeSecret)
 	if err != nil {
 		fmt.Printf("Error parsing YAML file: %s\n", err)

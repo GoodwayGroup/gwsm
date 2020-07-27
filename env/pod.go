@@ -3,10 +3,10 @@ package env
 import (
 	"bufio"
 	"fmt"
+	"github.com/GoodwayGroup/gwsm/kube"
 	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
-	"gwsm/kube"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"strings"

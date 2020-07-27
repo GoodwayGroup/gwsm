@@ -24,11 +24,11 @@ func getValueByKey(keyName string, secretBytes []byte) (secret []byte, err error
 	return []byte(secretValue), nil
 }
 
-/*
-   NOTE: Refactor of https://github.com/cyberark/summon-aws-secrets/blob/master/main.go
-   This was needed to have the command return the byte stream rather than have it write
-   to STDOUT
-*/
+// RetrieveSecret will pull the AWS Secrets Manager value and parse out the specific value needed.
+//
+// NOTE: Refactor of https://github.com/cyberark/summon-aws-secrets/blob/master/main.go
+// This was needed to have the command return the byte stream rather than have it write
+// to STDOUT
 func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 	sess, err := as.New()
 	if err != nil {
@@ -243,6 +243,7 @@ func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err
 	return
 }
 
+// CheckIfSecretExists determines if the input secret ID already exists in AWS Secrets Manager
 func CheckIfSecretExists(id string) (bool, error) {
 	sess, err := as.New()
 	if err != nil {

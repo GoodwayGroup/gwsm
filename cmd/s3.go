@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"errors"
+	"github.com/GoodwayGroup/gwsm/s3"
 	"github.com/urfave/cli/v2"
-	"gwsm/s3"
 )
 
 func S3Get(c *cli.Context) error {

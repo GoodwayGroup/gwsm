@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/GoodwayGroup/gwsm/cmd"
+	"github.com/GoodwayGroup/gwsm/info"
 	"github.com/urfave/cli/v2"
-	"gwsm/cmd"
-	"gwsm/info"
 	"log"
 	"os"
 	"runtime"
