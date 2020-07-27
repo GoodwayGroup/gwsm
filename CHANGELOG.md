@@ -2,6 +2,17 @@
 ## [Unreleased]
 
 
+<a name="v0.9.0"></a>
+## [v0.9.0] - 2020-07-27
+### Chore
+- updated release process to auto push branch and tag
+- bump version of kemba to v0.5.0
+
+### Features
+- **logging:** added kemba to improve debug logging. Properly name module and cleaned up code.
+- **logging:** added some kemba logging output
+
+
 <a name="v0.8.1"></a>
 ## [v0.8.1] - 2020-07-21
 ### Chore
@@ -11,6 +22,7 @@
 - updated release.sh script
 
 ### Features
+- **release:** v0.8.1
 - **release:** v0.8.0
 
 
@@ -132,7 +144,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.0...HEAD
+[v0.9.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.1...v0.9.0
 [v0.8.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.0...v0.8.1
 [v0.8.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.2...v0.8.0
 [v0.7.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.7.1...v0.7.2
