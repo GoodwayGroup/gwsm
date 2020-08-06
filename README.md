@@ -1,4 +1,4 @@
-# GW Secrets Mananger for Kubernetes
+# GW Secrets Manager for Kubernetes
 
 Kubernetes ConfigMaps + [summon](https://github.com/cyberark/summon) + AWS Secrets Manager
 
@@ -13,14 +13,16 @@ USAGE:
    gwsm [global options] command [command options] [arguments...]
 
 VERSION:
-   v0.4.0
+   v0.9.0
 
 AUTHORS:
    Derek Smith <dsmith@goodwaygroup.com>
-   GoodwayGroup Tech
+   Goodway Group Tech
 
 COMMANDS:
    version, v                 Print version info
+   s3                         simple S3 commands
+   secretsmanager, sm         Secrets Manager commands
    local, l                   Interact with local env files
    namespace, ns              Interact with env on a running Pod within a Namespace
    diff, d                    View diff of local vs. namespace
@@ -33,6 +35,7 @@ GLOBAL OPTIONS:
 
 COPYRIGHT:
    (c) 2020 Goodway Group
+
 ```
 
 ## Installation

@@ -399,6 +399,24 @@ func main() {
 		},
 	}
 
+	if os.Getenv("DOCS_MD") != "" {
+		docs, err := app.ToMarkdown()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(docs)
+		return
+	}
+
+	if os.Getenv("DOCS_MAN") != "" {
+		docs, err := app.ToMan()
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(docs)
+		return
+	}
+
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
