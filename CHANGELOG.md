@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.9.3"></a>
+## [v0.9.3] - 2020-08-09
+### Features
+- **man:** added install-manpage command
+
+
 <a name="v0.9.2"></a>
 ## [v0.9.2] - 2020-08-09
 ### Chore
@@ -9,6 +15,7 @@
 
 ### Features
 - **docs:** added patch docs methods to generate docs on release
+- **release:** v0.9.2
 
 
 <a name="v0.9.1"></a>
@@ -161,7 +168,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.2...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.3...HEAD
+[v0.9.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.2...v0.9.3
 [v0.9.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.1...v0.9.2
 [v0.9.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.0...v0.9.1
 [v0.9.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.1...v0.9.0
