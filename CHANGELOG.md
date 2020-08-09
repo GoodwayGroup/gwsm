@@ -2,10 +2,20 @@
 ## [Unreleased]
 
 
+<a name="v0.9.2"></a>
+## [v0.9.2] - 2020-08-09
+### Chore
+- **docs:** updating docs for version v0.9.2
+
+### Features
+- **docs:** added patch docs methods to generate docs on release
+
+
 <a name="v0.9.1"></a>
 ## [v0.9.1] - 2020-08-06
 ### Features
 - add support for env to generate docs
+- **release:** v0.9.1
 
 
 <a name="v0.9.0"></a>
@@ -151,7 +161,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.2...HEAD
+[v0.9.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.1...v0.9.2
 [v0.9.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.0...v0.9.1
 [v0.9.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.1...v0.9.0
 [v0.8.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.8.0...v0.8.1
