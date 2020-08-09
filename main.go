@@ -5,6 +5,7 @@ import (
 	"github.com/GoodwayGroup/gwsm/cmd"
 	"github.com/GoodwayGroup/gwsm/info"
 	"github.com/urfave/cli/v2"
+	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -393,6 +394,19 @@ func main() {
 				Usage:   "Print version info",
 				Action: func(c *cli.Context) error {
 					fmt.Printf("%s %s (%s/%s)\n", info.AppName, version, runtime.GOOS, runtime.GOARCH)
+					return nil
+				},
+			},
+			{
+				Name:   "install-manpage",
+				Usage:  "Generate and install manpage",
+				Hidden: true,
+				Action: func(c *cli.Context) error {
+					mp, _ := info.ToMan(c.App)
+					err := ioutil.WriteFile("/usr/local/share/man/man8/gwsm.8", []byte(mp), 0644)
+					if err != nil {
+						return cli.NewExitError(fmt.Sprintf("Unable to install man page: %e", err), 2)
+					}
 					return nil
 				},
 			},

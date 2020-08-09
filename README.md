@@ -39,8 +39,16 @@ COPYRIGHT:
 
 ## Installation
 
+To install latest version:
+
 ```
 $ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
+```
+
+To install `man` page:
+
+```
+$ gwsm install-manpage
 ```
 
 ## Commands

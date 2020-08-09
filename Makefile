@@ -42,6 +42,6 @@ docs:
 clean:
 	@rm -rf bin/ && rm -rf build/
 
-ci: tools package docs
+ci: tools package
 
 .PHONY: all tools build xbuild package clean ci docs
