@@ -33,30 +33,9 @@ func main() {
 		EnableBashCompletion: true,
 		Commands: []*cli.Command{
 			{
-				Name:    "version",
-				Aliases: []string{"v"},
-				Usage:   "Print version info",
-				Action: func(c *cli.Context) error {
-					fmt.Printf("%s %s (%s/%s)\n", info.AppName, version, runtime.GOOS, runtime.GOARCH)
-					return nil
-				},
-			},
-			{
-				Name:  "s3",
-				Usage: "simple S3 commands",
-				Subcommands: []*cli.Command{
-					{
-						Name:      "get",
-						Usage:     "[object path] [destination path]",
-						UsageText: info.S3GetCommandHelp,
-						Action:    cmd.S3Get,
-					},
-				},
-			},
-			{
 				Name:    "secretsmanager",
 				Aliases: []string{"sm"},
-				Usage:   "Secrets Manager commands",
+				Usage:   "Secrets Manager commands w/ interactive interface",
 				Flags: []cli.Flag{
 					&cli.BoolFlag{
 						Name:        "binary",
@@ -206,6 +185,96 @@ func main() {
 				},
 			},
 			{
+				Name:      "diff",
+				Aliases:   []string{"d"},
+				Usage:     "View diff of local vs. namespace",
+				UsageText: info.ViewDiffCommandHelpText,
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "secrets",
+						Aliases:  []string{"s"},
+						Usage:    "Path to secrets.yml",
+						Required: false,
+						Value:    ".docker/secrets.yml",
+					},
+					&cli.StringFlag{
+						Name:     "configmap",
+						Aliases:  []string{"c"},
+						Usage:    "Path to configmap.yaml",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "namespace",
+						Aliases:  []string{"n"},
+						Usage:    "Kube Namespace list Pods from",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "cmd",
+						Usage:    "Command to inspect",
+						Required: false,
+						Value:    "node",
+					},
+					&cli.StringFlag{
+						Name:     "filter-prefix",
+						Aliases:  []string{"f"},
+						Usage:    "List of prefixes (csv) used to filter values from display. Set to \"\" to remove any filters.",
+						Required: false,
+						Value:    "npm_,KUBERNETES_,API_PORT",
+					},
+					&cli.StringFlag{
+						Name:     "exclude",
+						Usage:    "List (csv) of specific env vars to exclude values from display. Set to \"\" to remove any exclusions.",
+						Required: false,
+						Value:    "PATH,SHLVL,HOSTNAME",
+					},
+					&cli.StringFlag{
+						Name:  "secret-suffix",
+						Usage: "Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup",
+						Value: "_NAME",
+					},
+				},
+				Action: cmd.ViewEnvDiff,
+			},
+			{
+				Name:      "diff:legacy",
+				Aliases:   []string{"diff:ansible"},
+				Usage:     "View diff of local (ansible encrypted) vs. namespace",
+				UsageText: info.ViewAnsibleEnvDiffCommandHelpText,
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "vault-password-file",
+						Usage:    "vault password file `VAULT_PASSWORD_FILE`",
+						Required: false,
+					},
+					&cli.StringFlag{
+						Name:     "encrypted-env-file",
+						Aliases:  []string{"e"},
+						Usage:    "Path to encrypted Kube Secret file",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:    "accessor",
+						Aliases: []string{"a"},
+						Usage:   "Accessor key to pull data out of Data block.",
+						Value:   ".env",
+					},
+					&cli.StringFlag{
+						Name:     "namespace",
+						Aliases:  []string{"n"},
+						Usage:    "Kube Namespace list Pods from",
+						Required: true,
+					},
+					&cli.StringFlag{
+						Name:     "dotenv",
+						Usage:    "Path to .env file on Pod",
+						Required: false,
+						Value:    "$PWD/.env",
+					},
+				},
+				Action: cmd.ViewAnsibleEnvDiff,
+			},
+			{
 				Name:    "local",
 				Aliases: []string{"l"},
 				Usage:   "Interact with local env files",
@@ -307,100 +376,31 @@ func main() {
 				},
 			},
 			{
-				Name:      "diff",
-				Aliases:   []string{"d"},
-				Usage:     "View diff of local vs. namespace",
-				UsageText: info.ViewDiffCommandHelpText,
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:     "secrets",
-						Aliases:  []string{"s"},
-						Usage:    "Path to secrets.yml",
-						Required: false,
-						Value:    ".docker/secrets.yml",
-					},
-					&cli.StringFlag{
-						Name:     "configmap",
-						Aliases:  []string{"c"},
-						Usage:    "Path to configmap.yaml",
-						Required: true,
-					},
-					&cli.StringFlag{
-						Name:     "namespace",
-						Aliases:  []string{"n"},
-						Usage:    "Kube Namespace list Pods from",
-						Required: true,
-					},
-					&cli.StringFlag{
-						Name:     "cmd",
-						Usage:    "Command to inspect",
-						Required: false,
-						Value:    "node",
-					},
-					&cli.StringFlag{
-						Name:     "filter-prefix",
-						Aliases:  []string{"f"},
-						Usage:    "List of prefixes (csv) used to filter values from display. Set to \"\" to remove any filters.",
-						Required: false,
-						Value:    "npm_,KUBERNETES_,API_PORT",
-					},
-					&cli.StringFlag{
-						Name:     "exclude",
-						Usage:    "List (csv) of specific env vars to exclude values from display. Set to \"\" to remove any exclusions.",
-						Required: false,
-						Value:    "PATH,SHLVL,HOSTNAME",
-					},
-					&cli.StringFlag{
-						Name:  "secret-suffix",
-						Usage: "Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup",
-						Value: "_NAME",
+				Name:  "s3",
+				Usage: "simple S3 commands",
+				Subcommands: []*cli.Command{
+					{
+						Name:      "get",
+						Usage:     "[object path] [destination path]",
+						UsageText: info.S3GetCommandHelp,
+						Action:    cmd.S3Get,
 					},
 				},
-				Action: cmd.ViewEnvDiff,
 			},
 			{
-				Name:      "diff:legacy",
-				Aliases:   []string{"diff:ansible"},
-				Usage:     "View diff of local (ansible encrypted) vs. namespace",
-				UsageText: info.ViewAnsibleEnvDiffCommandHelpText,
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:     "vault-password-file",
-						Usage:    "vault password file `VAULT_PASSWORD_FILE`",
-						Required: false,
-					},
-					&cli.StringFlag{
-						Name:     "encrypted-env-file",
-						Aliases:  []string{"e"},
-						Usage:    "Path to encrypted Kube Secret file",
-						Required: true,
-					},
-					&cli.StringFlag{
-						Name:    "accessor",
-						Aliases: []string{"a"},
-						Usage:   "Accessor key to pull data out of Data block.",
-						Value:   ".env",
-					},
-					&cli.StringFlag{
-						Name:     "namespace",
-						Aliases:  []string{"n"},
-						Usage:    "Kube Namespace list Pods from",
-						Required: true,
-					},
-					&cli.StringFlag{
-						Name:     "dotenv",
-						Usage:    "Path to .env file on Pod",
-						Required: false,
-						Value:    "$PWD/.env",
-					},
+				Name:    "version",
+				Aliases: []string{"v"},
+				Usage:   "Print version info",
+				Action: func(c *cli.Context) error {
+					fmt.Printf("%s %s (%s/%s)\n", info.AppName, version, runtime.GOOS, runtime.GOARCH)
+					return nil
 				},
-				Action: cmd.ViewAnsibleEnvDiff,
 			},
 		},
 	}
 
 	if os.Getenv("DOCS_MD") != "" {
-		docs, err := app.ToMarkdown()
+		docs, err := info.ToMarkdown(app)
 		if err != nil {
 			panic(err)
 		}
@@ -409,7 +409,7 @@ func main() {
 	}
 
 	if os.Getenv("DOCS_MAN") != "" {
-		docs, err := app.ToMan()
+		docs, err := info.ToMan(app)
 		if err != nil {
 			panic(err)
 		}

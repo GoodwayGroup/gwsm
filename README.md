@@ -4,6 +4,8 @@ Kubernetes ConfigMaps + [summon](https://github.com/cyberark/summon) + AWS Secre
 
 ## Basic Usage
 
+Please see [the docs for details on the commands.](./docs/gwsm.md)
+
 ```
 $ gwsm help
 NAME:
@@ -12,29 +14,26 @@ NAME:
 USAGE:
    gwsm [global options] command [command options] [arguments...]
 
-VERSION:
-   v0.9.0
-
 AUTHORS:
    Derek Smith <dsmith@goodwaygroup.com>
    Goodway Group Tech
 
 COMMANDS:
-   version, v                 Print version info
-   s3                         simple S3 commands
-   secretsmanager, sm         Secrets Manager commands
-   local, l                   Interact with local env files
-   namespace, ns              Interact with env on a running Pod within a Namespace
+   secretsmanager, sm         Secrets Manager commands w/ interactive interface
    diff, d                    View diff of local vs. namespace
    diff:legacy, diff:ansible  View diff of local (ansible encrypted) vs. namespace
+   local, l                   Interact with local env files
+   namespace, ns              Interact with env on a running Pod within a Namespace
+   s3                         simple S3 commands
+   version, v                 Print version info
    help, h                    Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --help, -h     show help (default: false)
-   --version, -v  print the version (default: false)
+   --help, -h  show help (default: false)
 
 COPYRIGHT:
    (c) 2020 Goodway Group
+
 
 ```
 
@@ -46,20 +45,9 @@ $ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
 
 ## Commands
 
-Each command ans subcommand has detailed help text that can be viewed using the `--help, -h` flag.
+Please see [the docs for details on the commands.](./docs/gwsm.md)
 
-- `local`
-    - `view`
-        - View values based on local settings
-    - `ansible, legacy`
-        - View value from ansible-vault encrypted Kube Secret file.
-- `namespace`
-    - `view`
-        - View values configured withing a namespace
-- `diff`
-    - View diff of local vs. namespace
-- `diff:ansible, diff:legacy`
-    - View diff of local (ansible encrypted) vs. namespace
+Each command ans subcommand has detailed help text that can be viewed using the `--help, -h` flag.
 
 
 ## Built With
@@ -78,7 +66,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We employ [auto-changelog](https://www.npmjs.com/package/auto-changelog) to manage the [CHANGELOG.md](CHANGELOG.md). For the versions available, see the [tags on this repository](https://github.com/GoodwayGroup/gwvault/tags).
+We employ [git-chglog](https://github.com/git-chglog/git-chglog) to manage the [CHANGELOG.md](CHANGELOG.md). For the versions available, see the [tags on this repository](https://github.com/GoodwayGroup/gwsm/tags).
 
 ## Authors
 

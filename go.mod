@@ -9,6 +9,7 @@ require (
 	github.com/aws/aws-sdk-go v1.33.8
 	github.com/clok/awssession v0.1.4
 	github.com/clok/kemba v0.6.3
+	github.com/cpuguy83/go-md2man/v2 v2.0.0
 	github.com/cyberark/summon v0.8.1
 	github.com/go-openapi/strfmt v0.19.5 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
