@@ -105,7 +105,7 @@ func addRowToTable(change diff.Change, t table.Writer) {
 		t.AppendRow([]interface{}{
 			aurora.Yellow("U"),
 			change.Path[0],
-			fmt.Sprintf("%s -> %s", aurora.Yellow(change.From), aurora.Green(change.To)),
+			fmt.Sprintf("%s -> %s", aurora.Green(change.From), aurora.Yellow(change.To)),
 		})
 	case "delete":
 		// This indicates that the value is present on the Pod, but not in the local env.
@@ -138,6 +138,7 @@ func printOutDiff(changelog diff.Changelog, envMapLocal map[string]string) {
 	block := strings.Repeat("-", 79)
 	fmt.Printf("%s\n%s\n%s\n", block, "> Summary Overview", block)
 	tSum.Render()
+	fmt.Println("")
 
 	for _, group := range groups {
 		changes := len(diffGroups[group])
