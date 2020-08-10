@@ -6,9 +6,10 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// S3Get will perform a simple pull of the requested object to the destination path.
 func S3Get(c *cli.Context) error {
 	if c.NArg() > 2 {
-		cli.ShowSubcommandHelp(c)
+		_ = cli.ShowSubcommandHelp(c)
 		return cli.NewExitError(errors.New("ERROR too many arguments passed"), 2)
 	}
 

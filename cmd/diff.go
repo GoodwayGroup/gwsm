@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/env"
+	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/logrusorgru/aurora"
 	"github.com/r3labs/diff"
@@ -12,32 +13,71 @@ import (
 	"strings"
 )
 
-func getDescription(group string, found int) string {
+var (
+	kl = kemba.New("gwsm:diff")
+)
+
+func containsString(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func getPaintedValue(group string, v int) string {
+	if v == 0 {
+		return fmt.Sprint(aurora.Gray(15, v))
+	}
 	switch group {
+	case "no_change":
+		return fmt.Sprint(aurora.Blue(v))
 	case "create":
-		return fmt.Sprintf(
-			"%s\n\n%s\n\nFound %s",
-			aurora.Green("New"),
-			"Local ENV values that are NOT found on the selected Pod",
-			fmt.Sprint(aurora.Green(found)),
-		)
+		return fmt.Sprint(aurora.Green(v))
 	case "update":
-		return fmt.Sprintf(
-			"%s\n\n%s\n\nFound %s",
-			aurora.Yellow("Updates"),
+		return fmt.Sprint(aurora.Yellow(v))
+	case "delete":
+		return fmt.Sprint(aurora.Red(v))
+	default:
+		return fmt.Sprintf("%d", v)
+	}
+}
+
+func addRowToSummary(group string, found int, t table.Writer) {
+	val := getPaintedValue(group, found)
+	switch group {
+	case "no_change":
+		t.AppendRow([]interface{}{
+			aurora.Blue("NC"),
+			val,
+			"No Change",
+			"Local ENV values that are the same on the Pod",
+		})
+	case "create":
+		t.AppendRow([]interface{}{
+			aurora.Green("N"),
+			val,
+			"New",
+			"Local ENV values that are NOT found on the selected Pod",
+		})
+	case "update":
+		t.AppendRow([]interface{}{
+			aurora.Yellow("U"),
+			val,
+			"Update",
 			"Local ENV values that are DIFFERENT than the values found on the selected Pod",
-			fmt.Sprint(aurora.Yellow(found)),
-		)
+		})
 	case "delete":
 		b := `ENV values that were found on the selected Pod, but are not found locally. 
 This could be caused by system level ENV values (such as CWD) or it could 
 indicate that a value is MISSING from the local ENV.`
-		return fmt.Sprintf(
-			"%s\n\n%s\n\nFound %s",
-			aurora.Red("Possible Deletions"),
+		t.AppendRow([]interface{}{
+			aurora.Red("PD"),
+			val,
+			"Possible Delete",
 			b,
-			fmt.Sprint(aurora.Red(found)),
-		)
+		})
 	default:
 		// This should not be reached.
 		panic(fmt.Sprintf("Uknown group type: %s", group))
@@ -46,15 +86,24 @@ indicate that a value is MISSING from the local ENV.`
 
 func addRowToTable(change diff.Change, t table.Writer) {
 	switch change.Type {
+	case "no_change":
+		// This means that the value is not contained in the Pod environment and will be added.
+		t.AppendRow([]interface{}{
+			aurora.Blue("NC"),
+			change.Path[0],
+			change.From,
+		})
 	case "create":
 		// This means that the value is not contained in the Pod environment and will be added.
 		t.AppendRow([]interface{}{
+			aurora.Green("N"),
 			change.Path[0],
 			change.To,
 		})
 	case "update":
 		// This denotes that there is a change in the local value compared to that on the Pod.
 		t.AppendRow([]interface{}{
+			aurora.Yellow("U"),
 			change.Path[0],
 			fmt.Sprintf("%s -> %s", aurora.Yellow(change.From), aurora.Green(change.To)),
 		})
@@ -62,6 +111,7 @@ func addRowToTable(change diff.Change, t table.Writer) {
 		// This indicates that the value is present on the Pod, but not in the local env.
 		// TODO: Format the row with color based on whether it is a system variable or not
 		t.AppendRow([]interface{}{
+			aurora.Red("PD"),
 			change.Path[0],
 			change.From,
 		})
@@ -71,23 +121,29 @@ func addRowToTable(change diff.Change, t table.Writer) {
 	}
 }
 
-func printOutDiff(changelog diff.Changelog) {
-	diffGroups := map[string][]diff.Change{
-		"create": {},
-		"delete": {},
-		"update": {},
+func printOutDiff(changelog diff.Changelog, envMapLocal map[string]string) {
+	diffGroups := groupDiffWithLocal(changelog, envMapLocal)
+
+	groups := []string{"no_change", "create", "update", "delete"}
+
+	tSum := table.NewWriter()
+	tSum.SetOutputMirror(os.Stdout)
+	tSum.SetStyle(table.StyleLight)
+	tSum.AppendHeader(table.Row{"Status", "Count", "Name", "Description"})
+
+	for _, group := range groups {
+		addRowToSummary(group, len(diffGroups[group]), tSum)
 	}
 
-	for _, change := range changelog {
-		diffGroups[change.Type] = append(diffGroups[change.Type], change)
-	}
+	block := strings.Repeat("-", 79)
+	fmt.Printf("%s\n%s\n%s\n", block, "> Summary Overview", block)
+	tSum.Render()
 
-	for _, group := range []string{"create", "update", "delete"} {
+	for _, group := range groups {
 		changes := len(diffGroups[group])
-		block := strings.Repeat("-", 79)
-		fmt.Printf("%s\n%s\n%s\n", block, getDescription(group, changes), block)
 
 		if changes > 0 {
+			fmt.Printf("%s\n> %s details\n%s\n", block, group, block)
 			sort.Slice(diffGroups[group], func(i int, j int) bool {
 				return diffGroups[group][i].Path[0] < diffGroups[group][j].Path[0]
 			})
@@ -95,19 +151,47 @@ func printOutDiff(changelog diff.Changelog) {
 			t := table.NewWriter()
 			t.SetOutputMirror(os.Stdout)
 			t.SetStyle(table.StyleLight)
-			t.AppendHeader(table.Row{"Key", "Value"})
+			t.AppendHeader(table.Row{"Status", "Key", "Value"})
 
 			for _, change := range diffGroups[group] {
 				addRowToTable(change, t)
 			}
 
 			t.Render()
+			fmt.Println("")
 		}
-		fmt.Println("")
 	}
 }
 
-// Print the diff for a parsed local ConfigMap file and retrieved JSON blobs from AWS Secrets Manager with the environment
+func groupDiffWithLocal(changelog diff.Changelog, envMapLocal map[string]string) map[string][]diff.Change {
+	diffGroups := map[string][]diff.Change{
+		"create":    {},
+		"delete":    {},
+		"update":    {},
+		"no_change": {},
+	}
+
+	var diffKeys []string
+	for _, change := range changelog {
+		diffGroups[change.Type] = append(diffGroups[change.Type], change)
+		diffKeys = append(diffKeys, change.Path[0])
+	}
+
+	for k, v := range envMapLocal {
+		if !containsString(diffKeys, k) {
+			diffGroups["no_change"] = append(diffGroups["no_change"], diff.Change{
+				Type: "no_change",
+				Path: []string{k},
+				From: v,
+				To:   "",
+			})
+		}
+	}
+	return diffGroups
+}
+
+// ViewEnvDiff will print the diff for a parsed local ConfigMap file and
+// retrieved JSON blobs from AWS Secrets Manager with the environment
 // for a given process on a Pod within a supplied NameSpace.
 func ViewEnvDiff(c *cli.Context) error {
 	// Get local envMap
@@ -123,21 +207,28 @@ func ViewEnvDiff(c *cli.Context) error {
 	}
 
 	// Get envMap from Pod
-	envMapPod, err := env.GetEnvFromPodProcess(c)
+	var envMapPod map[string]string
+	envMapPod, err = env.GetEnvFromPodProcess(c)
 	if err != nil {
 		return err
 	}
 
 	// Compares as if the Local env is being applied to the Pod env.
-	changelog, err := diff.Diff(envMapPod, envMapLocal)
+	var changelog diff.Changelog
+	changelog, err = diff.Diff(envMapPod, envMapLocal)
+	if err != nil {
+		return err
+	}
+	kl.Log(changelog)
 
-	printOutDiff(changelog)
+	printOutDiff(changelog, envMapLocal)
 
 	return nil
 }
 
-// Print the diff for a decrypted local Kube Secrets file with the environment pulled from the dotenv file for
-// a Pod within a supplied NameSpace.
+// ViewAnsibleEnvDiff will print the diff for a decrypted local Kube Secrets file
+// with the environment pulled from the dotenv file for a Pod within a supplied
+// NameSpace.
 func ViewAnsibleEnvDiff(c *cli.Context) error {
 	// Get local envMap
 	dataStr, err := env.GetEnvFromAnsibleVault(c)
@@ -154,15 +245,20 @@ func ViewAnsibleEnvDiff(c *cli.Context) error {
 	}
 
 	// Get envMap from Pod
-	envMapPod, err := env.GetLegacyEnvFromPodProcess(c)
+	var envMapPod map[string]string
+	envMapPod, err = env.GetLegacyEnvFromPodProcess(c)
 	if err != nil {
 		return err
 	}
 
 	// Compares as if the Local env is being applied to the Pod env.
-	changelog, err := diff.Diff(envMapPod, envMapLocal)
+	var changelog diff.Changelog
+	changelog, err = diff.Diff(envMapPod, envMapLocal)
+	if err != nil {
+		return err
+	}
 
-	printOutDiff(changelog)
+	printOutDiff(changelog, envMapLocal)
 
 	return nil
 }

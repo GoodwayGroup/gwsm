@@ -32,7 +32,8 @@ func addToGroupedValues(groupedValues map[string]map[string]string, group string
 	}
 }
 
-// Parse local ConfigMap file and retrieve JSON blobs from AWS Secrets Manager. Return a map of groups names to value blocks.
+// GetGroupedLocalEnv will parse local ConfigMap file and retrieve JSON blobs
+// from AWS Secrets Manager. Return a map of groups names to value blocks.
 func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]string, err error) {
 	yamlFile, err := ioutil.ReadFile(c.String("configmap"))
 	if err != nil {

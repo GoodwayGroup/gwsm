@@ -2,17 +2,17 @@ package cmd
 
 import (
 	"fmt"
-	. "github.com/logrusorgru/aurora"
+	a "github.com/logrusorgru/aurora"
 )
 
 func PrintWarn(s string) {
-	fmt.Println(Sprintf(Red("✖ %s"), s))
+	fmt.Println(a.Sprintf(a.Red("✖ %s"), s))
 }
 
 func PrintSuccess(s string) {
-	fmt.Println(Sprintf(Green("✔ %s"), s))
+	fmt.Println(a.Sprintf(a.Green("✔ %s"), s))
 }
 
 func PrintInfo(s string) {
-	fmt.Println(Sprintf(Gray(14, "➜ %s"), s))
+	fmt.Println(a.Sprintf(a.Gray(14, "➜ %s"), s))
 }
