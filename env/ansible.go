@@ -72,7 +72,9 @@ func retrieveVaultPassword(vaultPasswordFile string) (string, error) {
 func readVaultPassword() (password string, err error) {
 	println("Vault password: ")
 	var bytePassword []byte
-	bytePassword, err = terminal.ReadPassword(syscall.Stdin)
+	// skipped for windows compatibility
+	// nolint:unconvert
+	bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		err = errors.New("ERROR: could not input password, " + err.Error())
 		return
