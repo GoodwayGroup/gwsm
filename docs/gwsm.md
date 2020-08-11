@@ -7,7 +7,7 @@ gwsm
 
 # COMMAND TREE
 
-- [secretsmanager, sm](#secretsmanager-sm)
+- [sm, secretsmanager](#sm-secretsmanager)
     - [list](#list)
     - [describe](#describe)
     - [get, view](#get-view)
@@ -15,15 +15,17 @@ gwsm
     - [create, c](#create-c)
     - [put](#put)
     - [delete, del](#delete-del)
-- [diff, d](#diff-d)
-- [diff:legacy, diff:ansible](#diff:legacy-diff:ansible)
-- [local, l](#local-l)
+- [env, e](#env-e)
+    - [diff, d](#diff-d)
+        - [namespace, ns](#namespace-ns)
+        - [ansible, legacy](#ansible-legacy)
     - [view, v](#view-v)
-    - [ansible, legacy, a](#ansible-legacy-a)
-- [namespace, ns](#namespace-ns)
-    - [view, v](#view-v)
+        - [configmap, c](#configmap-c)
+        - [ansible, legacy](#ansible-legacy)
+        - [namespace, ns](#namespace-ns)
 - [s3](#s3)
     - [get](#get)
+- [install-manpage](#install-manpage)
 - [version, v](#version-v)
 
 **Usage**:
@@ -33,7 +35,7 @@ gwsm [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
 
 # COMMANDS
 
-## secretsmanager, sm
+## sm, secretsmanager
 
 Secrets Manager commands w/ interactive interface
 
@@ -45,7 +47,7 @@ display table of all secrets with meta data
 
 ### describe
 
-print description of secret to STDOUT
+print description of secret to `STDOUT`
 
 **--secret-id, -s**="": Specific Secret to describe, will bypass select/search
 
@@ -97,7 +99,15 @@ delete a specific secret
 
 **--secret-id, -s**="": Specific Secret to delete
 
-## diff, d
+## env, e
+
+Commands to interact with environment variables, both local and on cluster.
+
+### diff, d
+
+Print out detailed diff reports comparing local and running Pod
+
+#### namespace, ns
 
 View diff of local vs. namespace
 
@@ -138,17 +148,17 @@ display.
 
 **--configmap, -c**="": Path to configmap.yaml
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to "" to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to "" to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
 
-**--namespace, -n**="": Kube Namespace list Pods from
+**--namespace, -n**="": Kube Namespace to list Pods from for inspection
 
 **--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
-## diff:legacy, diff:ansible
+#### ansible, legacy
 
 View diff of local (ansible encrypted) vs. namespace
 
@@ -178,21 +188,21 @@ This method uses '/bin/bash -c' as the base command to perform inspection.
 
 **--accessor, -a**="": Accessor key to pull data out of Data block. (default: .env)
 
-**--dotenv**="": Path to .env file on Pod (default: $PWD/.env)
+**--dotenv**="": Path to `.env` file on Pod (default: $PWD/.env)
 
 **--encrypted-env-file, -e**="": Path to encrypted Kube Secret file
 
-**--namespace, -n**="": Kube Namespace list Pods from
+**--namespace, -n**="": Kube Namespace list Pods from for inspection
 
 **--vault-password-file**="": vault password file `VAULT_PASSWORD_FILE`
 
-## local, l
-
-Interact with local env files
-
 ### view, v
 
-View values based on local settings
+View configured environment for either local or running on a Pod
+
+#### configmap, c
+
+View env values based on local settings in a ConfigMap and secrets.yml
 
 ```
 View the current environment variables for a given ConfigMap and summon
@@ -226,9 +236,9 @@ display.
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
-### ansible, legacy, a
+#### ansible, legacy
 
-View value from ansible-vault encrypted Kube Secret file.
+View env values from ansible-vault encrypted Secret file.
 
 ```
 View a legacy ansible-vault encrypted Kubenetes Secret file. This will output
@@ -253,13 +263,9 @@ data:
 
 **--vault-password-file**="": vault password file `VAULT_PASSWORD_FILE`
 
-## namespace, ns
+#### namespace, ns
 
 Interact with env on a running Pod within a Namespace
-
-### view, v
-
-View values configured within a namespace
 
 ```
 View the current environment for a specific process running within a Pod in a
@@ -278,9 +284,9 @@ display.
 
 **--cmd**="": Command to inspect (default: node)
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to "" to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to "" to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
 
 **--namespace, -n**="": Kube Namespace list Pods from
 
@@ -299,6 +305,10 @@ The '[destination path]' directory MUST exists, but file will be created or over
 Example:
 $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 ```
+
+## install-manpage
+
+Generate and install man page
 
 ## version, v
 

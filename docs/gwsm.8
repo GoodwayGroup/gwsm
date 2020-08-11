@@ -14,8 +14,8 @@ gwsm
 .SH COMMAND TREE
 .RS
 .IP \(bu 2
-secretsmanager, sm
-\[la]#secretsmanager-sm\[ra]
+sm, secretsmanager
+\[la]#sm-secretsmanager\[ra]
 .RS
 .IP \(bu 2
 list
@@ -42,31 +42,38 @@ delete, del
 .RE
 
 .IP \(bu 2
-diff, d
-\[la]#diff-d\[ra]
-.IP \(bu 2
-diff:legacy, diff:ansible
-\[la]#diff:legacy-diff:ansible\[ra]
-.IP \(bu 2
-local, l
-\[la]#local-l\[ra]
+env, e
+\[la]#env-e\[ra]
 .RS
 .IP \(bu 2
-view, v
-\[la]#view-v\[ra]
+diff, d
+\[la]#diff-d\[ra]
+.RS
 .IP \(bu 2
-ansible, legacy, a
-\[la]#ansible-legacy-a\[ra]
+namespace, ns
+\[la]#namespace-ns\[ra]
+.IP \(bu 2
+ansible, legacy
+\[la]#ansible-legacy\[ra]
 
 .RE
 
 .IP \(bu 2
-namespace, ns
-\[la]#namespace-ns\[ra]
-.RS
-.IP \(bu 2
 view, v
 \[la]#view-v\[ra]
+.RS
+.IP \(bu 2
+configmap, c
+\[la]#configmap-c\[ra]
+.IP \(bu 2
+ansible, legacy
+\[la]#ansible-legacy\[ra]
+.IP \(bu 2
+namespace, ns
+\[la]#namespace-ns\[ra]
+
+.RE
+
 
 .RE
 
@@ -80,6 +87,9 @@ get
 
 .RE
 
+.IP \(bu 2
+install\-manpage
+\[la]#install-manpage\[ra]
 .IP \(bu 2
 version, v
 \[la]#version-v\[ra]
@@ -100,7 +110,7 @@ gwsm [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
 
 
 .SH COMMANDS
-.SH secretsmanager, sm
+.SH sm, secretsmanager
 .PP
 Secrets Manager commands w/ interactive interface
 
@@ -113,7 +123,7 @@ display table of all secrets with meta data
 
 .SS describe
 .PP
-print description of secret to STDOUT
+print description of secret to \fB\fCSTDOUT\fR
 
 .PP
 \fB\-\-secret\-id, \-s\fP="": Specific Secret to describe, will bypass select/search
@@ -180,7 +190,15 @@ delete a specific secret
 .PP
 \fB\-\-secret\-id, \-s\fP="": Specific Secret to delete
 
-.SH diff, d
+.SH env, e
+.PP
+Commands to interact with environment variables, both local and on cluster.
+
+.SS diff, d
+.PP
+Print out detailed diff reports comparing local and running Pod
+
+.SS namespace, ns
 .PP
 View diff of local vs. namespace
 
@@ -229,13 +247,13 @@ display.
 \fB\-\-configmap, \-c\fP="": Path to configmap.yaml
 
 .PP
-\fB\-\-exclude\fP="": List (csv) of specific env vars to exclude values from display. Set to "" to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+\fB\-\-exclude\fP="": List (csv) of specific env vars to exclude values from display. Set to \fB\fC""\fR to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
 .PP
-\fB\-\-filter\-prefix, \-f\fP="": List of prefixes (csv) used to filter values from display. Set to "" to remove any filters. (default: npm\fI,KUBERNETES\fP,API\_PORT)
+\fB\-\-filter\-prefix, \-f\fP="": List of prefixes (csv) used to filter values from display. Set to \fB\fC""\fR to remove any filters. (default: npm\fI,KUBERNETES\fP,API\_PORT)
 
 .PP
-\fB\-\-namespace, \-n\fP="": Kube Namespace list Pods from
+\fB\-\-namespace, \-n\fP="": Kube Namespace to list Pods from for inspection
 
 .PP
 \fB\-\-secret\-suffix\fP="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: \_NAME)
@@ -243,7 +261,7 @@ display.
 .PP
 \fB\-\-secrets, \-s\fP="": Path to secrets.yml (default: .docker/secrets.yml)
 
-.SH diff:legacy, diff:ansible
+.SS ansible, legacy
 .PP
 View diff of local (ansible encrypted) vs. namespace
 
@@ -280,24 +298,24 @@ This method uses '/bin/bash \-c' as the base command to perform inspection.
 \fB\-\-accessor, \-a\fP="": Accessor key to pull data out of Data block. (default: .env)
 
 .PP
-\fB\-\-dotenv\fP="": Path to .env file on Pod (default: $PWD/.env)
+\fB\-\-dotenv\fP="": Path to \fB\fC\&.env\fR file on Pod (default: $PWD/.env)
 
 .PP
 \fB\-\-encrypted\-env\-file, \-e\fP="": Path to encrypted Kube Secret file
 
 .PP
-\fB\-\-namespace, \-n\fP="": Kube Namespace list Pods from
+\fB\-\-namespace, \-n\fP="": Kube Namespace list Pods from for inspection
 
 .PP
 \fB\-\-vault\-password\-file\fP="": vault password file \fB\fCVAULT\_PASSWORD\_FILE\fR
 
-.SH local, l
-.PP
-Interact with local env files
-
 .SS view, v
 .PP
-View values based on local settings
+View configured environment for either local or running on a Pod
+
+.SS configmap, c
+.PP
+View env values based on local settings in a ConfigMap and secrets.yml
 
 .PP
 .RS
@@ -339,9 +357,9 @@ display.
 .PP
 \fB\-\-secrets, \-s\fP="": Path to secrets.yml (default: .docker/secrets.yml)
 
-.SS ansible, legacy, a
+.SS ansible, legacy
 .PP
-View value from ansible\-vault encrypted Kube Secret file.
+View env values from ansible\-vault encrypted Secret file.
 
 .PP
 .RS
@@ -374,13 +392,9 @@ data:
 .PP
 \fB\-\-vault\-password\-file\fP="": vault password file \fB\fCVAULT\_PASSWORD\_FILE\fR
 
-.SH namespace, ns
+.SS namespace, ns
 .PP
 Interact with env on a running Pod within a Namespace
-
-.SS view, v
-.PP
-View values configured within a namespace
 
 .PP
 .RS
@@ -406,10 +420,10 @@ display.
 \fB\-\-cmd\fP="": Command to inspect (default: node)
 
 .PP
-\fB\-\-exclude\fP="": List (csv) of specific env vars to exclude values from display. Set to "" to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+\fB\-\-exclude\fP="": List (csv) of specific env vars to exclude values from display. Set to \fB\fC""\fR to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
 .PP
-\fB\-\-filter\-prefix, \-f\fP="": List of prefixes (csv) used to filter values from display. Set to "" to remove any filters. (default: npm\fI,KUBERNETES\fP,API\_PORT)
+\fB\-\-filter\-prefix, \-f\fP="": List of prefixes (csv) used to filter values from display. Set to \fB\fC""\fR to remove any filters. (default: npm\fI,KUBERNETES\fP,API\_PORT)
 
 .PP
 \fB\-\-namespace, \-n\fP="": Kube Namespace list Pods from
@@ -434,6 +448,10 @@ $ gwsm s3 get s3://coll\-bucket\-name/with/path/filename /tmp/filename
 
 .fi
 .RE
+
+.SH install\-manpage
+.PP
+Generate and install man page
 
 .SH version, v
 .PP
