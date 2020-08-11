@@ -237,7 +237,7 @@ Interact with env on a running Pod within a Namespace
 
 ### view, v
 
-View values configured withing a namespace
+View values configured within a namespace
 
 ```
 View the current environment for a specific process running within a Pod in a
