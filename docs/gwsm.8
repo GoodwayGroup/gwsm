@@ -10,6 +10,82 @@ gwsm \- interact with config map and secret manager variables
 .PP
 gwsm
 
+
+.SH COMMAND TREE
+.RS
+.IP \(bu 2
+secretsmanager, sm
+\[la]#secretsmanager-sm\[ra]
+.RS
+.IP \(bu 2
+list
+\[la]#list\[ra]
+.IP \(bu 2
+describe
+\[la]#describe\[ra]
+.IP \(bu 2
+get, view
+\[la]#get-view\[ra]
+.IP \(bu 2
+edit, e
+\[la]#edit-e\[ra]
+.IP \(bu 2
+create, c
+\[la]#create-c\[ra]
+.IP \(bu 2
+put
+\[la]#put\[ra]
+.IP \(bu 2
+delete, del
+\[la]#delete-del\[ra]
+
+.RE
+
+.IP \(bu 2
+diff, d
+\[la]#diff-d\[ra]
+.IP \(bu 2
+diff:legacy, diff:ansible
+\[la]#diff:legacy-diff:ansible\[ra]
+.IP \(bu 2
+local, l
+\[la]#local-l\[ra]
+.RS
+.IP \(bu 2
+view, v
+\[la]#view-v\[ra]
+.IP \(bu 2
+ansible, legacy, a
+\[la]#ansible-legacy-a\[ra]
+
+.RE
+
+.IP \(bu 2
+namespace, ns
+\[la]#namespace-ns\[ra]
+.RS
+.IP \(bu 2
+view, v
+\[la]#view-v\[ra]
+
+.RE
+
+.IP \(bu 2
+s3
+\[la]#s3\[ra]
+.RS
+.IP \(bu 2
+get
+\[la]#get\[ra]
+
+.RE
+
+.IP \(bu 2
+version, v
+\[la]#version-v\[ra]
+
+.RE
+
 .PP
 \fBUsage\fP:
 

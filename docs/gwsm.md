@@ -4,6 +4,28 @@ gwsm - interact with config map and secret manager variables
 # SYNOPSIS
 gwsm
 
+
+# COMMAND TREE
+
+- [secretsmanager, sm](#secretsmanager-sm)
+    - [list](#list)
+    - [describe](#describe)
+    - [get, view](#get-view)
+    - [edit, e](#edit-e)
+    - [create, c](#create-c)
+    - [put](#put)
+    - [delete, del](#delete-del)
+- [diff, d](#diff-d)
+- [diff:legacy, diff:ansible](#diff:legacy-diff:ansible)
+- [local, l](#local-l)
+    - [view, v](#view-v)
+    - [ansible, legacy, a](#ansible-legacy-a)
+- [namespace, ns](#namespace-ns)
+    - [view, v](#view-v)
+- [s3](#s3)
+    - [get](#get)
+- [version, v](#version-v)
+
 **Usage**:
 ```
 gwsm [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
