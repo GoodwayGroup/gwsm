@@ -57,11 +57,11 @@ func GetEnvFromAnsibleVault(c *cli.Context) (string, error) {
 func retrieveVaultPassword(vaultPasswordFile string) (string, error) {
 	if vaultPasswordFile != "" {
 		if _, err := os.Stat(vaultPasswordFile); os.IsNotExist(err) {
-			return "", errors.New("ERROR: vault-password-file, could not find: " + vaultPasswordFile)
+			return "", fmt.Errorf("ERROR: vault-password-file, could not find: %s", vaultPasswordFile)
 		}
 		pw, err := ioutil.ReadFile(vaultPasswordFile)
 		if err != nil {
-			return "", errors.New("ERROR: vault-password-file, " + err.Error())
+			return "", err
 		}
 		return strings.TrimSpace(string(pw)), nil
 	}
