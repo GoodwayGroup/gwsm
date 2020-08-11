@@ -24,6 +24,11 @@ var MarkdownDocTemplate = `% {{ .App.Name }} 8
 # DESCRIPTION
 {{ .App.UsageText }}
 {{ end }}
+
+# COMMAND TREE
+{{ range $v := .TOC }}
+{{ $v }}{{ end }}
+
 **Usage**:
 ` + "```" + `
 {{ .App.Name }} [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
@@ -60,6 +65,7 @@ func ToMan(a *cli.App) (string, error) {
 
 type cliTemplate struct {
 	App          *cli.App
+	TOC          []string
 	Commands     []string
 	GlobalArgs   []string
 	SynopsisArgs []string
@@ -71,12 +77,39 @@ func writeDocTemplate(w io.Writer, a *cli.App) error {
 	if err != nil {
 		return err
 	}
+
+	toc := generateCommandTree(a.Commands, 0)
+
 	return t.ExecuteTemplate(w, name, &cliTemplate{
 		App:          a,
+		TOC:          toc,
 		Commands:     prepareCommands(a.Commands, 0),
 		GlobalArgs:   prepareArgsWithValues(a.VisibleFlags()),
 		SynopsisArgs: prepareArgsSynopsis(a.VisibleFlags()),
 	})
+}
+
+func generateCommandTree(commands []*cli.Command, level int) []string {
+	var coms []string
+	for _, command := range commands {
+		if command.Hidden {
+			continue
+		}
+
+		prepared := fmt.Sprintf("%s- [%s](#%s)", strings.Repeat("    ", level), strings.Join(command.Names(), ", "), strings.Join(command.Names(), "-"))
+
+		coms = append(coms, prepared)
+
+		// recursively iterate subcommands
+		if len(command.Subcommands) > 0 {
+			coms = append(
+				coms,
+				generateCommandTree(command.Subcommands, level+1)...,
+			)
+		}
+	}
+
+	return coms
 }
 
 func prepareCommands(commands []*cli.Command, level int) []string {
