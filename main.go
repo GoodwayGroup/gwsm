@@ -188,17 +188,14 @@ func main() {
 				},
 			},
 			{
-				Name: "env",
+				Name:    "env",
 				Aliases: []string{"e"},
-				Usage: "Commands to interact with environment variables, both local and on cluster.",
-				// TODO: add UsageText
-				UsageText: "TODO",
+				Usage:   "Commands to interact with environment variables, both local and on cluster.",
 				Subcommands: []*cli.Command{
 					{
-						Name:      "diff",
-						Aliases:   []string{"d"},
-						Usage: "Print out detailed diff reports comparing local and running Pod",
-						// TODO: add UsageText
+						Name:    "diff",
+						Aliases: []string{"d"},
+						Usage:   "Print out detailed diff reports comparing local and running Pod",
 						Subcommands: []*cli.Command{
 							{
 								Name:      "namespace",
@@ -293,15 +290,14 @@ func main() {
 						},
 					},
 					{
-						Name:      "view",
-						Aliases:   []string{"v"},
+						Name:    "view",
+						Aliases: []string{"v"},
 						Usage:   "View configured environment for either local or running on a Pod",
-						// TODO: add UsageText
 						Subcommands: []*cli.Command{
 							{
 								Name:      "configmap",
 								Aliases:   []string{"c"},
-								Usage:     "View values based on local settings",
+								Usage:     "View env values based on local settings in a ConfigMap and secrets.yml",
 								UsageText: info.ViewLocalCommandHelpText,
 								Flags: []cli.Flag{
 									&cli.StringFlag{
@@ -328,7 +324,7 @@ func main() {
 							{
 								Name:      "ansible",
 								Aliases:   []string{"legacy"},
-								Usage:     "View value from ansible-vault encrypted Kube Secret file.",
+								Usage:     "View env values from ansible-vault encrypted Secret file.",
 								UsageText: info.ViewAnsibleEncryptedEnvCommandHelpText,
 								Flags: []cli.Flag{
 									&cli.StringFlag{
@@ -402,8 +398,8 @@ func main() {
 				},
 			},
 			{
-				Name:   "install-manpage",
-				Usage:  "Generate and install man page",
+				Name:  "install-manpage",
+				Usage: "Generate and install man page",
 				Action: func(c *cli.Context) error {
 					mp, _ := info.ToMan(c.App)
 					err := ioutil.WriteFile("/usr/local/share/man/man8/gwsm.8", []byte(mp), 0644)
