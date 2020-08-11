@@ -2,6 +2,15 @@
 ## [Unreleased]
 
 
+<a name="v0.10.1"></a>
+## [v0.10.1] - 2020-08-11
+### Chore
+- **docs:** updating docs for version v0.10.1
+
+### Features
+- **docs:** added table of contents to docs
+
+
 <a name="v0.10.0"></a>
 ## [v0.10.0] - 2020-08-11
 ### Bug Fixes
@@ -9,6 +18,9 @@
 
 ### Chore
 - **docs:** updating docs for version v0.10.0
+
+### Features
+- **release:** v0.10.0
 
 ### Pull Requests
 - feat(diff): updated diff command to show summary report and non-changed values ([#3](https://github.com/GoodwayGroup/gwsm/issues/3))
@@ -181,7 +193,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.1...HEAD
+[v0.10.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.0...v0.10.1
 [v0.10.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.3...v0.10.0
 [v0.9.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.2...v0.9.3
 [v0.9.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.1...v0.9.2
