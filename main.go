@@ -55,7 +55,7 @@ func main() {
 					{
 						// describe-secret
 						Name:  "describe",
-						Usage: "print description of secret to STDOUT",
+						Usage: "print description of secret to `STDOUT`",
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:    "secret-id",
@@ -231,13 +231,13 @@ func main() {
 									&cli.StringFlag{
 										Name:     "filter-prefix",
 										Aliases:  []string{"f"},
-										Usage:    "List of prefixes (csv) used to filter values from display. Set to \"\" to remove any filters.",
+										Usage:    "List of prefixes (csv) used to filter values from display. Set to `\"\"` to remove any filters.",
 										Required: false,
 										Value:    "npm_,KUBERNETES_,API_PORT",
 									},
 									&cli.StringFlag{
 										Name:     "exclude",
-										Usage:    "List (csv) of specific env vars to exclude values from display. Set to \"\" to remove any exclusions.",
+										Usage:    "List (csv) of specific env vars to exclude values from display. Set to `\"\"` to remove any exclusions.",
 										Required: false,
 										Value:    "PATH,SHLVL,HOSTNAME",
 									},
@@ -280,7 +280,7 @@ func main() {
 									},
 									&cli.StringFlag{
 										Name:     "dotenv",
-										Usage:    "Path to .env file on Pod",
+										Usage:    "Path to `.env` file on Pod",
 										Required: false,
 										Value:    "$PWD/.env",
 									},
