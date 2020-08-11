@@ -343,7 +343,7 @@ func main() {
 					{
 						Name:      "view",
 						Aliases:   []string{"v"},
-						Usage:     "View values configured withing a namespace",
+						Usage:     "View values configured within a namespace",
 						UsageText: info.ViewNamespaceCommandHelpText,
 						Flags: []cli.Flag{
 							&cli.StringFlag{

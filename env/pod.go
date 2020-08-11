@@ -43,7 +43,7 @@ func shouldProcessLine(c *cli.Context, ln string) bool {
 	return true
 }
 
-func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) (string, error) {
+func promptForPod(clientset *kubernetes.Clientset, namespace string) (string, error) {
 	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		// TODO: Consolidate logger
@@ -72,6 +72,8 @@ func promptForPod(err error, clientset *kubernetes.Clientset, namespace string) 
 	return result, nil
 }
 
+// GetEnvFromPodProcess will execute an inspect on the Pod container for a
+// given process.
 func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) {
 	clientset, err := kube.GetClient()
 	if err != nil {
@@ -81,7 +83,7 @@ func GetEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err error) 
 	}
 
 	namespace := c.String("namespace")
-	result, err := promptForPod(err, clientset, namespace)
+	result, err := promptForPod(clientset, namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +123,7 @@ func GetLegacyEnvFromPodProcess(c *cli.Context) (envMap map[string]string, err e
 	}
 
 	namespace := c.String("namespace")
-	result, err := promptForPod(err, clientset, namespace)
+	result, err := promptForPod(clientset, namespace)
 	if err != nil {
 		return nil, err
 	}
