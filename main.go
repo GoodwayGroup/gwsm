@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/cmd"
 	"github.com/GoodwayGroup/gwsm/info"
+	"github.com/clok/cdocs"
 	"github.com/urfave/cli/v2"
-	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -15,6 +15,14 @@ import (
 var version string
 
 func main() {
+	// Generate the install-manpage command
+	im, err := cdocs.InstallManpageCommand(&cdocs.InstallManpageCommandInput{
+		AppName: "gwsm",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	app := &cli.App{
 		Name:     info.AppName,
 		Version:  version,
@@ -397,18 +405,7 @@ func main() {
 					},
 				},
 			},
-			{
-				Name:  "install-manpage",
-				Usage: "Generate and install man page",
-				Action: func(c *cli.Context) error {
-					mp, _ := info.ToMan(c.App)
-					err := ioutil.WriteFile("/usr/local/share/man/man8/gwsm.8", []byte(mp), 0644)
-					if err != nil {
-						return cli.NewExitError(fmt.Sprintf("Unable to install man page: %e", err), 2)
-					}
-					return nil
-				},
-			},
+			im,
 			{
 				Name:    "version",
 				Aliases: []string{"v"},
@@ -422,7 +419,7 @@ func main() {
 	}
 
 	if os.Getenv("DOCS_MD") != "" {
-		docs, err := info.ToMarkdown(app)
+		docs, err := cdocs.ToMarkdown(app)
 		if err != nil {
 			panic(err)
 		}
@@ -431,7 +428,7 @@ func main() {
 	}
 
 	if os.Getenv("DOCS_MAN") != "" {
-		docs, err := info.ToMan(app)
+		docs, err := cdocs.ToMan(app)
 		if err != nil {
 			panic(err)
 		}
@@ -439,7 +436,7 @@ func main() {
 		return
 	}
 
-	err := app.Run(os.Args)
+	err = app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
