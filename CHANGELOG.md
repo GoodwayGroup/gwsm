@@ -2,10 +2,22 @@
 ## [Unreleased]
 
 
+<a name="v0.12.0"></a>
+## [v0.12.0] - 2020-08-13
+### Chore
+- **docs:** updating docs for version v0.12.0
+
+### Fest
+- **cdocs:** integrate cdocs library
+
+
 <a name="v0.11.0"></a>
 ## [v0.11.0] - 2020-08-11
 ### Chore
 - **docs:** updating docs for version v0.11.0
+
+### Features
+- **release:** v0.11.0
 
 ### Pull Requests
 - chore(refactor): reorganize commands for clearer groupings ([#7](https://github.com/GoodwayGroup/gwsm/issues/7))
@@ -203,7 +215,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...HEAD
+[v0.12.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.11.0...v0.12.0
 [v0.11.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.1...v0.11.0
 [v0.10.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.0...v0.10.1
 [v0.10.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.9.3...v0.10.0
