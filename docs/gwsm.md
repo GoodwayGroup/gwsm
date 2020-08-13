@@ -310,6 +310,8 @@ $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 
 Generate and install man page
 
+>NOTE: Windows is not supported
+
 ## version, v
 
 Print version info
