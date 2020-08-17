@@ -299,6 +299,8 @@ func SMCreateSecret(c *cli.Context) error {
 			return cli.NewExitError(err, 2)
 		}
 		s = up
+	} else {
+		s = value
 	}
 
 	var t string
