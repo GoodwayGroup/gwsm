@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.12.1"></a>
+## [v0.12.1] - 2020-08-17
+### Bug Fixes
+- **sm:** create command properly handles passed values
+
+
 <a name="v0.12.0"></a>
 ## [v0.12.0] - 2020-08-13
 ### Chore
 - **docs:** updating docs for version v0.12.0
+
+### Features
+- **release:** v0.12.0
 
 ### Fest
 - **cdocs:** integrate cdocs library
@@ -215,7 +224,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...HEAD
+[v0.12.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...v0.12.1
 [v0.12.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.11.0...v0.12.0
 [v0.11.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.1...v0.11.0
 [v0.10.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.0...v0.10.1
