@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.0.7
-	github.com/TylerBrock/colorjson v0.0.0-20180527164720-95ec53f28296
+	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
 	github.com/aws/aws-sdk-go v1.33.8
 	github.com/clok/awssession v0.1.4
