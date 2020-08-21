@@ -16,7 +16,7 @@ require (
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.0.4
-	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
+	github.com/logrusorgru/aurora/v3/v3 v3.0.0
 	github.com/manifoldco/promptui v0.7.0
 	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
 	github.com/r3labs/diff v1.1.0
