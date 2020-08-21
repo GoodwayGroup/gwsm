@@ -2,12 +2,22 @@
 ## [Unreleased]
 
 
+<a name="v0.12.3"></a>
+## [v0.12.3] - 2020-08-21
+### Chore
+- **deps:** update k8s.io to v0.18.8 and x/cyrpto
+- **make:** don't update go.mod with gox
+
+
 <a name="v0.12.2"></a>
 ## [v0.12.2] - 2020-08-21
 ### Chore
 - **deps:** update module logrusorgru/aurora to v3
 - **deps:** udpate clok/kemba, clok/awssession, clok/cdocs, jedib0t/go-pretty/v6 and aws/aws-sdk-go
 - **renovate:** add renovate.json
+
+### Features
+- **release:** v0.12.2
 
 ### Pull Requests
 - chore(deps): update module jedib0t/go-pretty to v6 ([#17](https://github.com/GoodwayGroup/gwsm/issues/17))
@@ -243,7 +253,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...HEAD
+[v0.12.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...v0.12.3
 [v0.12.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...v0.12.2
 [v0.12.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...v0.12.1
 [v0.12.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.11.0...v0.12.0
