@@ -2,6 +2,7 @@ package env
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/kube"
 	"github.com/logrusorgru/aurora/v3"
@@ -44,7 +45,7 @@ func shouldProcessLine(c *cli.Context, ln string) bool {
 }
 
 func promptForPod(clientset *kubernetes.Clientset, namespace string) (string, error) {
-	pods, err := clientset.CoreV1().Pods(namespace).List(metav1.ListOptions{})
+	pods, err := clientset.CoreV1().Pods(namespace).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		// TODO: Consolidate logger
 		fmt.Println(aurora.Red("✖ Failed to get pods"))
