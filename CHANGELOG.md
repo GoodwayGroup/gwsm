@@ -2,10 +2,29 @@
 ## [Unreleased]
 
 
+<a name="v0.12.2"></a>
+## [v0.12.2] - 2020-08-21
+### Chore
+- **deps:** update module logrusorgru/aurora to v3
+- **deps:** udpate clok/kemba, clok/awssession, clok/cdocs, jedib0t/go-pretty/v6 and aws/aws-sdk-go
+- **renovate:** add renovate.json
+
+### Pull Requests
+- chore(deps): update module jedib0t/go-pretty to v6 ([#17](https://github.com/GoodwayGroup/gwsm/issues/17))
+- chore(deps): update module cyberark/summon to v0.8.2 ([#13](https://github.com/GoodwayGroup/gwsm/issues/13))
+- chore(deps): update module aws/aws-sdk-go to v1.34.8 ([#12](https://github.com/GoodwayGroup/gwsm/issues/12))
+- chore(deps): update module alecaivazis/survey/v2 to v2.1.1 ([#11](https://github.com/GoodwayGroup/gwsm/issues/11))
+- chore(deps): update golang.org/x/crypto commit hash to 123391f ([#10](https://github.com/GoodwayGroup/gwsm/issues/10))
+- chore(deps): update github.com/tylerbrock/colorjson commit hash to 8a50f05 ([#9](https://github.com/GoodwayGroup/gwsm/issues/9))
+
+
 <a name="v0.12.1"></a>
 ## [v0.12.1] - 2020-08-17
 ### Bug Fixes
 - **sm:** create command properly handles passed values
+
+### Features
+- **release:** v0.12.1
 
 
 <a name="v0.12.0"></a>
@@ -224,7 +243,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...HEAD
+[v0.12.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...v0.12.2
 [v0.12.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...v0.12.1
 [v0.12.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.11.0...v0.12.0
 [v0.11.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.10.1...v0.11.0
