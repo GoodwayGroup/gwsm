@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/env"
-	"github.com/jedib0t/go-pretty/table"
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/urfave/cli/v2"
 	"os"
 	"sort"
