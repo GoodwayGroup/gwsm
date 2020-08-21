@@ -19,7 +19,7 @@ require (
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
 	github.com/manifoldco/promptui v0.7.0
 	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
-	github.com/r3labs/diff v1.1.0
+	github.com/r3labs/diff/v2/v2 v2.5.0
 	github.com/urfave/cli/v2 v2.2.0
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
