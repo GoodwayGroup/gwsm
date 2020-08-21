@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora/v3"
 	"io/ioutil"
 	"os"
 	"testing"

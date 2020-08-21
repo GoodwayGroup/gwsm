@@ -5,7 +5,7 @@ import (
 	"github.com/GoodwayGroup/gwsm/env"
 	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/v6/table"
-	"github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora/v3"
 	"github.com/r3labs/diff"
 	"github.com/urfave/cli/v2"
 	"os"

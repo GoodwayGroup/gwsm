@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	a "github.com/logrusorgru/aurora"
+	a "github.com/logrusorgru/aurora/v3"
 )
 
 func PrintWarn(s string) {

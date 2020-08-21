@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/kube"
-	"github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora/v3"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
