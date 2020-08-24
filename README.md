@@ -14,27 +14,27 @@ NAME:
 USAGE:
    gwsm [global options] command [command options] [arguments...]
 
+VERSION:
+   v0.12.4
+
 AUTHORS:
    Derek Smith <dsmith@goodwaygroup.com>
    Goodway Group Tech
 
 COMMANDS:
-   secretsmanager, sm         Secrets Manager commands w/ interactive interface
-   diff, d                    View diff of local vs. namespace
-   diff:legacy, diff:ansible  View diff of local (ansible encrypted) vs. namespace
-   local, l                   Interact with local env files
-   namespace, ns              Interact with env on a running Pod within a Namespace
-   s3                         simple S3 commands
-   version, v                 Print version info
-   help, h                    Shows a list of commands or help for one command
+   sm, secretsmanager  Secrets Manager commands w/ interactive interface
+   env, e              Commands to interact with environment variables, both local and on cluster.
+   s3                  simple S3 commands
+   install-manpage     Generate and install man page
+   version, v          Print version info
+   help, h             Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --help, -h  show help (default: false)
+   --help, -h     show help (default: false)
+   --version, -v  print the version (default: false)
 
 COPYRIGHT:
    (c) 2020 Goodway Group
-
-
 ```
 
 ## Installation
