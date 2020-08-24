@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/sm"
+	"github.com/clok/kemba"
 	"github.com/cyberark/summon/secretsyml"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
@@ -60,7 +61,8 @@ func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]str
 	if cnt > 0 {
 		fmt.Printf("Found %d AWS Secrets Groups:\n", cnt)
 		for key, value := range subs {
-			fmt.Printf("\t%s: %s\n", strings.ToUpper(key), value)
+			l := kemba.PickColor(value)
+			fmt.Printf("\t%s: %s\n", l.Sprint(strings.ToUpper(key)), l.Sprint(value))
 		}
 		fmt.Println("")
 	} else {

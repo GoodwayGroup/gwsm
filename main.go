@@ -17,7 +17,7 @@ var version string
 func main() {
 	// Generate the install-manpage command
 	im, err := cdocs.InstallManpageCommand(&cdocs.InstallManpageCommandInput{
-		AppName: "gwsm",
+		AppName: info.AppName,
 	})
 	if err != nil {
 		log.Fatal(err)

@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/env"
+	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/urfave/cli/v2"
 	"os"
 	"sort"
+	"strings"
 )
 
 // Print the resulting environment for a set of local ConfigMap and Summon secrets.yml file.
@@ -23,7 +25,8 @@ func ViewLocalEnv(c *cli.Context) error {
 		if group == "local" {
 			t.SetTitle("From ConfigMap")
 		} else {
-			t.SetTitle(fmt.Sprintf("From secret: %s", group))
+			l := kemba.PickColor(group)
+			t.SetTitle(fmt.Sprintf("From secret: %s", l.Sprintf(group)))
 		}
 		t.AppendHeader(table.Row{"Key", "Value"})
 
@@ -34,9 +37,18 @@ func ViewLocalEnv(c *cli.Context) error {
 		sort.Strings(keys)
 
 		for _, key := range keys {
+			var value string
+			if strings.HasSuffix(key, c.String("secret-suffix")) {
+				l := kemba.PickColor(values[key])
+				value = l.Sprint(values[key])
+				key = l.Sprint(key)
+			} else {
+				value = values[key]
+			}
+
 			t.AppendRow([]interface{}{
 				key,
-				values[key],
+				value,
 			})
 		}
 		t.Render()

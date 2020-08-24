@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go v1.34.9
 	github.com/clok/awssession v0.1.5
 	github.com/clok/cdocs v0.2.2
-	github.com/clok/kemba v0.6.4
+	github.com/clok/kemba v0.7.1
 	github.com/cyberark/summon v0.8.2
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
