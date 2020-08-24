@@ -2,11 +2,20 @@
 ## [Unreleased]
 
 
+<a name="v0.12.4"></a>
+## [v0.12.4] - 2020-08-24
+### Features
+- **env:** add color tagging to env view with secrets manager
+
+
 <a name="v0.12.3"></a>
 ## [v0.12.3] - 2020-08-21
 ### Chore
 - **deps:** update k8s.io to v0.18.8 and x/cyrpto
 - **make:** don't update go.mod with gox
+
+### Features
+- **release:** v0.12.3
 
 
 <a name="v0.12.2"></a>
@@ -253,7 +262,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.4...HEAD
+[v0.12.4]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...v0.12.4
 [v0.12.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...v0.12.3
 [v0.12.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...v0.12.2
 [v0.12.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.0...v0.12.1
