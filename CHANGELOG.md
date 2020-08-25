@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.12.5"></a>
+## [v0.12.5] - 2020-08-25
+### Chore
+- updated release script to include publish to github
+- update README.md
+- **deps:** update module aws/aws-sdk-go to v1.34.10
+
+
 <a name="v0.12.4"></a>
 ## [v0.12.4] - 2020-08-24
 ### Features
 - **env:** add color tagging to env view with secrets manager
+- **release:** v0.12.4
 
 
 <a name="v0.12.3"></a>
@@ -262,7 +271,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.4...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.5...HEAD
+[v0.12.5]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.4...v0.12.5
 [v0.12.4]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...v0.12.4
 [v0.12.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...v0.12.3
 [v0.12.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.1...v0.12.2
