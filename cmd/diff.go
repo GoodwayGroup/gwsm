@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/GoodwayGroup/gwsm/env"
 	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/logrusorgru/aurora/v3"
 	"github.com/r3labs/diff"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/urfave/cli/v2"
 	"os"
 	"sort"
@@ -102,11 +104,22 @@ func addRowToTable(change diff.Change, t table.Writer) {
 		})
 	case "update":
 		// This denotes that there is a change in the local value compared to that on the Pod.
+
+		dmp := diffmatchpatch.New()
+		//
+		diffs := dmp.DiffMain(change.From.(string), change.To.(string), false)
+
 		t.AppendRow([]interface{}{
 			aurora.Yellow("U"),
 			change.Path[0],
-			fmt.Sprintf("%s -> %s", aurora.Green(change.From), aurora.Yellow(change.To)),
+			fmt.Sprint(aurora.Gray(15, change.From)),
 		})
+		t.AppendRow([]interface{}{
+			"",
+			"",
+			printUpdateDiff(diffs),
+		})
+		t.AppendSeparator()
 	case "delete":
 		// This indicates that the value is present on the Pod, but not in the local env.
 		// TODO: Format the row with color based on whether it is a system variable or not
@@ -119,6 +132,22 @@ func addRowToTable(change diff.Change, t table.Writer) {
 		// This should not be reached.
 		panic(fmt.Sprintf("Uknown change type: %s", change.Type))
 	}
+}
+
+func printUpdateDiff(diffs []diffmatchpatch.Diff) string {
+	var buff bytes.Buffer
+	for _, d := range diffs {
+		text := d.Text
+
+		switch d.Type {
+		case diffmatchpatch.DiffInsert:
+			_, _ = buff.WriteString(aurora.Sprintf(aurora.Yellow(text)))
+		case diffmatchpatch.DiffEqual:
+			_, _ = buff.WriteString(text)
+		}
+	}
+
+	return buff.String()
 }
 
 func printOutDiff(changelog diff.Changelog, envMapLocal map[string]string) {
