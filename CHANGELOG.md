@@ -2,12 +2,25 @@
 ## [Unreleased]
 
 
+<a name="v0.13.0"></a>
+## [v0.13.0] - 2020-09-01
+### Chore
+- **ci:** increased timeout on golangci-lint
+- **deps:** updated k8s.io packages to v0.19.0 and aws-sdk-go to v1.34.14
+
+### Pull Requests
+- feat(diff): added character diff via go-diff ([#32](https://github.com/GoodwayGroup/gwsm/issues/32))
+
+
 <a name="v0.12.5"></a>
 ## [v0.12.5] - 2020-08-25
 ### Chore
 - updated release script to include publish to github
 - update README.md
 - **deps:** update module aws/aws-sdk-go to v1.34.10
+
+### Features
+- **release:** v0.12.5
 
 
 <a name="v0.12.4"></a>
@@ -271,7 +284,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.5...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.0...HEAD
+[v0.13.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.5...v0.13.0
 [v0.12.5]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.4...v0.12.5
 [v0.12.4]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...v0.12.4
 [v0.12.3]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.2...v0.12.3
