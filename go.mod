@@ -6,13 +6,12 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.1.1
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
-	github.com/aws/aws-sdk-go v1.34.10
+	github.com/aws/aws-sdk-go v1.34.14
 	github.com/clok/awssession v0.1.5
 	github.com/clok/cdocs v0.2.2
 	github.com/clok/kemba v0.7.1
 	github.com/cyberark/summon v0.8.2
 	github.com/fatih/color v1.9.0 // indirect
-	github.com/golang/protobuf v1.3.4 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.0.4
@@ -25,9 +24,8 @@ require (
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
-	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
-	k8s.io/api v0.18.8
-	k8s.io/apimachinery v0.18.8
-	k8s.io/client-go v0.18.8
+	k8s.io/api v0.19.0
+	k8s.io/apimachinery v0.19.0
+	k8s.io/client-go v0.19.0
 )
