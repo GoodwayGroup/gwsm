@@ -12,7 +12,6 @@ require (
 	github.com/clok/kemba v0.7.1
 	github.com/cyberark/summon v0.8.2
 	github.com/fatih/color v1.9.0 // indirect
-	github.com/golang/protobuf v1.3.4 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/jedib0t/go-pretty/v6 v6.0.4
@@ -28,6 +27,6 @@ require (
 	google.golang.org/appengine v1.6.5 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.18.8
-	k8s.io/apimachinery v0.18.8
+	k8s.io/apimachinery v0.19.0
 	k8s.io/client-go v0.18.8
 )
