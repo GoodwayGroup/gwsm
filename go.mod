@@ -10,13 +10,13 @@ require (
 	github.com/clok/awssession v0.1.5
 	github.com/clok/cdocs v0.2.2
 	github.com/clok/kemba v0.7.1
-	github.com/cyberark/summon v0.8.2
+	github.com/cyberark/summon v0.8.3
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
-	github.com/jedib0t/go-pretty/v6 v6.0.4
+	github.com/jedib0t/go-pretty/v6 v6.0.5
 	github.com/logrusorgru/aurora/v3 v3.0.0
-	github.com/manifoldco/promptui v0.7.0
+	github.com/manifoldco/promptui v0.8.0
 	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
 	github.com/r3labs/diff v1.1.0
 	github.com/sergi/go-diff v1.1.0
