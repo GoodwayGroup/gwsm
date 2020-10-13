@@ -2,11 +2,23 @@
 ## [Unreleased]
 
 
+<a name="v0.13.1"></a>
+## [v0.13.1] - 2020-10-13
+### Chore
+- **deps:** update golang.org/x/crypto commit hash to 84dcc77
+- **deps:** update module aws/aws-sdk-go to v1.35.7
+- **deps:** updated cyberark/summon, jedib0t/go-pretty/v6 and manifoldco/promptui
+- **deps:** update k8s.io/api, k8s.io/apimachinery and k8s.io/client-go to v0.19.2
+
+
 <a name="v0.13.0"></a>
 ## [v0.13.0] - 2020-09-01
 ### Chore
 - **ci:** increased timeout on golangci-lint
 - **deps:** updated k8s.io packages to v0.19.0 and aws-sdk-go to v1.34.14
+
+### Features
+- **release:** v0.13.0
 
 ### Pull Requests
 - feat(diff): added character diff via go-diff ([#32](https://github.com/GoodwayGroup/gwsm/issues/32))
@@ -284,7 +296,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.1...HEAD
+[v0.13.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.0...v0.13.1
 [v0.13.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.5...v0.13.0
 [v0.12.5]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.4...v0.12.5
 [v0.12.4]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.3...v0.12.4
