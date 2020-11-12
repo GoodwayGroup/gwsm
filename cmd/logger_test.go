@@ -9,15 +9,15 @@ import (
 )
 
 func Test_PrintWarn(t *testing.T) {
-	rescueStdout := os.Stdout
+	rescueStderr := os.Stderr
 	r, w, _ := os.Pipe()
-	os.Stdout = w
+	os.Stderr = w
 
 	PrintWarn("This is a test!")
 
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
-	os.Stdout = rescueStdout
+	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Red("✖ This is a test!"))
 	if string(out) != wantMsg {
@@ -26,15 +26,15 @@ func Test_PrintWarn(t *testing.T) {
 }
 
 func Test_PrintSuccess(t *testing.T) {
-	rescueStdout := os.Stdout
+	rescueStderr := os.Stderr
 	r, w, _ := os.Pipe()
-	os.Stdout = w
+	os.Stderr = w
 
 	PrintSuccess("This is a test!")
 
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
-	os.Stdout = rescueStdout
+	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Green("✔ This is a test!"))
 	if string(out) != wantMsg {
@@ -43,15 +43,15 @@ func Test_PrintSuccess(t *testing.T) {
 }
 
 func Test_PrintInfo(t *testing.T) {
-	rescueStdout := os.Stdout
+	rescueStderr := os.Stderr
 	r, w, _ := os.Pipe()
-	os.Stdout = w
+	os.Stderr = w
 
 	PrintInfo("This is a test!")
 
 	w.Close()
 	out, _ := ioutil.ReadAll(r)
-	os.Stdout = rescueStdout
+	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Gray(14, "➜ This is a test!"))
 	if string(out) != wantMsg {
