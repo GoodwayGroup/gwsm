@@ -78,6 +78,58 @@ func promptForEdit(secretName string, s []byte) ([]byte, error) {
 	return []byte(ed), nil
 }
 
+// validateAndUpdateSecretValue will take the original buffer and interactively open an
+// editor to allow for updates. It will check if the original and updated buffer match, if
+// so it will exit gracefully. It will also verify valid JSON and prompt if an invalid input
+// is provided.
+func validateAndUpdateSecretValue(secretName string, orig []byte, updateTmp []byte) ([]byte, error) {
+	done := false
+	for !done {
+		_, err := djson.Decode(updateTmp)
+		if err != nil {
+			PrintWarn("invalid JSON submitted.")
+
+			ed := false
+			p1 := &survey.Confirm{
+				Message: "Open to edit?",
+			}
+			err = survey.AskOne(p1, &ed)
+			if err != nil {
+				return nil, err
+			}
+			if ed {
+				updateTmp, err = promptForEdit(secretName, updateTmp)
+				if err != nil {
+					return nil, cli.NewExitError(err, 2)
+				}
+				if string(orig) == strings.TrimSuffix(string(updateTmp), "\n") {
+					PrintInfo("Updated value matches original. Exiting.")
+					return nil, cli.NewExitError("", 0)
+				}
+			} else {
+				submit := false
+				p2 := &survey.Confirm{
+					Message: "Continue with Submit?",
+				}
+				err = survey.AskOne(p2, &submit)
+				if err != nil {
+					return nil, err
+				}
+				if !submit {
+					PrintWarn("Exiting without submit.")
+					return nil, cli.NewExitError("", 0)
+				}
+				PrintInfo("Continuing with submit.")
+				done = true
+			}
+		} else {
+			PrintInfo("JSON validated.")
+			done = true
+		}
+	}
+	return updateTmp, nil
+}
+
 // ListSecrets CLI command to list all Secrets.
 func ListSecrets(c *cli.Context) error {
 	secrets, err := sm.ListSecrets()
@@ -204,58 +256,19 @@ func EditSecret(c *cli.Context) error {
 		return nil
 	}
 
-	done := false
-	for !done {
-		_, err = djson.Decode(up)
-		if err != nil {
-			PrintWarn("invalid JSON submitted.")
-
-			ed := false
-			p1 := &survey.Confirm{
-				Message: "Open to edit?",
-			}
-			err = survey.AskOne(p1, &ed)
-			if err != nil {
-				return err
-			}
-			if ed {
-				up, err = promptForEdit(secretName, up)
-				if err != nil {
-					return cli.NewExitError(err, 2)
-				}
-				if string(s) == strings.TrimSuffix(string(up), "\n") {
-					PrintInfo("Updated value matches original. Exiting.")
-					return nil
-				}
-			} else {
-				submit := false
-				p2 := &survey.Confirm{
-					Message: "Continue with Submit?",
-				}
-				err = survey.AskOne(p2, &submit)
-				if err != nil {
-					return err
-				}
-				if !submit {
-					PrintWarn("Exiting without submit.")
-					return nil
-				}
-				PrintInfo("Continuing with submit.")
-				done = true
-			}
-		} else {
-			PrintInfo("JSON validated.")
-			done = true
-		}
+	var final []byte
+	final, err = validateAndUpdateSecretValue(secretName, s, up)
+	if err != nil {
+		return cli.NewExitError(err, 2)
 	}
 
 	var t string
 	if c.Bool("binary") {
 		t = "BinarySecret"
-		_, err = sm.PutSecretBinary(secretName, up)
+		_, err = sm.PutSecretBinary(secretName, final)
 	} else {
 		t = "StringSecret"
-		_, err = sm.PutSecretString(secretName, string(up))
+		_, err = sm.PutSecretString(secretName, string(final))
 	}
 
 	if err != nil {
@@ -371,7 +384,6 @@ func PutSecret(c *cli.Context) error {
 		value = []byte(c.String("value"))
 	}
 
-	// if not interactive OR no value paseed in
 	var final []byte
 	if interactive {
 		var up []byte
@@ -379,48 +391,15 @@ func PutSecret(c *cli.Context) error {
 		if err != nil {
 			return cli.NewExitError(err, 2)
 		}
-
-		done := false
-		for !done {
-			_, err = djson.Decode(up)
-			if err != nil {
-				PrintWarn("invalid JSON submitted.")
-
-				ed := false
-				p1 := &survey.Confirm{
-					Message: "Open to edit?",
-				}
-				err = survey.AskOne(p1, &ed)
-				if err != nil {
-					return err
-				}
-				if ed {
-					up, err = promptForEdit(secretName, up)
-					if err != nil {
-						return cli.NewExitError(err, 2)
-					}
-				} else {
-					submit := false
-					p2 := &survey.Confirm{
-						Message: "Continue with Submit?",
-					}
-					err = survey.AskOne(p2, &submit)
-					if err != nil {
-						return err
-					}
-					if !submit {
-						PrintWarn("Exiting without submit.")
-						return nil
-					}
-					PrintInfo("Continuing with submit.")
-					done = true
-				}
-			} else {
-				PrintInfo("JSON validated.")
-				done = true
-			}
+		if string(value) == strings.TrimSuffix(string(up), "\n") {
+			PrintInfo("Updated value matches original. Exiting.")
+			return nil
 		}
-		final = up
+
+		final, err = validateAndUpdateSecretValue(secretName, value, up)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
 	} else {
 		final = value
 	}
