@@ -58,7 +58,7 @@ func main() {
 						// list-secrets
 						Name:   "list",
 						Usage:  "display table of all secrets with meta data",
-						Action: cmd.SMListSecrets,
+						Action: cmd.ListSecrets,
 					},
 					{
 						// describe-secret
@@ -71,7 +71,7 @@ func main() {
 								Usage:   "Specific Secret to describe, will bypass select/search",
 							},
 						},
-						Action: cmd.SMDescribeSecret,
+						Action: cmd.DescribeSecret,
 					},
 					{
 						// get-secret-value
@@ -85,7 +85,7 @@ func main() {
 								Usage:   "Specific Secret to view, will bypass select/search",
 							},
 						},
-						Action: cmd.SMViewSecret,
+						Action: cmd.ViewSecret,
 					},
 					{
 						Name:    "edit",
@@ -98,8 +98,9 @@ func main() {
 								Aliases: []string{"s"},
 								Usage:   "Specific Secret to edit, will bypass select/search",
 							},
+							// TODO: add flag for passing version stage
 						},
-						Action: cmd.SMEditSecret,
+						Action: cmd.EditSecret,
 					},
 					{
 						// create-secret
@@ -122,26 +123,33 @@ func main() {
 							&cli.BoolFlag{
 								Name:    "interactive",
 								Aliases: []string{"i"},
-								Usage:   "Open interactive editor to create secret value.",
+								Usage:   "Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.",
 							},
 							&cli.StringFlag{
-								// TODO: add description feature
 								Name:    "description",
-								Aliases: []string{"desc"},
+								Aliases: []string{"d"},
 								Usage:   "Additional description text.",
 							},
 							&cli.StringFlag{
-								// TODO: add tags feature
-								Name:  "tags",
-								Usage: "key=value tags (CSV list)",
+								Name:    "tags",
+								Aliases: []string{"t"},
+								Usage:   "key=value tags (CSV list)",
 							},
 						},
-						Action: cmd.SMCreateSecret,
+						Action: cmd.CreateSecret,
 					},
 					{
 						// put-secret-value
 						Name:  "put",
 						Usage: "non-interactive update to a specific secret",
+						UsageText: `
+Stores a new encrypted secret value in the specified secret. To do this, the 
+operation creates a new version and attaches it to the secret. The version 
+can contain a new SecretString value or a new SecretBinary value.
+
+This will put the value to AWSCURRENT and retain one previous version 
+with AWSPREVIOUS.
+`,
 						Flags: []cli.Flag{
 							&cli.StringFlag{
 								Name:     "secret-id",
@@ -157,22 +165,11 @@ func main() {
 							&cli.BoolFlag{
 								Name:    "interactive",
 								Aliases: []string{"i"},
-								Usage:   "Open interactive editor to create secret value.",
+								Usage:   "Override and open interactive editor to verify and modify the new secret value.",
 							},
-							&cli.StringFlag{
-								// TODO: add description feature
-								Name:    "description",
-								Aliases: []string{"desc"},
-								Usage:   "Additional description text.",
-							},
-							&cli.StringFlag{
-								// TODO: add tags feature
-								Name:  "tags",
-								Usage: "key=value tags (CSV list)",
-							},
+							// TODO: add flag for passing version stage
 						},
-						// TODO: Flag for use of binary
-						Action: cmd.SMPutSecret,
+						Action: cmd.PutSecret,
 					},
 					{
 						Name:    "delete",
@@ -191,7 +188,7 @@ func main() {
 								Usage:   "Bypass recovery window (30 days) and immediately delete Secret.",
 							},
 						},
-						Action: cmd.SMDeleteSecret,
+						Action: cmd.DeleteSecret,
 					},
 				},
 			},

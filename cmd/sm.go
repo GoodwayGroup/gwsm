@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-// Limit the length of a string while also appending an ellipses.
+// truncateString limits the length of a string while also appending an ellipses.
 func truncateString(str string, num int) string {
 	short := str
 	if len(str) > num {
@@ -27,9 +27,9 @@ func truncateString(str string, num int) string {
 	return short
 }
 
-// Helper method to either bypass and return the `secretName` passed in via CLI
-// flag OR retrieve a list of all secrets to allow for a search select by the
-// User.
+// selectSecretNameFromList is a helper method to either bypass and return the
+// `secretName` passed in via CLI flag OR retrieve a list of all secrets to allow
+// for a search select by the User.
 func selectSecretNameFromList(c *cli.Context) (string, error) {
 	secretName := c.String("secret-id")
 	if secretName == "" {
@@ -60,6 +60,7 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 	return secretName, nil
 }
 
+// promptForEdit is a helper method providing an editor interface.
 func promptForEdit(secretName string, s []byte) ([]byte, error) {
 	ed := ""
 	prompt := &survey.Editor{
@@ -77,7 +78,60 @@ func promptForEdit(secretName string, s []byte) ([]byte, error) {
 	return []byte(ed), nil
 }
 
-func SMListSecrets(c *cli.Context) error {
+// validateAndUpdateSecretValue will take the original buffer and interactively open an
+// editor to allow for updates. It will check if the original and updated buffer match, if
+// so it will exit gracefully. It will also verify valid JSON and prompt if an invalid input
+// is provided.
+func validateAndUpdateSecretValue(secretName string, orig []byte, updateTmp []byte) ([]byte, error) {
+	done := false
+	for !done {
+		_, err := djson.Decode(updateTmp)
+		if err != nil {
+			PrintWarn("invalid JSON submitted.")
+
+			ed := false
+			p1 := &survey.Confirm{
+				Message: "Open to edit?",
+			}
+			err = survey.AskOne(p1, &ed)
+			if err != nil {
+				return nil, err
+			}
+			if ed {
+				updateTmp, err = promptForEdit(secretName, updateTmp)
+				if err != nil {
+					return nil, cli.NewExitError(err, 2)
+				}
+				if string(orig) == strings.TrimSuffix(string(updateTmp), "\n") {
+					PrintInfo("Updated value matches original. Exiting.")
+					return nil, cli.NewExitError("", 0)
+				}
+			} else {
+				submit := false
+				p2 := &survey.Confirm{
+					Message: "Continue with Submit?",
+				}
+				err = survey.AskOne(p2, &submit)
+				if err != nil {
+					return nil, err
+				}
+				if !submit {
+					PrintWarn("Exiting without submit.")
+					return nil, cli.NewExitError("", 0)
+				}
+				PrintInfo("Continuing with submit.")
+				done = true
+			}
+		} else {
+			PrintInfo("JSON validated.")
+			done = true
+		}
+	}
+	return updateTmp, nil
+}
+
+// ListSecrets CLI command to list all Secrets.
+func ListSecrets(c *cli.Context) error {
 	secrets, err := sm.ListSecrets()
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -116,7 +170,8 @@ func SMListSecrets(c *cli.Context) error {
 	return nil
 }
 
-func SMViewSecret(c *cli.Context) error {
+// ViewSecret CLI command to view/get a Secret.
+func ViewSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -146,7 +201,8 @@ func SMViewSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMDescribeSecret(c *cli.Context) error {
+// DescribeSecret CLI command to describe a Secret.
+func DescribeSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -162,7 +218,8 @@ func SMDescribeSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMEditSecret(c *cli.Context) error {
+// EditSecret CLI command to edit a Secret.
+func EditSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -199,67 +256,32 @@ func SMEditSecret(c *cli.Context) error {
 		return nil
 	}
 
-	done := false
-	for !done {
-		_, err = djson.Decode(up)
-		if err != nil {
-			PrintWarn("invalid JSON submitted.")
-
-			ed := false
-			p1 := &survey.Confirm{
-				Message: "Open to edit?",
-			}
-			err = survey.AskOne(p1, &ed)
-			if err != nil {
-				return err
-			}
-			if ed {
-				up, err = promptForEdit(secretName, up)
-				if err != nil {
-					return cli.NewExitError(err, 2)
-				}
-				if string(s) == strings.TrimSuffix(string(up), "\n") {
-					PrintInfo("Updated value matches original. Exiting.")
-					return nil
-				}
-			} else {
-				submit := false
-				p2 := &survey.Confirm{
-					Message: "Continue with Submit?",
-				}
-				err = survey.AskOne(p2, &submit)
-				if err != nil {
-					return err
-				}
-				if !submit {
-					PrintWarn("Exiting without submit.")
-					return nil
-				}
-				PrintInfo("Continuing with submit.")
-				done = true
-			}
-		} else {
-			PrintInfo("JSON validated.")
-			done = true
-		}
+	var final []byte
+	final, err = validateAndUpdateSecretValue(secretName, s, up)
+	if err != nil {
+		return cli.NewExitError(err, 2)
 	}
 
+	var t string
 	if c.Bool("binary") {
-		_, err = sm.PutSecretBinary(secretName, up)
+		t = "BinarySecret"
+		_, err = sm.PutSecretBinary(secretName, final)
 	} else {
-		_, err = sm.PutSecretString(secretName, string(up))
+		t = "StringSecret"
+		_, err = sm.PutSecretString(secretName, string(final))
 	}
 
 	if err != nil {
 		return cli.NewExitError(err, 2)
 	}
 
-	PrintSuccess(fmt.Sprintf("%s successfully updated.", secretName))
+	PrintSuccess(fmt.Sprintf("%s %s successfully updated.", secretName, t))
 
 	return nil
 }
 
-func SMCreateSecret(c *cli.Context) error {
+// CreateSecret CLI command to create a new Secret.
+func CreateSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
@@ -306,10 +328,10 @@ func SMCreateSecret(c *cli.Context) error {
 	var t string
 	if c.Bool("binary") {
 		t = "BinarySecret"
-		_, err = sm.CreateSecretBinary(secretName, s)
+		_, err = sm.CreateSecretBinary(secretName, s, c.String("description"), c.String("tags"))
 	} else {
 		t = "StringSecret"
-		_, err = sm.CreateSecretString(secretName, string(s))
+		_, err = sm.CreateSecretString(secretName, string(s), c.String("description"), c.String("tags"))
 	}
 
 	if err != nil {
@@ -321,22 +343,87 @@ func SMCreateSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMPutSecret(c *cli.Context) error {
+// PutSecret CLI command to apply a delta to a Secret.
+func PutSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
 		return cli.NewExitError(err, 2)
 	}
-	if exists {
-		PrintWarn(fmt.Sprintf("'%s' already exists. Please use a different name.", secretName))
+	if !exists {
+		PrintWarn(fmt.Sprintf("'%s' does not exists. Please create the secret first.", secretName))
 		return nil
 	}
 
-	// TODO: Implement PutSecret
-	return cli.NewExitError("Not yet implemented", 5)
+	interactive := c.Bool("interactive")
+	var value []byte
+	if c.String("value") == "" {
+		// Assume interactive mode
+		interactive = true
+
+		secret, err := sm.GetSecret(secretName)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
+
+		if c.Bool("binary") {
+			value = secret.SecretBinary
+		} else {
+			result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
+			if err != nil {
+				PrintWarn("stored string value is not valid JSON.")
+				value = []byte(aws.StringValue(secret.SecretString))
+			} else {
+				value, err = json.MarshalIndent(result, "", "    ")
+				if err != nil {
+					return cli.NewExitError(err, 2)
+				}
+			}
+		}
+	} else {
+		value = []byte(c.String("value"))
+	}
+
+	var final []byte
+	if interactive {
+		var up []byte
+		up, err = promptForEdit(secretName, value)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
+		if string(value) == strings.TrimSuffix(string(up), "\n") {
+			PrintInfo("Updated value matches original. Exiting.")
+			return nil
+		}
+
+		final, err = validateAndUpdateSecretValue(secretName, value, up)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
+	} else {
+		final = value
+	}
+
+	var t string
+	if c.Bool("binary") {
+		t = "BinarySecret"
+		_, err = sm.PutSecretBinary(secretName, final)
+	} else {
+		t = "StringSecret"
+		_, err = sm.PutSecretString(secretName, string(final))
+	}
+
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+
+	PrintSuccess(fmt.Sprintf("%s %s successfully put new version.", secretName, t))
+
+	return nil
 }
 
-func SMDeleteSecret(c *cli.Context) error {
+// DeleteSecret CLI command that will delete a Secret.
+func DeleteSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {

@@ -185,17 +185,35 @@ func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretVa
 }
 
 // CreateSecretString will create a new SecretString value to a specific secret by Name (id)
-func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSecretOutput, err error) {
+func CreateSecretString(id string, data string, description string, tagsCSV string) (secret *secretsmanager.CreateSecretOutput, err error) {
 	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
 	svc := secretsmanager.New(sess)
 
-	secret, err = svc.CreateSecret(&secretsmanager.CreateSecretInput{
+	input := secretsmanager.CreateSecretInput{
 		SecretString: aws.String(data),
 		Name:         aws.String(id),
-	})
+	}
+
+	if description != "" {
+		input.Description = aws.String(description)
+	}
+
+	if tagsCSV != "" {
+		var tags []*secretsmanager.Tag
+		for _, kv := range strings.Split(tagsCSV, ",") {
+			parts := strings.SplitN(kv, "=", 2)
+			tags = append(tags, &secretsmanager.Tag{
+				Key:   aws.String(parts[0]),
+				Value: aws.String(parts[1]),
+			})
+		}
+		input.Tags = tags
+	}
+
+	secret, err = svc.CreateSecret(&input)
 
 	if err != nil {
 		return nil, err
@@ -205,17 +223,35 @@ func CreateSecretString(id string, data string) (secret *secretsmanager.CreateSe
 }
 
 // CreateSecretBinary will create a new SecretBinary value to a specific secret by Name (id)
-func CreateSecretBinary(id string, data []byte) (secret *secretsmanager.CreateSecretOutput, err error) {
+func CreateSecretBinary(id string, data []byte, description string, tagsCSV string) (secret *secretsmanager.CreateSecretOutput, err error) {
 	sess, err := as.New()
 	if err != nil {
 		return nil, err
 	}
 	svc := secretsmanager.New(sess)
 
-	secret, err = svc.CreateSecret(&secretsmanager.CreateSecretInput{
+	input := secretsmanager.CreateSecretInput{
 		SecretBinary: data,
 		Name:         aws.String(id),
-	})
+	}
+
+	if description != "" {
+		input.Description = aws.String(description)
+	}
+
+	if tagsCSV != "" {
+		var tags []*secretsmanager.Tag
+		for _, kv := range strings.Split(tagsCSV, ",") {
+			parts := strings.SplitN(kv, "=", 2)
+			tags = append(tags, &secretsmanager.Tag{
+				Key:   aws.String(parts[0]),
+				Value: aws.String(parts[1]),
+			})
+		}
+		input.Tags = tags
+	}
+
+	secret, err = svc.CreateSecret(&input)
 
 	if err != nil {
 		return nil, err
