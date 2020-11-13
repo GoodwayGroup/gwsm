@@ -2,6 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v0.14.0"></a>
+## [v0.14.0] - 2020-11-13
+### Chore
+- **docs:** updating docs for version v0.14.0
+
+### Pull Requests
+- feat(sm): added support description and tags on creation, added put sub command ([#52](https://github.com/GoodwayGroup/gwsm/issues/52))
+- chore(deps): update golang.org/x/crypto commit hash to 0c6587e ([#51](https://github.com/GoodwayGroup/gwsm/issues/51))
+- chore(deps): update module alecaivazis/survey/v2 to v2.2.2 ([#50](https://github.com/GoodwayGroup/gwsm/issues/50))
+- chore(deps): update module aws/aws-sdk-go to v1.35.27 ([#48](https://github.com/GoodwayGroup/gwsm/issues/48))
+
+
 <a name="v0.13.2"></a>
 ## [v0.13.2] - 2020-11-12
 ### Bug Fixes
@@ -9,6 +21,9 @@
 
 ### Chore
 - **deps:** update k8s.io to v0.19.3 and golang.org/x/crypto
+
+### Features
+- **release:** v0.13.2
 
 ### Pull Requests
 - chore(deps): update actions/checkout action to v2 ([#46](https://github.com/GoodwayGroup/gwsm/issues/46))
@@ -313,7 +328,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.2...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.0...HEAD
+[v0.14.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.2...v0.14.0
 [v0.13.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.1...v0.13.2
 [v0.13.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.0...v0.13.1
 [v0.13.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.12.5...v0.13.0
