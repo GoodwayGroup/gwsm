@@ -147,16 +147,16 @@ interactive edit of a secret String Value
 create new secret in Secrets Manager
 
 .PP
-\fB\-\-description, \-\-desc\fP="": Additional description text.
+\fB\-\-description, \-d\fP="": Additional description text.
 
 .PP
-\fB\-\-interactive, \-i\fP: Open interactive editor to create secret value.
+\fB\-\-interactive, \-i\fP: Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.
 
 .PP
 \fB\-\-secret\-id, \-s\fP="": Secret name
 
 .PP
-\fB\-\-tags\fP="": key=value tags (CSV list)
+\fB\-\-tags, \-t\fP="": key=value tags (CSV list)
 
 .PP
 \fB\-\-value, \-v\fP="": Secret Value. Will store as a string, unless binary flag is set.
@@ -166,16 +166,24 @@ create new secret in Secrets Manager
 non\-interactive update to a specific secret
 
 .PP
-\fB\-\-description, \-\-desc\fP="": Additional description text.
+.RS
+
+.nf
+Stores a new encrypted secret value in the specified secret. To do this, the 
+operation creates a new version and attaches it to the secret. The version 
+can contain a new SecretString value or a new SecretBinary value.
+
+This will put the value to AWSCURRENT and retain one previous version 
+with AWSPREVIOUS.
+
+.fi
+.RE
 
 .PP
-\fB\-\-interactive, \-i\fP: Open interactive editor to create secret value.
+\fB\-\-interactive, \-i\fP: Override and open interactive editor to verify and modify the new secret value.
 
 .PP
 \fB\-\-secret\-id, \-s\fP="": Secret name
-
-.PP
-\fB\-\-tags\fP="": key=value tags (CSV list)
 
 .PP
 \fB\-\-value, \-v\fP="": Secret Value. Will store as a string, unless binary flag is set.

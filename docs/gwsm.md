@@ -67,13 +67,13 @@ interactive edit of a secret String Value
 
 create new secret in Secrets Manager
 
-**--description, --desc**="": Additional description text.
+**--description, -d**="": Additional description text.
 
-**--interactive, -i**: Open interactive editor to create secret value.
+**--interactive, -i**: Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.
 
 **--secret-id, -s**="": Secret name
 
-**--tags**="": key=value tags (CSV list)
+**--tags, -t**="": key=value tags (CSV list)
 
 **--value, -v**="": Secret Value. Will store as a string, unless binary flag is set.
 
@@ -81,13 +81,18 @@ create new secret in Secrets Manager
 
 non-interactive update to a specific secret
 
-**--description, --desc**="": Additional description text.
+```
+Stores a new encrypted secret value in the specified secret. To do this, the 
+operation creates a new version and attaches it to the secret. The version 
+can contain a new SecretString value or a new SecretBinary value.
 
-**--interactive, -i**: Open interactive editor to create secret value.
+This will put the value to AWSCURRENT and retain one previous version 
+with AWSPREVIOUS.
+```
+
+**--interactive, -i**: Override and open interactive editor to verify and modify the new secret value.
 
 **--secret-id, -s**="": Secret name
-
-**--tags**="": key=value tags (CSV list)
 
 **--value, -v**="": Secret Value. Will store as a string, unless binary flag is set.
 
