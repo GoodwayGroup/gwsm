@@ -58,7 +58,7 @@ func main() {
 						// list-secrets
 						Name:   "list",
 						Usage:  "display table of all secrets with meta data",
-						Action: cmd.SMListSecrets,
+						Action: cmd.ListSecrets,
 					},
 					{
 						// describe-secret
@@ -71,7 +71,7 @@ func main() {
 								Usage:   "Specific Secret to describe, will bypass select/search",
 							},
 						},
-						Action: cmd.SMDescribeSecret,
+						Action: cmd.DescribeSecret,
 					},
 					{
 						// get-secret-value
@@ -85,7 +85,7 @@ func main() {
 								Usage:   "Specific Secret to view, will bypass select/search",
 							},
 						},
-						Action: cmd.SMViewSecret,
+						Action: cmd.ViewSecret,
 					},
 					{
 						Name:    "edit",
@@ -99,7 +99,7 @@ func main() {
 								Usage:   "Specific Secret to edit, will bypass select/search",
 							},
 						},
-						Action: cmd.SMEditSecret,
+						Action: cmd.EditSecret,
 					},
 					{
 						// create-secret
@@ -136,7 +136,7 @@ func main() {
 								Usage: "key=value tags (CSV list)",
 							},
 						},
-						Action: cmd.SMCreateSecret,
+						Action: cmd.CreateSecret,
 					},
 					{
 						// put-secret-value
@@ -172,7 +172,7 @@ func main() {
 							},
 						},
 						// TODO: Flag for use of binary
-						Action: cmd.SMPutSecret,
+						Action: cmd.PutSecret,
 					},
 					{
 						Name:    "delete",
@@ -191,7 +191,7 @@ func main() {
 								Usage:   "Bypass recovery window (30 days) and immediately delete Secret.",
 							},
 						},
-						Action: cmd.SMDeleteSecret,
+						Action: cmd.DeleteSecret,
 					},
 				},
 			},

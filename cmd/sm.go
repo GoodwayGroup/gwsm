@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-// Limit the length of a string while also appending an ellipses.
+// truncateString limits the length of a string while also appending an ellipses.
 func truncateString(str string, num int) string {
 	short := str
 	if len(str) > num {
@@ -27,9 +27,9 @@ func truncateString(str string, num int) string {
 	return short
 }
 
-// Helper method to either bypass and return the `secretName` passed in via CLI
-// flag OR retrieve a list of all secrets to allow for a search select by the
-// User.
+// selectSecretNameFromList is a helper method to either bypass and return the
+// `secretName` passed in via CLI flag OR retrieve a list of all secrets to allow
+// for a search select by the User.
 func selectSecretNameFromList(c *cli.Context) (string, error) {
 	secretName := c.String("secret-id")
 	if secretName == "" {
@@ -60,6 +60,7 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 	return secretName, nil
 }
 
+// promptForEdit is a helper method providing an editor interface.
 func promptForEdit(secretName string, s []byte) ([]byte, error) {
 	ed := ""
 	prompt := &survey.Editor{
@@ -77,7 +78,8 @@ func promptForEdit(secretName string, s []byte) ([]byte, error) {
 	return []byte(ed), nil
 }
 
-func SMListSecrets(c *cli.Context) error {
+// ListSecrets CLI command to list all Secrets.
+func ListSecrets(c *cli.Context) error {
 	secrets, err := sm.ListSecrets()
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -116,7 +118,8 @@ func SMListSecrets(c *cli.Context) error {
 	return nil
 }
 
-func SMViewSecret(c *cli.Context) error {
+// ViewSecret CLI command to view/get a Secret.
+func ViewSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -146,7 +149,8 @@ func SMViewSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMDescribeSecret(c *cli.Context) error {
+// DescribeSecret CLI command to describe a Secret.
+func DescribeSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -162,7 +166,8 @@ func SMDescribeSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMEditSecret(c *cli.Context) error {
+// EditSecret CLI command to edit a Secret.
+func EditSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
 		return cli.NewExitError(err, 2)
@@ -259,7 +264,8 @@ func SMEditSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMCreateSecret(c *cli.Context) error {
+// CreateSecret CLI command to create a new Secret.
+func CreateSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
@@ -321,7 +327,9 @@ func SMCreateSecret(c *cli.Context) error {
 	return nil
 }
 
-func SMPutSecret(c *cli.Context) error {
+// PutSecret CLI command to apply a delta to a Secret.
+// TODO: PutSecret Not yet implemented
+func PutSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
@@ -336,7 +344,8 @@ func SMPutSecret(c *cli.Context) error {
 	return cli.NewExitError("Not yet implemented", 5)
 }
 
-func SMDeleteSecret(c *cli.Context) error {
+// DeleteSecret CLI command that will delete a Secret.
+func DeleteSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
