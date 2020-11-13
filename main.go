@@ -122,12 +122,11 @@ func main() {
 							&cli.BoolFlag{
 								Name:    "interactive",
 								Aliases: []string{"i"},
-								Usage:   "Open interactive editor to create secret value.",
+								Usage:   "Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.",
 							},
 							&cli.StringFlag{
-								// TODO: add description feature
 								Name:    "description",
-								Aliases: []string{"desc"},
+								Aliases: []string{"desc", "d"},
 								Usage:   "Additional description text.",
 							},
 							&cli.StringFlag{
@@ -160,9 +159,8 @@ func main() {
 								Usage:   "Open interactive editor to create secret value.",
 							},
 							&cli.StringFlag{
-								// TODO: add description feature
 								Name:    "description",
-								Aliases: []string{"desc"},
+								Aliases: []string{"desc", "d"},
 								Usage:   "Additional description text.",
 							},
 							&cli.StringFlag{

@@ -312,10 +312,10 @@ func CreateSecret(c *cli.Context) error {
 	var t string
 	if c.Bool("binary") {
 		t = "BinarySecret"
-		_, err = sm.CreateSecretBinary(secretName, s)
+		_, err = sm.CreateSecretBinary(secretName, s, c.String("description"))
 	} else {
 		t = "StringSecret"
-		_, err = sm.CreateSecretString(secretName, string(s))
+		_, err = sm.CreateSecretString(secretName, string(s), c.String("description"))
 	}
 
 	if err != nil {
