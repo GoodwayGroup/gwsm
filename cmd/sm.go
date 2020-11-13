@@ -249,9 +249,12 @@ func EditSecret(c *cli.Context) error {
 		}
 	}
 
+	var t string
 	if c.Bool("binary") {
+		t = "BinarySecret"
 		_, err = sm.PutSecretBinary(secretName, up)
 	} else {
+		t = "StringSecret"
 		_, err = sm.PutSecretString(secretName, string(up))
 	}
 
@@ -259,7 +262,7 @@ func EditSecret(c *cli.Context) error {
 		return cli.NewExitError(err, 2)
 	}
 
-	PrintSuccess(fmt.Sprintf("%s successfully updated.", secretName))
+	PrintSuccess(fmt.Sprintf("%s %s successfully updated.", secretName, t))
 
 	return nil
 }
@@ -328,20 +331,116 @@ func CreateSecret(c *cli.Context) error {
 }
 
 // PutSecret CLI command to apply a delta to a Secret.
-// TODO: PutSecret Not yet implemented
 func PutSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
 		return cli.NewExitError(err, 2)
 	}
-	if exists {
-		PrintWarn(fmt.Sprintf("'%s' already exists. Please use a different name.", secretName))
+	if !exists {
+		PrintWarn(fmt.Sprintf("'%s' does not exists. Please create the secret first.", secretName))
 		return nil
 	}
 
-	// TODO: Implement PutSecret
-	return cli.NewExitError("Not yet implemented", 5)
+	interactive := c.Bool("interactive")
+	var value []byte
+	if c.String("value") == "" {
+		// Assume interactive mode
+		interactive = true
+
+		secret, err := sm.GetSecret(secretName)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
+
+		if c.Bool("binary") {
+			value = secret.SecretBinary
+		} else {
+			result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
+			if err != nil {
+				PrintWarn("stored string value is not valid JSON.")
+				value = []byte(aws.StringValue(secret.SecretString))
+			} else {
+				value, err = json.MarshalIndent(result, "", "    ")
+				if err != nil {
+					return cli.NewExitError(err, 2)
+				}
+			}
+		}
+	} else {
+		value = []byte(c.String("value"))
+	}
+
+	// if not interactive OR no value paseed in
+	var final []byte
+	if interactive {
+		var up []byte
+		up, err = promptForEdit(secretName, value)
+		if err != nil {
+			return cli.NewExitError(err, 2)
+		}
+
+		done := false
+		for !done {
+			_, err = djson.Decode(up)
+			if err != nil {
+				PrintWarn("invalid JSON submitted.")
+
+				ed := false
+				p1 := &survey.Confirm{
+					Message: "Open to edit?",
+				}
+				err = survey.AskOne(p1, &ed)
+				if err != nil {
+					return err
+				}
+				if ed {
+					up, err = promptForEdit(secretName, up)
+					if err != nil {
+						return cli.NewExitError(err, 2)
+					}
+				} else {
+					submit := false
+					p2 := &survey.Confirm{
+						Message: "Continue with Submit?",
+					}
+					err = survey.AskOne(p2, &submit)
+					if err != nil {
+						return err
+					}
+					if !submit {
+						PrintWarn("Exiting without submit.")
+						return nil
+					}
+					PrintInfo("Continuing with submit.")
+					done = true
+				}
+			} else {
+				PrintInfo("JSON validated.")
+				done = true
+			}
+		}
+		final = up
+	} else {
+		final = value
+	}
+
+	var t string
+	if c.Bool("binary") {
+		t = "BinarySecret"
+		_, err = sm.PutSecretBinary(secretName, final)
+	} else {
+		t = "StringSecret"
+		_, err = sm.PutSecretString(secretName, string(final))
+	}
+
+	if err != nil {
+		return cli.NewExitError(err, 2)
+	}
+
+	PrintSuccess(fmt.Sprintf("%s %s successfully put new version.", secretName, t))
+
+	return nil
 }
 
 // DeleteSecret CLI command that will delete a Secret.
