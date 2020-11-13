@@ -126,13 +126,13 @@ func main() {
 							},
 							&cli.StringFlag{
 								Name:    "description",
-								Aliases: []string{"desc", "d"},
+								Aliases: []string{"d"},
 								Usage:   "Additional description text.",
 							},
 							&cli.StringFlag{
-								// TODO: add tags feature
-								Name:  "tags",
-								Usage: "key=value tags (CSV list)",
+								Name:    "tags",
+								Aliases: []string{"t"},
+								Usage:   "key=value tags (CSV list)",
 							},
 						},
 						Action: cmd.CreateSecret,
@@ -160,13 +160,13 @@ func main() {
 							},
 							&cli.StringFlag{
 								Name:    "description",
-								Aliases: []string{"desc", "d"},
+								Aliases: []string{"d"},
 								Usage:   "Additional description text.",
 							},
 							&cli.StringFlag{
-								// TODO: add tags feature
-								Name:  "tags",
-								Usage: "key=value tags (CSV list)",
+								Name:    "tags",
+								Aliases: []string{"t"},
+								Usage:   "key=value tags (CSV list)",
 							},
 						},
 						// TODO: Flag for use of binary
