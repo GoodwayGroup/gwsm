@@ -39,11 +39,28 @@ COPYRIGHT:
 
 ## Installation
 
+### Direct Install
+
 To install latest version:
 
 ```
 $ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
 ```
+
+### [`asdf` plugin](https://github.com/GoodwayGroup/asdf-gwsm)
+
+Add plugin:
+
+```
+$ asdf plugin-add gwsm https://github.com/GoodwayGroup/asdf-gwsm.git
+```
+
+Install the latest version:
+```
+$ asdf install gwsm latest
+```
+
+### man page
 
 To install `man` page:
 
