@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/pbthorste/avtool"
 	"github.com/urfave/cli/v2"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
@@ -74,7 +74,7 @@ func readVaultPassword() (password string, err error) {
 	var bytePassword []byte
 	// skipped for windows compatibility
 	// nolint:unconvert
-	bytePassword, err = terminal.ReadPassword(int(syscall.Stdin))
+	bytePassword, err = term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		err = errors.New("ERROR: could not input password, " + err.Error())
 		return
