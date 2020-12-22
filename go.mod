@@ -21,7 +21,7 @@ require (
 	github.com/r3labs/diff v1.1.0
 	github.com/sergi/go-diff v1.1.0
 	github.com/urfave/cli/v2 v2.2.0
-	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9
+	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.20.1
 	k8s.io/apimachinery v0.20.1
