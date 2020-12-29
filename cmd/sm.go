@@ -100,11 +100,11 @@ func validateAndUpdateSecretValue(secretName string, orig []byte, updateTmp []by
 			if ed {
 				updateTmp, err = promptForEdit(secretName, updateTmp)
 				if err != nil {
-					return nil, cli.NewExitError(err, 2)
+					return nil, cli.Exit(err, 2)
 				}
 				if string(orig) == strings.TrimSuffix(string(updateTmp), "\n") {
 					PrintInfo("Updated value matches original. Exiting.")
-					return nil, cli.NewExitError("", 0)
+					return nil, cli.Exit("", 0)
 				}
 			} else {
 				submit := false
@@ -117,7 +117,7 @@ func validateAndUpdateSecretValue(secretName string, orig []byte, updateTmp []by
 				}
 				if !submit {
 					PrintWarn("Exiting without submit.")
-					return nil, cli.NewExitError("", 0)
+					return nil, cli.Exit("", 0)
 				}
 				PrintInfo("Continuing with submit.")
 				done = true
@@ -134,7 +134,7 @@ func validateAndUpdateSecretValue(secretName string, orig []byte, updateTmp []by
 func ListSecrets(c *cli.Context) error {
 	secrets, err := sm.ListSecrets()
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	t := table.NewWriter()
@@ -174,12 +174,12 @@ func ListSecrets(c *cli.Context) error {
 func ViewSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	secret, err := sm.GetSecret(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	if c.Bool("binary") {
@@ -205,12 +205,12 @@ func ViewSecret(c *cli.Context) error {
 func DescribeSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	secret, err := sm.DescribeSecret(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	fmt.Println(secret.String())
@@ -222,12 +222,12 @@ func DescribeSecret(c *cli.Context) error {
 func EditSecret(c *cli.Context) error {
 	secretName, err := selectSecretNameFromList(c)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	secret, err := sm.GetSecret(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	var s []byte
@@ -241,7 +241,7 @@ func EditSecret(c *cli.Context) error {
 		} else {
 			s, err = json.MarshalIndent(result, "", "    ")
 			if err != nil {
-				return cli.NewExitError(err, 2)
+				return cli.Exit(err, 2)
 			}
 		}
 	}
@@ -249,7 +249,7 @@ func EditSecret(c *cli.Context) error {
 	var up []byte
 	up, err = promptForEdit(secretName, s)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 	if string(s) == strings.TrimSuffix(string(up), "\n") {
 		PrintInfo("Updated value matches original. Exiting.")
@@ -259,7 +259,7 @@ func EditSecret(c *cli.Context) error {
 	var final []byte
 	final, err = validateAndUpdateSecretValue(secretName, s, up)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	var t string
@@ -272,7 +272,7 @@ func EditSecret(c *cli.Context) error {
 	}
 
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	PrintSuccess(fmt.Sprintf("%s %s successfully updated.", secretName, t))
@@ -285,7 +285,7 @@ func CreateSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 	if exists {
 		PrintWarn(fmt.Sprintf("'%s' already exists. Please use a different name.", secretName))
@@ -311,14 +311,14 @@ func CreateSecret(c *cli.Context) error {
 		} else {
 			s, err = json.MarshalIndent(result, "", "    ")
 			if err != nil {
-				return cli.NewExitError(err, 2)
+				return cli.Exit(err, 2)
 			}
 		}
 
 		var up []byte
 		up, err = promptForEdit(secretName, s)
 		if err != nil {
-			return cli.NewExitError(err, 2)
+			return cli.Exit(err, 2)
 		}
 		s = up
 	} else {
@@ -335,7 +335,7 @@ func CreateSecret(c *cli.Context) error {
 	}
 
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	PrintSuccess(fmt.Sprintf("%s %s successfully created.", secretName, t))
@@ -348,7 +348,7 @@ func PutSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 	if !exists {
 		PrintWarn(fmt.Sprintf("'%s' does not exists. Please create the secret first.", secretName))
@@ -363,7 +363,7 @@ func PutSecret(c *cli.Context) error {
 
 		secret, err := sm.GetSecret(secretName)
 		if err != nil {
-			return cli.NewExitError(err, 2)
+			return cli.Exit(err, 2)
 		}
 
 		if c.Bool("binary") {
@@ -376,7 +376,7 @@ func PutSecret(c *cli.Context) error {
 			} else {
 				value, err = json.MarshalIndent(result, "", "    ")
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 			}
 		}
@@ -389,7 +389,7 @@ func PutSecret(c *cli.Context) error {
 		var up []byte
 		up, err = promptForEdit(secretName, value)
 		if err != nil {
-			return cli.NewExitError(err, 2)
+			return cli.Exit(err, 2)
 		}
 		if string(value) == strings.TrimSuffix(string(up), "\n") {
 			PrintInfo("Updated value matches original. Exiting.")
@@ -398,7 +398,7 @@ func PutSecret(c *cli.Context) error {
 
 		final, err = validateAndUpdateSecretValue(secretName, value, up)
 		if err != nil {
-			return cli.NewExitError(err, 2)
+			return cli.Exit(err, 2)
 		}
 	} else {
 		final = value
@@ -414,7 +414,7 @@ func PutSecret(c *cli.Context) error {
 	}
 
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	PrintSuccess(fmt.Sprintf("%s %s successfully put new version.", secretName, t))
@@ -427,7 +427,7 @@ func DeleteSecret(c *cli.Context) error {
 	secretName := c.String("secret-id")
 	exists, err := sm.CheckIfSecretExists(secretName)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 	if !exists {
 		PrintWarn(fmt.Sprintf("'%s' was not found.", secretName))
@@ -440,7 +440,7 @@ func DeleteSecret(c *cli.Context) error {
 	}
 	err = survey.AskOne(p1, &del)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	if !del {
@@ -451,7 +451,7 @@ func DeleteSecret(c *cli.Context) error {
 	force := c.Bool("force")
 	_, err = sm.DeleteSecret(secretName, force)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	PrintSuccess(fmt.Sprintf("'%s' deleted. (force: %v)", secretName, force))

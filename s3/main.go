@@ -23,7 +23,7 @@ func Get(src string, dest string) error {
 	var err error
 	dstFile, err = os.Create(dest)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 	defer dstFile.Close()
 	kget.Printf("writing to path: %s", dest)
@@ -33,7 +33,7 @@ func Get(src string, dest string) error {
 
 	bucket, object, err := getBucketAndObject(src)
 	if err != nil {
-		return cli.NewExitError(err, 2)
+		return cli.Exit(err, 2)
 	}
 
 	kget.Printf("downloading - bucket: %s object: %s", bucket, object)

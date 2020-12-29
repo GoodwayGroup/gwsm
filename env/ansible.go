@@ -31,9 +31,9 @@ func GetEnvFromAnsibleVault(c *cli.Context) (string, error) {
 	result, err := avtool.DecryptFile(vf, pw)
 	if err != nil {
 		if strings.Compare(err.Error(), "ERROR: runtime error: index out of range") == 0 {
-			return "", cli.NewExitError("input is not a vault encrypted "+vf+" is not a vault encrypted file for "+vf, 2)
+			return "", cli.Exit("input is not a vault encrypted "+vf+" is not a vault encrypted file for "+vf, 2)
 		}
-		return "", cli.NewExitError(err, 1)
+		return "", cli.Exit(err, 1)
 	}
 
 	var kubeSecret KubeSecret
