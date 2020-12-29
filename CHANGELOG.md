@@ -2,10 +2,28 @@
 ## [Unreleased]
 
 
+<a name="v0.14.1"></a>
+## [v0.14.1] - 2020-12-29
+### Chore
+- **deps:** update module urfave/cli/v2 to v2.3.0
+- **deps:** update awssession to v0.1.5 and cdocs to v0.2.3
+- **deps:** deprecate used of golang.org/x/crypto/ssh/terminal in favor of golang.org/x/term
+- **deps:** update k8s.io to v0.20.1
+- **docs:** updated README with asdf plugin installation
+
+### Pull Requests
+- chore(deps): update module aws/aws-sdk-go to v1.36.16 ([#59](https://github.com/GoodwayGroup/gwsm/issues/59))
+- chore(deps): update module alecaivazis/survey/v2 to v2.2.7 ([#58](https://github.com/GoodwayGroup/gwsm/issues/58))
+- chore(deps): update module aws/aws-sdk-go to v1.36.13 ([#53](https://github.com/GoodwayGroup/gwsm/issues/53))
+
+
 <a name="v0.14.0"></a>
 ## [v0.14.0] - 2020-11-13
 ### Chore
 - **docs:** updating docs for version v0.14.0
+
+### Features
+- **release:** v0.14.0
 
 ### Pull Requests
 - feat(sm): added support description and tags on creation, added put sub command ([#52](https://github.com/GoodwayGroup/gwsm/issues/52))
@@ -328,7 +346,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.1...HEAD
+[v0.14.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.2...v0.14.0
 [v0.13.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.1...v0.13.2
 [v0.13.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.0...v0.13.1
