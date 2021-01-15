@@ -2,6 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v0.14.2"></a>
+## [v0.14.2] - 2021-01-15
+### Chore
+- **deps:** update k8s.io monorepo to v0.20.2
+
+### Pull Requests
+- chore(deps): update module aws/aws-sdk-go to v1.36.28 ([#61](https://github.com/GoodwayGroup/gwsm/issues/61))
+- chore(deps): update module aws/aws-sdk-go to v1.36.18 ([#60](https://github.com/GoodwayGroup/gwsm/issues/60))
+
+
 <a name="v0.14.1"></a>
 ## [v0.14.1] - 2020-12-29
 ### Chore
@@ -10,6 +20,9 @@
 - **deps:** deprecate used of golang.org/x/crypto/ssh/terminal in favor of golang.org/x/term
 - **deps:** update k8s.io to v0.20.1
 - **docs:** updated README with asdf plugin installation
+
+### Features
+- **release:** v0.14.1
 
 ### Pull Requests
 - chore(deps): update module aws/aws-sdk-go to v1.36.16 ([#59](https://github.com/GoodwayGroup/gwsm/issues/59))
@@ -346,7 +359,8 @@
 - **view:** Added view command and scaffolding for deployments
 
 
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.2...HEAD
+[v0.14.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.1...v0.14.2
 [v0.14.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.0...v0.14.1
 [v0.14.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.2...v0.14.0
 [v0.13.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.13.1...v0.13.2
