@@ -7,7 +7,7 @@ import (
 	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/logrusorgru/aurora/v3"
-	"github.com/r3labs/diff"
+	"github.com/r3labs/diff/v2"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/urfave/cli/v2"
 	"os"
