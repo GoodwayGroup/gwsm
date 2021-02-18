@@ -25,6 +25,6 @@ require (
 	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.20.2
-	k8s.io/apimachinery v0.20.2
+	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.2
 )
