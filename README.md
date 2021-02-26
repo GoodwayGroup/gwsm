@@ -56,6 +56,7 @@ $ asdf plugin-add gwsm https://github.com/GoodwayGroup/asdf-gwsm.git
 ```
 
 Install the latest version:
+
 ```
 $ asdf install gwsm latest
 ```
@@ -74,7 +75,6 @@ Please see [the docs for details on the commands.](./docs/gwsm.md)
 
 Each command ans subcommand has detailed help text that can be viewed using the `--help, -h` flag.
 
-
 ## Built With
 
 * go v1.14+
@@ -87,17 +87,20 @@ Run `./release.sh $VERSION`
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull
+requests to us.
 
 ## Versioning
 
-We employ [git-chglog](https://github.com/git-chglog/git-chglog) to manage the [CHANGELOG.md](CHANGELOG.md). For the versions available, see the [tags on this repository](https://github.com/GoodwayGroup/gwsm/tags).
+We employ [git-chglog](https://github.com/git-chglog/git-chglog) to manage the [CHANGELOG.md](CHANGELOG.md). For the
+versions available, see the [tags on this repository](https://github.com/GoodwayGroup/gwsm/tags).
 
 ## Authors
 
 * **Derek Smith** - [@clok](https://github.com/clok)
 
-See also the list of [contributors](https://github.com/GoodwayGroup/gwvault/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/GoodwayGroup/gwvault/contributors) who participated in this
+project.
 
 ## License
 

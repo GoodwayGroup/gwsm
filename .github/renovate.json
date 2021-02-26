@@ -2,5 +2,7 @@
   "extends": [
     "github>GoodwayGroup/renovate-config"
   ],
-  "postUpdateOptions": ["gomodTidy"]
+  "postUpdateOptions": [
+    "gomodTidy"
+  ]
 }
