@@ -1,9 +1,12 @@
 % gwsm 8
-# NAME
-gwsm - interact with config map and secret manager variables
-# SYNOPSIS
-gwsm
 
+# NAME
+
+gwsm - interact with config map and secret manager variables
+
+# SYNOPSIS
+
+gwsm
 
 # COMMAND TREE
 
@@ -29,6 +32,7 @@ gwsm
 - [version, v](#version-v)
 
 **Usage**:
+
 ```
 gwsm [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
 ```
@@ -69,7 +73,8 @@ create new secret in Secrets Manager
 
 **--description, -d**="": Additional description text.
 
-**--interactive, -i**: Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.
+**--interactive, -i**: Open interactive editor to create secret value. If no 'value' is provided, an editor will be
+opened by default.
 
 **--secret-id, -s**="": Secret name
 
@@ -153,13 +158,16 @@ display.
 
 **--configmap, -c**="": Path to configmap.yaml
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any
+exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any
+filters. (default: npm_,KUBERNETES_,API_PORT)
 
 **--namespace, -n**="": Kube Namespace to list Pods from for inspection
 
-**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
+**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _
+NAME)
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
@@ -168,10 +176,10 @@ display.
 View diff of local (ansible encrypted) vs. namespace
 
 ```
-View the diff of the local ansible-vault encrypted Kubenetes Secret file
+View the diff of the local ansible-vault encrypted Kubernetes Secret file
 against a given dotenv file on a pod within a namespace.
 
-The local file will use the contents of the 'data.<accsessor flag>' block.
+The local file will use the contents of the 'data.<accessor flag>' block.
 This defaults to 'data..env'.
 
 Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
@@ -185,7 +193,7 @@ type: Opaque
 data:
   .env: <BASE64 ENCODED STRING>
 
-It will then grab contents of the dotenv filr on a Pod in a given Namespace.
+It will then grab contents of the dotenv file on a Pod in a given Namespace.
 
 This defaults to inspecting the '$PWD/.env on' when executing a 'cat' command.
 This method uses '/bin/bash -c' as the base command to perform inspection.
@@ -237,7 +245,8 @@ display.
 
 **--configmap, -c**="": Path to configmap.yaml
 
-**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
+**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _
+NAME)
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
@@ -246,8 +255,8 @@ display.
 View env values from ansible-vault encrypted Secret file.
 
 ```
-View a legacy ansible-vault encrypted Kubenetes Secret file. This will output
-the contents of the 'data.<accsessor flag>' block.
+View a legacy ansible-vault encrypted Kubernetes Secret file. This will output
+the contents of the 'data.<accessor flag>' block.
 This defaults to 'data..env'.
 
 Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
@@ -289,9 +298,11 @@ display.
 
 **--cmd**="": Command to inspect (default: node)
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any
+exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any
+filters. (default: npm_,KUBERNETES_,API_PORT)
 
 **--namespace, -n**="": Kube Namespace list Pods from
 
@@ -315,7 +326,7 @@ $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 
 Generate and install man page
 
->NOTE: Windows is not supported
+> NOTE: Windows is not supported
 
 ## version, v
 

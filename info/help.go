@@ -21,9 +21,6 @@ The path to the secrets.yml is typically .docker/secrets.yaml
 
 The 'filter-prefix' flag will exclude any values that start with the flagged 
 prefixes from display.
-
-The 'exclude' flag will exclude any values where the KEY matches exactly from
-display.
 `
 
 var ViewNamespaceCommandHelpText = `
@@ -75,8 +72,8 @@ display.
 `
 
 var ViewAnsibleEncryptedEnvCommandHelpText = `
-View a legacy ansible-vault encrypted Kubenetes Secret file. This will output
-the contents of the 'data.<accsessor flag>' block.
+View a legacy ansible-vault encrypted Kubernetes Secret file. This will output
+the contents of the 'data.<accessor flag>' block.
 This defaults to 'data..env'.
 
 Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
@@ -92,10 +89,10 @@ data:
 `
 
 var ViewAnsibleEnvDiffCommandHelpText = `
-View the diff of the local ansible-vault encrypted Kubenetes Secret file
+View the diff of the local ansible-vault encrypted Kubernetes Secret file
 against a given dotenv file on a pod within a namespace.
 
-The local file will use the contents of the 'data.<accsessor flag>' block.
+The local file will use the contents of the 'data.<accessor flag>' block.
 This defaults to 'data..env'.
 
 Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
@@ -109,7 +106,7 @@ type: Opaque
 data:
   .env: <BASE64 ENCODED STRING>
 
-It will then grab contents of the dotenv filr on a Pod in a given Namespace.
+It will then grab contents of the dotenv file on a Pod in a given Namespace.
 
 This defaults to inspecting the '$PWD/.env on' when executing a 'cat' command.
 This method uses '/bin/bash -c' as the base command to perform inspection.
@@ -124,3 +121,58 @@ $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 `
 
 var SecretBinaryHelp = "By default, the tool will interact with the SecretString value. Use this flag to interact with the SecretBinary value instead."
+
+var DumpLocalCommandHelpText = `
+Dump the current environment variables for a given ConfigMap and summon
+secrets.yml.
+
+This will retrieve the stored secrets within AWS Secrets Manager and map them
+via the secrets.yml file used by the 'summon' CLI tool to generate the current
+state of Environment Variables for a given stage.
+
+The AWS Secrets Manager names are assumed to be stored as
+'<SECRETS_GROUP>_NAME' in the ConfigMap. 
+Example: 'RDS_SECRET_NAME: rds/staging/service-yolo'
+
+From the root of the service, the required files are typically found below:
+
+The path to the configmap.yaml file is within the kubernetes deployment.
+This is typically .kube/<stage>/05-configmap.yaml
+
+The path to the secrets.yml is typically .docker/secrets.yaml
+
+The 'filter-prefix' flag will exclude any values that start with the flagged 
+prefixes from display.
+`
+
+var DumpNamespaceCommandHelpText = `
+Dump the current environment for a specific process running within a Pod in a
+given Namespace.
+
+This is achieved by inspecting the /proc/<PID>/environ for the given process.
+This method uses '/bin/bash -c' as the base command to perform the PID
+inspection via 'ps faux'.
+
+The 'filter-prefix' flag will exclude any values that start with the flagged
+prefixes from display.
+
+The 'exclude' flag will exclude any values where the KEY matches exactly from
+display.
+`
+
+var DumpAnsibleEncryptedEnvCommandHelpText = `
+Dump a legacy ansible-vault encrypted Kubernetes Secret file. This will output
+the contents of the 'data.<accessor flag>' block.
+This defaults to 'data..env'.
+
+Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
+
+Example file structure of decrypted file:
+
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  .env: <BASE64 ENCODED STRING>
+`

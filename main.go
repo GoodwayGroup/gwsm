@@ -388,6 +388,96 @@ with AWSPREVIOUS.
 							},
 						},
 					},
+					{
+						Name:  "dump",
+						Usage: "Dump environment for either local or running on a Pod to screen or file",
+						Subcommands: []*cli.Command{
+							{
+								Name:    "configmap",
+								Aliases: []string{"c"},
+								Usage:   "Dump env values based on local settings in a ConfigMap and secrets.yml",
+								// TODO: Add UsageText text
+								UsageText: info.DumpLocalCommandHelpText,
+								Flags: []cli.Flag{
+									&cli.StringFlag{
+										Name:     "secrets",
+										Aliases:  []string{"s"},
+										Usage:    "Path to secrets.yml",
+										Required: false,
+										Value:    ".docker/secrets.yml",
+									},
+									&cli.StringFlag{
+										Name:     "configmap",
+										Aliases:  []string{"c"},
+										Usage:    "Path to configmap.yaml",
+										Required: true,
+									},
+									&cli.StringFlag{
+										Name:  "secret-suffix",
+										Usage: "Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup",
+										Value: "_NAME",
+									},
+								},
+								Action: cmd.DumpLocalEnv,
+							},
+							{
+								Name:    "ansible",
+								Aliases: []string{"legacy"},
+								Usage:   "Dump env values from ansible-vault encrypted Secret file.",
+								// TODO: Add UsageText text
+								UsageText: info.DumpAnsibleEncryptedEnvCommandHelpText,
+								Flags: []cli.Flag{
+									&cli.StringFlag{
+										Name:     "vault-password-file",
+										Usage:    "vault password file `VAULT_PASSWORD_FILE`",
+										Required: false,
+									},
+									&cli.StringFlag{
+										Name:     "encrypted-env-file",
+										Aliases:  []string{"e"},
+										Usage:    "Path to encrypted Kube Secret file",
+										Required: true,
+									},
+								},
+								Action: cmd.DumpAnsibleEncryptedEnv,
+							},
+							{
+								Name:    "namespace",
+								Aliases: []string{"ns"},
+								Usage:   "Dump env on a running Pod within a Namespace",
+								// TODO: Add UsageText text
+								UsageText: info.DumpNamespaceCommandHelpText,
+								Flags: []cli.Flag{
+									&cli.StringFlag{
+										Name:     "namespace",
+										Aliases:  []string{"n"},
+										Usage:    "Kube Namespace list Pods from",
+										Required: true,
+									},
+									&cli.StringFlag{
+										Name:     "cmd",
+										Usage:    "Command to inspect",
+										Required: false,
+										Value:    "node",
+									},
+									&cli.StringFlag{
+										Name:     "filter-prefix",
+										Aliases:  []string{"f"},
+										Usage:    "List of prefixes (csv) used to filter values from display. Set to `\"\"` to remove any filters.",
+										Required: false,
+										Value:    "npm_,KUBERNETES_,API_PORT",
+									},
+									&cli.StringFlag{
+										Name:     "exclude",
+										Usage:    "List (csv) of specific env vars to exclude values from display. Set to `\"\"` to remove any exclusions.",
+										Required: false,
+										Value:    "PATH,SHLVL,HOSTNAME",
+									},
+								},
+								Action: cmd.ViewNamespaceEnv,
+							},
+						},
+					},
 				},
 			},
 			{
