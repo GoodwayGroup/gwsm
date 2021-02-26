@@ -1,12 +1,9 @@
 % gwsm 8
-
 # NAME
-
 gwsm - interact with config map and secret manager variables
-
 # SYNOPSIS
-
 gwsm
+
 
 # COMMAND TREE
 
@@ -26,13 +23,16 @@ gwsm
         - [configmap, c](#configmap-c)
         - [ansible, legacy](#ansible-legacy)
         - [namespace, ns](#namespace-ns)
+    - [dump](#dump)
+        - [configmap, c](#configmap-c)
+        - [ansible, legacy](#ansible-legacy)
+        - [namespace, ns](#namespace-ns)
 - [s3](#s3)
     - [get](#get)
 - [install-manpage](#install-manpage)
 - [version, v](#version-v)
 
 **Usage**:
-
 ```
 gwsm [GLOBAL OPTIONS] command [COMMAND OPTIONS] [ARGUMENTS...]
 ```
@@ -73,8 +73,7 @@ create new secret in Secrets Manager
 
 **--description, -d**="": Additional description text.
 
-**--interactive, -i**: Open interactive editor to create secret value. If no 'value' is provided, an editor will be
-opened by default.
+**--interactive, -i**: Open interactive editor to create secret value. If no 'value' is provided, an editor will be opened by default.
 
 **--secret-id, -s**="": Secret name
 
@@ -158,16 +157,13 @@ display.
 
 **--configmap, -c**="": Path to configmap.yaml
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any
-exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any
-filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
 
 **--namespace, -n**="": Kube Namespace to list Pods from for inspection
 
-**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _
-NAME)
+**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
@@ -238,15 +234,11 @@ The path to the secrets.yml is typically .docker/secrets.yaml
 
 The 'filter-prefix' flag will exclude any values that start with the flagged 
 prefixes from display.
-
-The 'exclude' flag will exclude any values where the KEY matches exactly from
-display.
 ```
 
 **--configmap, -c**="": Path to configmap.yaml
 
-**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _
-NAME)
+**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
 
 **--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
 
@@ -298,11 +290,98 @@ display.
 
 **--cmd**="": Command to inspect (default: node)
 
-**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any
-exclusions. (default: PATH,SHLVL,HOSTNAME)
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
 
-**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any
-filters. (default: npm_,KUBERNETES_,API_PORT)
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
+
+**--namespace, -n**="": Kube Namespace list Pods from
+
+### dump
+
+Dump environment for either local or running on a Pod to screen or file
+
+#### configmap, c
+
+Dump env values based on local settings in a ConfigMap and secrets.yml
+
+```
+Dump the current environment variables for a given ConfigMap and summon
+secrets.yml.
+
+This will retrieve the stored secrets within AWS Secrets Manager and map them
+via the secrets.yml file used by the 'summon' CLI tool to generate the current
+state of Environment Variables for a given stage.
+
+The AWS Secrets Manager names are assumed to be stored as
+'<SECRETS_GROUP>_NAME' in the ConfigMap. 
+Example: 'RDS_SECRET_NAME: rds/staging/service-yolo'
+
+From the root of the service, the required files are typically found below:
+
+The path to the configmap.yaml file is within the kubernetes deployment.
+This is typically .kube/<stage>/05-configmap.yaml
+
+The path to the secrets.yml is typically .docker/secrets.yaml
+
+The 'filter-prefix' flag will exclude any values that start with the flagged 
+prefixes from display.
+```
+
+**--configmap, -c**="": Path to configmap.yaml
+
+**--secret-suffix**="": Suffix used to find ENV variables that denote the Secret Manager Secrets to lookup (default: _NAME)
+
+**--secrets, -s**="": Path to secrets.yml (default: .docker/secrets.yml)
+
+#### ansible, legacy
+
+Dump env values from ansible-vault encrypted Secret file.
+
+```
+Dump a legacy ansible-vault encrypted Kubernetes Secret file. This will output
+the contents of the 'data.<accessor flag>' block.
+This defaults to 'data..env'.
+
+Supported ansible-vault encryption version: $ANSIBLE_VAULT;1.1;AES256
+
+Example file structure of decrypted file:
+
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+data:
+  .env: <BASE64 ENCODED STRING>
+```
+
+**--encrypted-env-file, -e**="": Path to encrypted Kube Secret file
+
+**--vault-password-file**="": vault password file `VAULT_PASSWORD_FILE`
+
+#### namespace, ns
+
+Dump env on a running Pod within a Namespace
+
+```
+Dump the current environment for a specific process running within a Pod in a
+given Namespace.
+
+This is achieved by inspecting the /proc/<PID>/environ for the given process.
+This method uses '/bin/bash -c' as the base command to perform the PID
+inspection via 'ps faux'.
+
+The 'filter-prefix' flag will exclude any values that start with the flagged
+prefixes from display.
+
+The 'exclude' flag will exclude any values where the KEY matches exactly from
+display.
+```
+
+**--cmd**="": Command to inspect (default: node)
+
+**--exclude**="": List (csv) of specific env vars to exclude values from display. Set to `""` to remove any exclusions. (default: PATH,SHLVL,HOSTNAME)
+
+**--filter-prefix, -f**="": List of prefixes (csv) used to filter values from display. Set to `""` to remove any filters. (default: npm_,KUBERNETES_,API_PORT)
 
 **--namespace, -n**="": Kube Namespace list Pods from
 
@@ -326,7 +405,7 @@ $ gwsm s3 get s3://coll-bucket-name/with/path/filename /tmp/filename
 
 Generate and install man page
 
-> NOTE: Windows is not supported
+>NOTE: Windows is not supported
 
 ## version, v
 
