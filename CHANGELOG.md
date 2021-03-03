@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.0.1"></a>
+## [v1.0.1] - 2021-03-03
+### Chore
+- **github actions:** add go proxy warming
+  
+  
 <a name="v1.0.0"></a>
 ## [v1.0.0] - 2021-03-02
 ### Chore
@@ -9,6 +15,7 @@
   
   ### Features
 - **avtool:** port to clok/avtool/v2 module
+  - **release:** v1.0.0
   
   ### Pull Requests
 - fix(deps): update module github.com/aws/aws-sdk-go to v1.37.21 ([#80](https://github.com/GoodwayGroup/gwsm/issues/80))
@@ -396,7 +403,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...HEAD
+[v1.0.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.15.0...v1.0.0
 [v0.15.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.2...v0.15.0
 [v0.14.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.1...v0.14.2
