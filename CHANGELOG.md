@@ -2,6 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v1.0.0"></a>
+## [v1.0.0] - 2021-03-02
+### Chore
+- **renovate:** add extension for group:allNonMajor
+  
+  ### Features
+- **avtool:** port to clok/avtool/v2 module
+  
+  ### Pull Requests
+- fix(deps): update module github.com/aws/aws-sdk-go to v1.37.21 ([#80](https://github.com/GoodwayGroup/gwsm/issues/80))
+  
+  
 <a name="v0.15.0"></a>
 ## [v0.15.0] - 2021-02-26
 ### Bug Fixes
@@ -21,6 +33,7 @@
   
   ### Features
 - **end dump:** added env dump commands
+  - **release:** v0.15.0
   
   
 <a name="v0.14.2"></a>
@@ -383,7 +396,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.15.0...v1.0.0
 [v0.15.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.2...v0.15.0
 [v0.14.2]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.1...v0.14.2
 [v0.14.1]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.0...v0.14.1
