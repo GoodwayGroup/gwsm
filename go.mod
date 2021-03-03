@@ -7,6 +7,7 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
 	github.com/aws/aws-sdk-go v1.37.21
+	github.com/clok/avtool/v2 v2.0.0
 	github.com/clok/awssession v0.1.6
 	github.com/clok/cdocs v0.2.3
 	github.com/clok/kemba v0.7.1
@@ -17,11 +18,9 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/manifoldco/promptui v0.8.0
-	github.com/pbthorste/avtool v0.0.0-20170525210117-6dec4ba971b0
 	github.com/r3labs/diff/v2 v2.12.0
 	github.com/sergi/go-diff v1.1.0
 	github.com/urfave/cli/v2 v2.3.0
-	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.20.4

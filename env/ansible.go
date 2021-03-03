@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/pbthorste/avtool"
+	"github.com/clok/avtool/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
