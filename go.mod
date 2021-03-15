@@ -10,7 +10,7 @@ require (
 	github.com/clok/avtool/v2 v2.0.0
 	github.com/clok/awssession v0.1.6
 	github.com/clok/cdocs v0.2.3
-	github.com/clok/kemba v0.7.1
+	github.com/clok/kemba v1.1.0
 	github.com/cyberark/summon v0.8.3
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
