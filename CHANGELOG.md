@@ -2,10 +2,21 @@
 ## [Unreleased]
 
 
+<a name="v1.1.0"></a>
+## [v1.1.0] - 2021-03-15
+### Chore
+- **ci:** port to using golangci-lint and goreleaser github action
+  - **deps:** update kemba, awessession, cdocs, avtool, survey and aws-sdf-go
+  - **go.mod:** bump to go 1.16
+  
+  
 <a name="v1.0.1"></a>
 ## [v1.0.1] - 2021-03-03
 ### Chore
 - **github actions:** add go proxy warming
+  
+  ### Features
+- **release:** v1.0.1
   
   
 <a name="v1.0.0"></a>
@@ -403,7 +414,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...HEAD
+[v1.1.0]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...v1.1.0
 [v1.0.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.15.0...v1.0.0
 [v0.15.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.14.2...v0.15.0
