@@ -3,14 +3,14 @@ module github.com/GoodwayGroup/gwsm
 go 1.16
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.2.8
+	github.com/AlecAivazis/survey/v2 v2.2.9
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
-	github.com/aws/aws-sdk-go v1.37.21
-	github.com/clok/avtool/v2 v2.0.0
-	github.com/clok/awssession v0.1.6
-	github.com/clok/cdocs v0.2.3
-	github.com/clok/kemba v0.7.1
+	github.com/aws/aws-sdk-go v1.37.31
+	github.com/clok/avtool/v2 v2.1.0
+	github.com/clok/awssession v1.1.0
+	github.com/clok/cdocs v1.1.0
+	github.com/clok/kemba v1.1.0
 	github.com/cyberark/summon v0.8.3
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
