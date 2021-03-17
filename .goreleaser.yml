@@ -37,3 +37,15 @@ changelog:
 
 snapshot:
   name_template: "{{ .Tag }}-next"
+
+brews:
+  - tap:
+      owner: GoodwayGroup
+      name: homebrew-gwsm
+    homepage: "https://goodwaygroup.github.io/gwsm/"
+    description: "Kubernetes ConfigMaps + https://github.com/cyberark/summon + AWS Secrets Manager"
+    license: "MIT"
+    test: |
+      system "#{bin}/gwsm --help"
+    install: |
+      bin.install "gwsm"

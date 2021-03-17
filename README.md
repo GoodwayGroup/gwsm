@@ -15,7 +15,7 @@ USAGE:
    gwsm [global options] command [command options] [arguments...]
 
 VERSION:
-   v0.12.4
+   1.1.0
 
 AUTHORS:
    Derek Smith <dsmith@goodwaygroup.com>
@@ -39,14 +39,6 @@ COPYRIGHT:
 
 ## Installation
 
-### Direct Install
-
-To install latest version:
-
-```
-$ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
-```
-
 ### [`asdf` plugin](https://github.com/GoodwayGroup/asdf-gwsm)
 
 Add plugin:
@@ -59,6 +51,19 @@ Install the latest version:
 
 ```
 $ asdf install gwsm latest
+```
+
+### [Homebrew](https://brew.sh) (for macOS users)
+
+```
+brew tap GoodwayGroup/gwsm
+brew install gwsm
+```
+
+### curl binary
+
+```
+$ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
 ```
 
 ### man page
