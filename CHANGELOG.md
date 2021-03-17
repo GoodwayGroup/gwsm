@@ -2,12 +2,21 @@
 ## [Unreleased]
 
 
+<a name="v1.1.1"></a>
+## [v1.1.1] - 2021-03-17
+### Chore
+- **release:** update homebrew push
+  
+  
 <a name="v1.1.0"></a>
 ## [v1.1.0] - 2021-03-15
 ### Chore
 - **ci:** port to using golangci-lint and goreleaser github action
   - **deps:** update kemba, awessession, cdocs, avtool, survey and aws-sdf-go
   - **go.mod:** bump to go 1.16
+  
+  ### Features
+- **release:** v1.1.0
   
   
 <a name="v1.0.1"></a>
@@ -414,7 +423,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...HEAD
+[v1.1.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...v1.1.0
 [v1.0.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/GoodwayGroup/gwsm/compare/v0.15.0...v1.0.0
