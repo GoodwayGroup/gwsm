@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v1.1.2"></a>
+## [v1.1.2] - 2021-04-01
+### Ci
+- **docker:** add goreleaser docker GitHub Container Registry support
+  
+  
 <a name="v1.1.1"></a>
 ## [v1.1.1] - 2021-03-17
 ### Chore
 - **release:** update homebrew push
+  
+  ### Features
+- **release:** v1.1.1
   
   
 <a name="v1.1.0"></a>
@@ -423,7 +432,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.2...HEAD
+[v1.1.2]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...v1.1.0
 [v1.0.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.0...v1.0.1
