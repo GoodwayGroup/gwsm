@@ -38,12 +38,19 @@ changelog:
 snapshot:
   name_template: "{{ .Tag }}-next"
 
+dockers:
+  - ids:
+      - gwsm
+    image_templates:
+      - "ghcr.io/goodwaygroup/gwsm:{{ .RawVersion }}"
+      - "ghcr.io/goodwaygroup/gwsm:latest"
+
 brews:
   - tap:
       owner: GoodwayGroup
       name: homebrew-gwsm
     homepage: "https://goodwaygroup.github.io/gwsm/"
-    description: "Kubernetes ConfigMaps + https://github.com/cyberark/summon + AWS Secrets Manager"
+    description: "A set of commands to audit AWS usage to identify cost savings and security issues."
     license: "MIT"
     test: |
       system "#{bin}/gwsm --help"

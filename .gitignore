@@ -27,3 +27,5 @@ gen
 build/
 .DS_Store
 bin/
+dist/
+gwsm

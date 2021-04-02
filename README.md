@@ -66,6 +66,20 @@ brew install gwsm
 $ curl https://i.jpillora.com/GoodwayGroup/gwsm! | bash
 ```
 
+### [docker](https://www.docker.com/)
+
+The compiled docker images are maintained on [GitHub Container Registry (ghcr.io)](https://github.com/orgs/GoodwayGroup/packages/container/package/gwsm).
+We maintain the following tags:
+
+- `edge`: Image that is build from the current `HEAD` of the main line branch.
+- `latest`: Image that is built from the [latest released version](https://github.com/GoodwayGroup/gwsm/releases)
+- `x.y.z` (versions): Images that are build from the tagged versions within Github.
+
+```bash
+docker pull ghcr.io/goodwaygroup/gwsm
+docker run -v "$PWD":/workdir ghcr.io/goodwaygroup/gwsm --version
+```
+
 ### man page
 
 To install `man` page:
