@@ -2,9 +2,20 @@
 ## [Unreleased]
 
 
+<a name="v1.1.3"></a>
+## [v1.1.3] - 2021-04-05
+### Pull Requests
+- fix(deps): update golang.org/x/term commit hash to de623e6 ([#86](https://github.com/GoodwayGroup/gwsm/issues/86))
+  - fix(deps): update all non-major dependencies ([#87](https://github.com/GoodwayGroup/gwsm/issues/87))
+  - fix(deps): update all non-major dependencies ([#85](https://github.com/GoodwayGroup/gwsm/issues/85))
+  
+  
 <a name="v1.1.2"></a>
 ## [v1.1.2] - 2021-04-01
-### Ci
+### Chore
+- **release:** v1.1.2
+  
+  ### Ci
 - **docker:** add goreleaser docker GitHub Container Registry support
   
   
@@ -432,7 +443,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.3...HEAD
+[v1.1.3]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/GoodwayGroup/gwsm/compare/v1.0.1...v1.1.0
