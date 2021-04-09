@@ -6,7 +6,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.2.9
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
-	github.com/aws/aws-sdk-go v1.38.13
+	github.com/aws/aws-sdk-go v1.38.17
 	github.com/clok/avtool/v2 v2.1.0
 	github.com/clok/awssession v1.1.1
 	github.com/clok/cdocs v1.1.2
@@ -15,7 +15,7 @@ require (
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
-	github.com/jedib0t/go-pretty/v6 v6.1.0
+	github.com/jedib0t/go-pretty/v6 v6.1.1
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/r3labs/diff/v2 v2.12.0
@@ -23,7 +23,7 @@ require (
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/term v0.0.0-20210317153231-de623e64d2a6
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
-	k8s.io/api v0.20.5
-	k8s.io/apimachinery v0.20.5
-	k8s.io/client-go v0.20.5
+	k8s.io/api v0.21.0
+	k8s.io/apimachinery v0.21.0
+	k8s.io/client-go v0.21.0
 )
