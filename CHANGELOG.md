@@ -2,9 +2,26 @@
 ## [Unreleased]
 
 
+<a name="v1.1.4"></a>
+## [v1.1.4] - 2021-05-13
+### Pull Requests
+- fix(deps): update all non-major dependencies ([#95](https://github.com/GoodwayGroup/gwsm/issues/95))
+  - fix(deps): update golang.org/x/term commit hash to a79de54 ([#96](https://github.com/GoodwayGroup/gwsm/issues/96))
+  - fix(deps): update golang.org/x/term commit hash to f5beecf ([#94](https://github.com/GoodwayGroup/gwsm/issues/94))
+  - fix(deps): update all non-major dependencies ([#93](https://github.com/GoodwayGroup/gwsm/issues/93))
+  - fix(deps): update module github.com/aws/aws-sdk-go to v1.38.20 ([#92](https://github.com/GoodwayGroup/gwsm/issues/92))
+  - chore(deps): update alpine docker tag to v3.13.5 ([#91](https://github.com/GoodwayGroup/gwsm/issues/91))
+  - fix(deps): update module github.com/aws/aws-sdk-go to v1.38.19 ([#90](https://github.com/GoodwayGroup/gwsm/issues/90))
+  - fix(deps): update golang.org/x/term commit hash to 72f3dc4 ([#89](https://github.com/GoodwayGroup/gwsm/issues/89))
+  - fix(deps): update all non-major dependencies ([#88](https://github.com/GoodwayGroup/gwsm/issues/88))
+  
+  
 <a name="v1.1.3"></a>
 ## [v1.1.3] - 2021-04-05
-### Pull Requests
+### Chore
+- **release:** v1.1.3
+  
+  ### Pull Requests
 - fix(deps): update golang.org/x/term commit hash to de623e6 ([#86](https://github.com/GoodwayGroup/gwsm/issues/86))
   - fix(deps): update all non-major dependencies ([#87](https://github.com/GoodwayGroup/gwsm/issues/87))
   - fix(deps): update all non-major dependencies ([#85](https://github.com/GoodwayGroup/gwsm/issues/85))
@@ -443,7 +460,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.4...HEAD
+[v1.1.4]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.0...v1.1.1
