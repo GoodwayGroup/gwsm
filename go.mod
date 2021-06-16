@@ -6,7 +6,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.2.12
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
-	github.com/aws/aws-sdk-go v1.38.56
+	github.com/aws/aws-sdk-go v1.38.63
 	github.com/clok/avtool/v2 v2.1.1
 	github.com/clok/awssession v1.1.1
 	github.com/clok/cdocs v1.2.0
