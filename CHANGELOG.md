@@ -2,9 +2,21 @@
 ## [Unreleased]
 
 
+<a name="v1.1.5"></a>
+## [v1.1.5] - 2021-06-17
+### Pull Requests
+- chore(deps): update all non-major dependencies docker tags ([#99](https://github.com/GoodwayGroup/gwsm/issues/99))
+  - ci: update goreleaser token ([#100](https://github.com/GoodwayGroup/gwsm/issues/100))
+  - fix(deps): update module github.com/aws/aws-sdk-go to v1.38.56 ([#98](https://github.com/GoodwayGroup/gwsm/issues/98))
+  - fix(deps): update all non-major dependencies ([#97](https://github.com/GoodwayGroup/gwsm/issues/97))
+  
+  
 <a name="v1.1.4"></a>
 ## [v1.1.4] - 2021-05-13
-### Pull Requests
+### Chore
+- **release:** v1.1.4
+  
+  ### Pull Requests
 - fix(deps): update all non-major dependencies ([#95](https://github.com/GoodwayGroup/gwsm/issues/95))
   - fix(deps): update golang.org/x/term commit hash to a79de54 ([#96](https://github.com/GoodwayGroup/gwsm/issues/96))
   - fix(deps): update golang.org/x/term commit hash to f5beecf ([#94](https://github.com/GoodwayGroup/gwsm/issues/94))
@@ -460,7 +472,8 @@
 - **view:** Added view command and scaffolding for deployments
   
   
-[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.4...HEAD
+[Unreleased]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.5...HEAD
+[v1.1.5]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.4...v1.1.5
 [v1.1.4]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.3...v1.1.4
 [v1.1.3]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.2...v1.1.3
 [v1.1.2]: https://github.com/GoodwayGroup/gwsm/compare/v1.1.1...v1.1.2
