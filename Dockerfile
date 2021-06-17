@@ -1,4 +1,4 @@
-FROM alpine:3.13.5
+FROM alpine:3.14.0
 
 COPY gwsm /usr/local/bin/gwsm
 RUN chmod +x /usr/local/bin/gwsm
