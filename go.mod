@@ -21,7 +21,7 @@ require (
 	github.com/r3labs/diff/v2 v2.13.1
 	github.com/sergi/go-diff v1.2.0
 	github.com/urfave/cli/v2 v2.3.0
-	golang.org/x/term v0.0.0-20210503060354-a79de5458b56
+	golang.org/x/term v0.0.0-20220919170432-7a66f970e087
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
