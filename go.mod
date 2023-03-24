@@ -7,7 +7,8 @@ require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/a8m/djson v0.0.0-20170509170705-c02c5aef757f
 	github.com/aws/aws-sdk-go v1.38.63
-	github.com/clok/avtool/v2 v2.1.1
+	github.com/clok/avtool/v2 v2.2.0
+	github.com/clok/avtool/v3 v3.0.0
 	github.com/clok/awssession v1.1.1
 	github.com/clok/cdocs v1.2.0
 	github.com/clok/kemba v1.1.1
