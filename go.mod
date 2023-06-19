@@ -18,7 +18,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.2.2
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/manifoldco/promptui v0.8.0
-	github.com/r3labs/diff/v2 v2.13.1
+	github.com/r3labs/diff/v3 v3.0.1
 	github.com/sergi/go-diff v1.2.0
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/term v0.0.0-20210503060354-a79de5458b56
