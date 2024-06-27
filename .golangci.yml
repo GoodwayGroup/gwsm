@@ -3,7 +3,8 @@ run:
   timeout: 2m
 
 output:
-  format: tab
+  formats:
+    - format: tab
 
 issues:
   max-issues-per-linter: 0
@@ -16,6 +17,19 @@ linters:
     - gocritic
     - gocyclo
     - gofmt
-    - golint
+    - govet
+    - staticcheck
     - misspell
     - unconvert
+
+linters-settings:
+  depguard:
+    rules:
+      prevent_unmaintained_packages:
+        list-mode: lax # allow unless explicitely denied
+        files:
+          - $all
+          - "!$test"
+        allow:
+          - "github.com/clok"
+          - "github.com/aws/aws-sdk-go"
