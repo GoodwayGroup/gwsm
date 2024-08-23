@@ -1,13 +1,15 @@
 package s3
 
 import (
+	"context"
 	"errors"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	as "github.com/clok/awssession"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/clok/kemba"
 	"github.com/urfave/cli/v2"
+	"log"
 	"os"
 	"strings"
 )
@@ -28,8 +30,15 @@ func Get(src string, dest string) error {
 	defer dstFile.Close()
 	kget.Printf("writing to path: %s", dest)
 
-	sess, _ := as.New()
-	downloader := s3manager.NewDownloader(sess)
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	// Create an Amazon S3 service client
+	client := s3.NewFromConfig(cfg)
+	downloader := manager.NewDownloader(client)
 
 	bucket, object, err := getBucketAndObject(src)
 	if err != nil {
@@ -37,7 +46,7 @@ func Get(src string, dest string) error {
 	}
 
 	kget.Printf("downloading - bucket: %s object: %s", bucket, object)
-	_, err = downloader.Download(dstFile, &s3.GetObjectInput{
+	_, err = downloader.Download(context.TODO(), dstFile, &s3.GetObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(object),
 	})

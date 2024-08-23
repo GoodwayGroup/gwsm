@@ -3,10 +3,13 @@ package sm
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/service/secretsmanager"
-	as "github.com/clok/awssession"
+	"context"
+	"log"
+	"errors"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager/types"
 	"strings"
 )
 
@@ -29,11 +32,12 @@ func getValueByKey(keyName string, secretBytes []byte) (secret []byte, err error
 // This was needed to have the command return the byte stream rather than have it write
 // to STDOUT
 func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
 	// Check if key has been specified
 	arguments := strings.SplitN(variableName, "#", 2)
@@ -54,12 +58,12 @@ func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 	}
 
 	// Get secret value
-	req, resp := svc.GetSecretValueRequest(&secretsmanager.GetSecretValueInput{
-		SecretId: aws.String(secretName),
-	})
+	input := &secretsmanager.GetSecretValueInput{
+		SecretId:     aws.String(secretName),
+	  }
 
-	err = req.Send()
-	if err != nil {
+	resp, err := svc.GetSecretValue(context.TODO(), input)
+    if err != nil {
 		return nil, err
 	}
 
@@ -81,39 +85,42 @@ func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 
 // ListSecrets will retrieval ALL secrets via pagination of 100 per page. It will
 // return once all pages have been processed.
-func ListSecrets() (secrets []secretsmanager.SecretListEntry, err error) {
-	sess, err := as.New()
+func ListSecrets() (secrets []types.SecretListEntry, err error) {
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
 	// Get all secret names
-	err = svc.ListSecretsPages(&secretsmanager.ListSecretsInput{
-		MaxResults: aws.Int64(100),
-	},
-		func(page *secretsmanager.ListSecretsOutput, lastPage bool) bool {
-			for _, v := range page.SecretList {
-				secrets = append(secrets, *v)
-			}
-			return !lastPage
-		})
-	if err != nil {
-		return nil, err
-	}
+    paginator := secretsmanager.NewListSecretsPaginator(svc, &secretsmanager.ListSecretsInput{
+        MaxResults: aws.Int32(100),
+    })
 
-	return
+    for paginator.HasMorePages() {
+        page, err := paginator.NextPage(context.TODO())
+        if err != nil {
+            return nil, fmt.Errorf("failed to retrieve secrets: %w", err)
+        }
+
+        secrets = append(secrets, page.SecretList...)
+    }
+
+    return secrets, nil
 }
 
 // GetSecret will retrieve a specific secret by Name (id)
 func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	secret, err = svc.GetSecretValue(&secretsmanager.GetSecretValueInput{
+
+	secret, err = svc.GetSecretValue(context.TODO(), &secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(id),
 	})
 
@@ -126,13 +133,14 @@ func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err erro
 
 // DeleteSecret will retrieve a specific secret by Name (id)
 func DeleteSecret(id string, force bool) (secret *secretsmanager.DeleteSecretOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	secret, err = svc.DeleteSecret(&secretsmanager.DeleteSecretInput{
+	secret, err = svc.DeleteSecret(context.TODO(), &secretsmanager.DeleteSecretInput{
 		SecretId:                   aws.String(id),
 		ForceDeleteWithoutRecovery: aws.Bool(force),
 	})
@@ -146,13 +154,15 @@ func DeleteSecret(id string, force bool) (secret *secretsmanager.DeleteSecretOut
 
 // PutSecretString will put an updated SecretString value to a specific secret by Name (id)
 func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	secret, err = svc.PutSecretValue(&secretsmanager.PutSecretValueInput{
+
+	secret, err = svc.PutSecretValue(context.TODO(), &secretsmanager.PutSecretValueInput{
 		SecretString: aws.String(data),
 		SecretId:     aws.String(id),
 	})
@@ -166,13 +176,14 @@ func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretVa
 
 // PutSecretBinary will put an updated SecretBinary value to a specific secret by Name (id)
 func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretValueOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	secret, err = svc.PutSecretValue(&secretsmanager.PutSecretValueInput{
+	secret, err = svc.PutSecretValue(context.TODO(), &secretsmanager.PutSecretValueInput{
 		SecretBinary: data,
 		SecretId:     aws.String(id),
 	})
@@ -186,11 +197,13 @@ func PutSecretBinary(id string, data []byte) (secret *secretsmanager.PutSecretVa
 
 // CreateSecretString will create a new SecretString value to a specific secret by Name (id)
 func CreateSecretString(id string, data string, description string, tagsCSV string) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
+
 
 	input := secretsmanager.CreateSecretInput{
 		SecretString: aws.String(data),
@@ -202,10 +215,10 @@ func CreateSecretString(id string, data string, description string, tagsCSV stri
 	}
 
 	if tagsCSV != "" {
-		var tags []*secretsmanager.Tag
+		tags := []types.Tag{}
 		for _, kv := range strings.Split(tagsCSV, ",") {
 			parts := strings.SplitN(kv, "=", 2)
-			tags = append(tags, &secretsmanager.Tag{
+			tags = append(tags, types.Tag{
 				Key:   aws.String(parts[0]),
 				Value: aws.String(parts[1]),
 			})
@@ -213,7 +226,7 @@ func CreateSecretString(id string, data string, description string, tagsCSV stri
 		input.Tags = tags
 	}
 
-	secret, err = svc.CreateSecret(&input)
+	secret, err = svc.CreateSecret(context.TODO(), &input)
 
 	if err != nil {
 		return nil, err
@@ -224,11 +237,13 @@ func CreateSecretString(id string, data string, description string, tagsCSV stri
 
 // CreateSecretBinary will create a new SecretBinary value to a specific secret by Name (id)
 func CreateSecretBinary(id string, data []byte, description string, tagsCSV string) (secret *secretsmanager.CreateSecretOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
+
 
 	input := secretsmanager.CreateSecretInput{
 		SecretBinary: data,
@@ -240,10 +255,10 @@ func CreateSecretBinary(id string, data []byte, description string, tagsCSV stri
 	}
 
 	if tagsCSV != "" {
-		var tags []*secretsmanager.Tag
+		tags := []types.Tag{}
 		for _, kv := range strings.Split(tagsCSV, ",") {
 			parts := strings.SplitN(kv, "=", 2)
-			tags = append(tags, &secretsmanager.Tag{
+			tags = append(tags, types.Tag{
 				Key:   aws.String(parts[0]),
 				Value: aws.String(parts[1]),
 			})
@@ -251,7 +266,7 @@ func CreateSecretBinary(id string, data []byte, description string, tagsCSV stri
 		input.Tags = tags
 	}
 
-	secret, err = svc.CreateSecret(&input)
+	secret, err = svc.CreateSecret(context.TODO(), &input)
 
 	if err != nil {
 		return nil, err
@@ -262,13 +277,14 @@ func CreateSecretBinary(id string, data []byte, description string, tagsCSV stri
 
 // DescribeSecret retrieves the describe data for a specific secret by Name (id)
 func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	secret, err = svc.DescribeSecret(&secretsmanager.DescribeSecretInput{
+	secret, err = svc.DescribeSecret(context.TODO(), &secretsmanager.DescribeSecretInput{
 		SecretId: aws.String(id),
 	})
 	if err != nil {
@@ -280,21 +296,21 @@ func DescribeSecret(id string) (secret *secretsmanager.DescribeSecretOutput, err
 
 // CheckIfSecretExists determines if the input secret ID already exists in AWS Secrets Manager
 func CheckIfSecretExists(id string) (bool, error) {
-	sess, err := as.New()
+	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
+		log.Fatal(err)
 		return true, err
 	}
-	svc := secretsmanager.New(sess)
+	svc := secretsmanager.NewFromConfig(cfg)
 
-	_, err = svc.DescribeSecret(&secretsmanager.DescribeSecretInput{
+	_, err = svc.DescribeSecret(context.TODO(), &secretsmanager.DescribeSecretInput{
 		SecretId: aws.String(id),
 	})
 
 	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			if aerr.Code() == secretsmanager.ErrCodeResourceNotFoundException {
-				return false, nil
-			}
+		var notFoundErr *types.ResourceNotFoundException
+		if errors.As(err, &notFoundErr) {
+			return false, nil
 		}
 		return true, err
 	}

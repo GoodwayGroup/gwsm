@@ -3,16 +3,17 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"os"
+	"sort"
+	"strings"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/GoodwayGroup/gwsm/sm"
 	"github.com/TylerBrock/colorjson"
 	"github.com/a8m/djson"
-	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/urfave/cli/v2"
-	"os"
-	"sort"
-	"strings"
 )
 
 // truncateString limits the length of a string while also appending an ellipses.
@@ -41,7 +42,7 @@ func selectSecretNameFromList(c *cli.Context) (string, error) {
 
 		secretNames := make([]string, 0, len(secrets))
 		for _, secret := range secrets {
-			secretNames = append(secretNames, aws.StringValue(secret.Name))
+			secretNames = append(secretNames, aws.ToString(secret.Name))
 		}
 		sort.Strings(secretNames)
 
@@ -155,13 +156,13 @@ func ListSecrets(c *cli.Context) error {
 	})
 
 	for _, secret := range secrets {
-		lastdt := aws.TimeValue(secret.LastAccessedDate)
-		updateddt := aws.TimeValue(secret.LastChangedDate)
+		lastdt := aws.ToTime(secret.LastAccessedDate)
+		updateddt := aws.ToTime(secret.LastChangedDate)
 		t.AppendRow([]interface{}{
-			aws.StringValue(secret.Name),
+			aws.ToString(secret.Name),
 			fmt.Sprintf("%d-%02d-%02d", updateddt.Year(), updateddt.Month(), updateddt.Day()),
 			fmt.Sprintf("%d-%02d-%02d", lastdt.Year(), lastdt.Month(), lastdt.Day()),
-			truncateString(aws.StringValue(secret.Description), 40),
+			truncateString(aws.ToString(secret.Description), 40),
 		})
 	}
 
@@ -185,10 +186,10 @@ func ViewSecret(c *cli.Context) error {
 	if c.Bool("binary") {
 		fmt.Println(string(secret.SecretBinary))
 	} else {
-		result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
+		result, err := djson.Decode([]byte(aws.ToString(secret.SecretString)))
 		if err != nil {
 			PrintWarn("stored string value is not valid JSON.")
-			fmt.Println(aws.StringValue(secret.SecretString))
+			fmt.Println(aws.ToString(secret.SecretString))
 		} else {
 			f := colorjson.NewFormatter()
 			f.Indent = 4
@@ -213,7 +214,12 @@ func DescribeSecret(c *cli.Context) error {
 		return cli.Exit(err, 2)
 	}
 
-	fmt.Println(secret.String())
+	jString, err := json.MarshalIndent(secret, "", "  ")
+	if err != nil {
+		return cli.Exit(err, 2)
+	}
+
+	fmt.Println(string(jString))
 
 	return nil
 }
@@ -234,10 +240,10 @@ func EditSecret(c *cli.Context) error {
 	if c.Bool("binary") {
 		s = secret.SecretBinary
 	} else {
-		result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
+		result, err := djson.Decode([]byte(aws.ToString(secret.SecretString)))
 		if err != nil {
 			PrintWarn("stored string value is not valid JSON.")
-			s = []byte(aws.StringValue(secret.SecretString))
+			s = []byte(aws.ToString(secret.SecretString))
 		} else {
 			s, err = json.MarshalIndent(result, "", "    ")
 			if err != nil {
@@ -369,10 +375,10 @@ func PutSecret(c *cli.Context) error {
 		if c.Bool("binary") {
 			value = secret.SecretBinary
 		} else {
-			result, err := djson.Decode([]byte(aws.StringValue(secret.SecretString)))
+			result, err := djson.Decode([]byte(aws.ToString(secret.SecretString)))
 			if err != nil {
 				PrintWarn("stored string value is not valid JSON.")
-				value = []byte(aws.StringValue(secret.SecretString))
+				value = []byte(aws.ToString(secret.SecretString))
 			} else {
 				value, err = json.MarshalIndent(result, "", "    ")
 				if err != nil {
