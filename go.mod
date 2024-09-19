@@ -1,6 +1,8 @@
 module github.com/GoodwayGroup/gwsm
 
-go 1.20
+go 1.22.4
+
+toolchain go1.22.6
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.2.12
@@ -14,14 +16,14 @@ require (
 	github.com/clok/avtool/v2 v2.1.1
 	github.com/clok/cdocs v1.2.0
 	github.com/clok/kemba v1.2.1
-	github.com/cyberark/summon v0.8.4
+	github.com/cyberark/summon v0.10.1
 	github.com/jedib0t/go-pretty/v6 v6.2.2
 	github.com/logrusorgru/aurora/v3 v3.0.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/r3labs/diff/v2 v2.13.1
 	github.com/sergi/go-diff v1.2.0
 	github.com/urfave/cli/v2 v2.3.0
-	golang.org/x/term v0.0.0-20210503060354-a79de5458b56
+	golang.org/x/term v0.19.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -45,7 +47,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.4 // indirect
 	github.com/aws/smithy-go v1.20.4 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/go-logr/logr v0.4.0 // indirect
@@ -71,16 +73,15 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
-	github.com/russross/blackfriday/v2 v2.0.1 // indirect
-	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/crypto v0.0.0-20210513122933-cd7d49e622d5 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
+	golang.org/x/crypto v0.22.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/text v0.3.4 // indirect
+	golang.org/x/sys v0.19.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect

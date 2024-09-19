@@ -4,14 +4,14 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"os"
+	"strings"
+	"syscall"
+
 	"github.com/clok/avtool/v2"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
-	"os"
-	"strings"
-	"syscall"
 )
 
 // KubeSecret is a simple version of the KubeSecret defined in kubernetes.
@@ -59,7 +59,8 @@ func retrieveVaultPassword(vaultPasswordFile string) (string, error) {
 		if _, err := os.Stat(vaultPasswordFile); os.IsNotExist(err) {
 			return "", fmt.Errorf("ERROR: vault-password-file, could not find: %s", vaultPasswordFile)
 		}
-		pw, err := ioutil.ReadFile(vaultPasswordFile)
+
+		pw, err := os.ReadFile(vaultPasswordFile)
 		if err != nil {
 			return "", err
 		}

@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/logrusorgru/aurora/v3"
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
+
+	"github.com/logrusorgru/aurora/v3"
 )
 
 func Test_PrintWarn(t *testing.T) {
@@ -16,7 +17,7 @@ func Test_PrintWarn(t *testing.T) {
 	PrintWarn("This is a test!")
 
 	w.Close()
-	out, _ := ioutil.ReadAll(r)
+	out, _ := io.ReadAll(r)
 	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Red("✖ This is a test!"))
@@ -33,7 +34,7 @@ func Test_PrintSuccess(t *testing.T) {
 	PrintSuccess("This is a test!")
 
 	w.Close()
-	out, _ := ioutil.ReadAll(r)
+	out, _ := io.ReadAll(r)
 	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Green("✔ This is a test!"))
@@ -50,7 +51,7 @@ func Test_PrintInfo(t *testing.T) {
 	PrintInfo("This is a test!")
 
 	w.Close()
-	out, _ := ioutil.ReadAll(r)
+	out, _ := io.ReadAll(r)
 	os.Stderr = rescueStderr
 
 	wantMsg := fmt.Sprintln(aurora.Gray(14, "➜ This is a test!"))
