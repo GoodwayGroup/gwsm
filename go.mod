@@ -13,7 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.12
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.60.0
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.32.5
-	github.com/clok/avtool/v2 v2.1.1
+	github.com/clok/avtool/v3 v3.0.0
 	github.com/clok/cdocs v1.2.0
 	github.com/clok/kemba v1.2.1
 	github.com/cyberark/summon v0.10.1
@@ -23,7 +23,7 @@ require (
 	github.com/r3labs/diff/v2 v2.13.1
 	github.com/sergi/go-diff v1.2.0
 	github.com/urfave/cli/v2 v2.3.0
-	golang.org/x/term v0.19.0
+	golang.org/x/term v0.24.0
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.21.1
 	k8s.io/apimachinery v0.21.1
@@ -77,11 +77,11 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/crypto v0.22.0 // indirect
+	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect

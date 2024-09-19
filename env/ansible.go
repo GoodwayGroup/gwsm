@@ -8,7 +8,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/clok/avtool/v2"
+	"github.com/clok/avtool/v3"
 	"github.com/urfave/cli/v2"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
@@ -22,13 +22,18 @@ type KubeSecret struct {
 }
 
 func GetEnvFromAnsibleVault(c *cli.Context) (string, error) {
+	println("Retrieving vault password")
 	pw, err := retrieveVaultPassword(c.String("vault-password-file"))
 	if err != nil {
 		return "", err
 	}
 
+	pwBytes := []byte(pw)
 	vf := c.String("encrypted-env-file")
-	result, err := avtool.DecryptFile(vf, pw)
+	result, err := avtool.DecryptFile(&avtool.DecryptFileOptions{
+		Filename: vf,
+		Password: &pwBytes,
+	})
 	if err != nil {
 		if strings.Compare(err.Error(), "ERROR: runtime error: index out of range") == 0 {
 			return "", cli.Exit("input is not a vault encrypted "+vf+" is not a vault encrypted file for "+vf, 2)
