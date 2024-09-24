@@ -3,6 +3,10 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"sort"
+	"strings"
+
 	"github.com/GoodwayGroup/gwsm/env"
 	"github.com/clok/kemba"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -10,9 +14,6 @@ import (
 	"github.com/r3labs/diff/v2"
 	"github.com/sergi/go-diff/diffmatchpatch"
 	"github.com/urfave/cli/v2"
-	"os"
-	"sort"
-	"strings"
 )
 
 var (

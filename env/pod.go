@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/GoodwayGroup/gwsm/kube"
 	"github.com/logrusorgru/aurora/v3"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"strings"
 )
 
 func containsString(s []string, e string) bool {
