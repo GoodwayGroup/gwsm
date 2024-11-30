@@ -2,14 +2,16 @@ package kube
 
 import (
 	"bytes"
-	"github.com/clok/kemba"
+	"context"
 	"io"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
 	"net/url"
 	"strings"
 
-	"k8s.io/api/core/v1"
+	"github.com/clok/kemba"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
+
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/remotecommand"
@@ -89,7 +91,7 @@ func execute(method string, url *url.URL, config *restclient.Config, stdin io.Re
 	if err != nil {
 		return err
 	}
-	return exec.Stream(remotecommand.StreamOptions{
+	return exec.StreamWithContext(context.Background(), remotecommand.StreamOptions{
 		Stdin:  stdin,
 		Stdout: stdout,
 		Stderr: stderr,

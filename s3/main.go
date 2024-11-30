@@ -3,15 +3,15 @@ package s3
 import (
 	"context"
 	"errors"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-	"github.com/clok/kemba"
-	"github.com/urfave/cli/v2"
-	"log"
 	"os"
 	"strings"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/clok/kemba"
+	"github.com/urfave/cli/v2"
 )
 
 var (
@@ -32,8 +32,7 @@ func Get(src string, dest string) error {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		log.Fatal(err)
-		return err
+		return cli.Exit(err, 2)
 	}
 
 	// Create an Amazon S3 service client

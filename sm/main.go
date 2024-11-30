@@ -1,15 +1,15 @@
 package sm
 
 import (
-	"encoding/json"
-	"fmt"
 	"context"
-	"log"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager/types"
+	"log"
 	"strings"
 )
 
@@ -59,11 +59,11 @@ func RetrieveSecret(variableName string) (secretBytes []byte, err error) {
 
 	// Get secret value
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId:     aws.String(secretName),
-	  }
+		SecretId: aws.String(secretName),
+	}
 
 	resp, err := svc.GetSecretValue(context.TODO(), input)
-    if err != nil {
+	if err != nil {
 		return nil, err
 	}
 
@@ -94,20 +94,20 @@ func ListSecrets() (secrets []types.SecretListEntry, err error) {
 	svc := secretsmanager.NewFromConfig(cfg)
 
 	// Get all secret names
-    paginator := secretsmanager.NewListSecretsPaginator(svc, &secretsmanager.ListSecretsInput{
-        MaxResults: aws.Int32(100),
-    })
+	paginator := secretsmanager.NewListSecretsPaginator(svc, &secretsmanager.ListSecretsInput{
+		MaxResults: aws.Int32(100),
+	})
 
-    for paginator.HasMorePages() {
-        page, err := paginator.NextPage(context.TODO())
-        if err != nil {
-            return nil, fmt.Errorf("failed to retrieve secrets: %w", err)
-        }
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(context.TODO())
+		if err != nil {
+			return nil, fmt.Errorf("failed to retrieve secrets: %w", err)
+		}
 
-        secrets = append(secrets, page.SecretList...)
-    }
+		secrets = append(secrets, page.SecretList...)
+	}
 
-    return secrets, nil
+	return secrets, nil
 }
 
 // GetSecret will retrieve a specific secret by Name (id)
@@ -118,7 +118,6 @@ func GetSecret(id string) (secret *secretsmanager.GetSecretValueOutput, err erro
 		return nil, err
 	}
 	svc := secretsmanager.NewFromConfig(cfg)
-
 
 	secret, err = svc.GetSecretValue(context.TODO(), &secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(id),
@@ -160,7 +159,6 @@ func PutSecretString(id string, data string) (secret *secretsmanager.PutSecretVa
 		return nil, err
 	}
 	svc := secretsmanager.NewFromConfig(cfg)
-
 
 	secret, err = svc.PutSecretValue(context.TODO(), &secretsmanager.PutSecretValueInput{
 		SecretString: aws.String(data),
@@ -204,7 +202,6 @@ func CreateSecretString(id string, data string, description string, tagsCSV stri
 	}
 	svc := secretsmanager.NewFromConfig(cfg)
 
-
 	input := secretsmanager.CreateSecretInput{
 		SecretString: aws.String(data),
 		Name:         aws.String(id),
@@ -243,7 +240,6 @@ func CreateSecretBinary(id string, data []byte, description string, tagsCSV stri
 		return nil, err
 	}
 	svc := secretsmanager.NewFromConfig(cfg)
-
 
 	input := secretsmanager.CreateSecretInput{
 		SecretBinary: data,
