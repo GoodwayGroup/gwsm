@@ -96,10 +96,10 @@ Each command ans subcommand has detailed help text that can be viewed using the 
 
 ## Built With
 
-* go v1.16
-* make
-* [git-chglog](https://github.com/git-chglog/git-chglog)
-* [goreleaser](https://goreleaser.com/install/)
+- go v1.22
+- make
+- [git-chglog](https://github.com/git-chglog/git-chglog)
+- [goreleaser](https://goreleaser.com/install/)
 
 ## Deployment
 
@@ -122,7 +122,7 @@ requests to us.
 1. Use `go >= 1.16`
 1. Branch & Code
 1. Run linters :broom: `golangci-lint run`
-    - The project uses [golangci-lint](https://golangci-lint.run/usage/install/#local-installation)
+   - The project uses [golangci-lint](https://golangci-lint.run/welcome/install/#brew)
 1. Commit with a Conventional Commit
 1. Open a PR
 
@@ -133,7 +133,7 @@ versions available, see the [tags on this repository](https://github.com/Goodway
 
 ## Authors
 
-* **Derek Smith** - [@clok](https://github.com/clok)
+- **Derek Smith** - [@clok](https://github.com/clok)
 
 See also the list of [contributors](https://github.com/GoodwayGroup/gwvault/contributors) who participated in this
 project.

@@ -3,7 +3,8 @@ run:
   timeout: 2m
 
 output:
-  format: tab
+  formats:
+    - format: tab
 
 issues:
   max-issues-per-linter: 0
@@ -16,6 +17,46 @@ linters:
     - gocritic
     - gocyclo
     - gofmt
-    - golint
     - misspell
     - unconvert
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - $all
+        allow:
+          - $gostd # Allow all Go standard library imports
+          - github.com/a8m/djson
+          - github.com/AlecAivazis/survey/v2
+          - github.com/aws/aws-sdk-go-v2/aws
+          - github.com/aws/aws-sdk-go-v2/config
+          - github.com/aws/aws-sdk-go-v2/feature/s3/manager
+          - github.com/aws/aws-sdk-go-v2/service/s3
+          - github.com/aws/aws-sdk-go-v2/service/secretsmanager
+          - github.com/aws/aws-sdk-go-v2/service/secretsmanager/types
+          - github.com/clok/avtool/v3
+          - github.com/clok/cdocs
+          - github.com/clok/kemba
+          - github.com/cyberark/summon/pkg/secretsyml
+          - github.com/GoodwayGroup/gwsm/cmd
+          - github.com/GoodwayGroup/gwsm/env
+          - github.com/GoodwayGroup/gwsm/info
+          - github.com/GoodwayGroup/gwsm/kube
+          - github.com/GoodwayGroup/gwsm/s3
+          - github.com/GoodwayGroup/gwsm/sm
+          - github.com/jedib0t/go-pretty/v6/table
+          - github.com/logrusorgru/aurora/v3
+          - github.com/manifoldco/promptui
+          - github.com/r3labs/diff/v2
+          - github.com/sergi/go-diff/diffmatchpatch
+          - github.com/TylerBrock/colorjson
+          - github.com/urfave/cli/v2
+          - k8s.io/api/core/v1
+          - k8s.io/apimachinery/pkg/apis/meta/v1
+          - k8s.io/client-go/kubernetes
+          - k8s.io/client-go/kubernetes/scheme
+          - k8s.io/client-go/rest
+          - k8s.io/client-go/tools/clientcmd
+          - k8s.io/client-go/tools/remotecommand

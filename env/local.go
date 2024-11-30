@@ -3,14 +3,15 @@ package env
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/GoodwayGroup/gwsm/sm"
-	"github.com/clok/kemba"
-	"github.com/cyberark/summon/secretsyml"
-	"github.com/urfave/cli/v2"
-	"gopkg.in/yaml.v3"
-	"io/ioutil"
+	"os"
 	"strings"
 	"sync"
+
+	"github.com/GoodwayGroup/gwsm/sm"
+	"github.com/clok/kemba"
+	"github.com/cyberark/summon/pkg/secretsyml"
+	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
 )
 
 // ConfigMap is a simple version of the ConfigMap defined in kubernetes.
@@ -36,7 +37,7 @@ func addToGroupedValues(groupedValues map[string]map[string]string, group string
 // GetGroupedLocalEnv will parse local ConfigMap file and retrieve JSON blobs
 // from AWS Secrets Manager. Return a map of groups names to value blocks.
 func GetGroupedLocalEnv(c *cli.Context) (groupedValues map[string]map[string]string, err error) {
-	yamlFile, err := ioutil.ReadFile(c.String("configmap"))
+	yamlFile, err := os.ReadFile(c.String("configmap"))
 	if err != nil {
 		fmt.Printf("Error reading YAML file: %s\n", err)
 		return nil, err

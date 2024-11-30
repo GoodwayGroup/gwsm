@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/GoodwayGroup/gwsm/cmd"
-	"github.com/GoodwayGroup/gwsm/info"
-	"github.com/clok/cdocs"
-	"github.com/urfave/cli/v2"
 	"log"
 	"os"
 	"runtime"
 	"time"
+
+	"github.com/GoodwayGroup/gwsm/cmd"
+	"github.com/GoodwayGroup/gwsm/info"
+	"github.com/clok/cdocs"
+	"github.com/urfave/cli/v2"
 )
 
 var version string
